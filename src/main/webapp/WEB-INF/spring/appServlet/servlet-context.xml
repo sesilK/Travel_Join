@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:beans="http://www.springframework.org/schema/beans"
+			 xmlns:context="http://www.springframework.org/schema/context"
+			 xsi:schemaLocation="http://www.springframework.org/schema/mvc
+			 					 http://www.springframework.org/schema/mvc/spring-mvc.xsd
+			 					 http://www.springframework.org/schema/beans
+			 					 http://www.springframework.org/schema/beans/spring-beans.xsd
+			 					 http://www.springframework.org/schema/context
+			 					 http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<annotation-driven/>
+	
+	<context:component-scan base-package="com.app.controller"></context:component-scan>
+	<context:component-scan base-package="com.app.service"></context:component-scan>
+	<context:component-scan base-package="com.app.dao"></context:component-scan>
+	
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/"></beans:property>
+		<beans:property name="suffix" value=".jsp"></beans:property>
+	</beans:bean>
+	
+	<resources location="/resources/" mapping="/**"></resources>
+	
+	<beans:bean id="loginInterceptor" class="com.app.interceptor.LoginInterceptor"/>
+	<beans:bean id="adminInterceptor" class="com.app.interceptor.AdminInterceptor"/>
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/admin/**"/>
+<!-- 			<exclude-mapping path="/admin/login"/>						 -->
+<!-- 			<exclude-mapping path="/admin/signUp"/> -->
+			<beans:ref bean="adminInterceptor" />
+		</interceptor>
+		
+		<interceptor>
+			<mapping path="/**"/>
+			<exclude-mapping path="/login"/>						
+			<exclude-mapping path="/signUp"/>
+			<exclude-mapping path="/**/*.css"/>
+			<exclude-mapping path="/**/*.js"/>
+			<exclude-mapping path="/image/**"/>
+			<exclude-mapping path="/main"/>
+			<beans:ref bean="loginInterceptor" />
+		</interceptor>
+	</interceptors>
+</beans:beans>
+
+
+<!-- <mapping path="/**"/> -->
+<!-- <exclude-mapping path="/login"/>						 -->
+<!-- <exclude-mapping path="/signUp"/> -->
+<!-- <exclude-mapping path="/**/*.css"/> -->
+<!-- <exclude-mapping path="/**/*.js"/> -->
+<!-- <exclude-mapping path="/image/**"/> -->
+<!-- <exclude-mapping path="/main"/> -->
+
+
+
+
+
+
+
+
+
+
+
+
