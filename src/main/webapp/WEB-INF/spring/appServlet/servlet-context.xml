@@ -36,7 +36,7 @@
 		</interceptor>
 		
 		<interceptor>
-			<mapping path="/**"/>
+			<mapping path="/abcsdf"/>
 			<exclude-mapping path="/login"/>						
 			<exclude-mapping path="/signUp"/>
 			<exclude-mapping path="/**/*.css"/>

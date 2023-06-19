@@ -3,6 +3,8 @@ package com.app.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.websocket.Session;
+
 @Controller
 public class HomeController {
 
@@ -20,6 +22,11 @@ public class HomeController {
 	public String login() {
 		return "login";
 	}
+
+	@RequestMapping("/chat")
+	public String chat() {
+        return "chat";
+    }
 
 }
 
