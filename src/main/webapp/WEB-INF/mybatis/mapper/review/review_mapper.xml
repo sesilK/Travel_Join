@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="review_mapper">
+
+	<!-- 글 작성 -->				<!-- #{user_id} 수정 필요 -->
+	<insert id="insert_review" parameterType="ReviewDto">
+		insert into review_bbs (review_id, user_id, plan_id, title, content, stars)
+		values ( review_id_seq.NEXTVAL, 'admin' , #{planId}, #{title}, #{content},  #{stars})
+	</insert>					
+	
+	<!-- 글목록 불러오기 (+검색기능) -->
+	<select id="select_review_list" resultType="ReviewDto" parameterType="hashMap">
+		select review_id, user_id, title, SUBSTR(create_date,1,10) create_date,
+				views, like_count, comment_count
+		from review_bbs
+ 		where 1=1
+		<if test="searchCondition == 'title'">
+			and title like '%'||#{keyword}||'%'
+		</if>
+		<if test="searchCondition == 'content'">
+			and content like '%'||#{keyword}||'%'
+		</if>
+		<if test="searchCondition == 'ticon'">
+			and (title like '%'||#{keyword}||'%') or (content like '%'||#{keyword}||'%')
+		</if>
+		<if test="searchCondition == 'user'">
+			and user_id like '%'||#{keyword}||'%'
+		</if>
+		order by review_id desc
+	</select>
+	
+	<!-- 글상세 불러오기 -->
+	<select id="select_review_view" resultType="ReviewDto">
+		select user_id, title, content, create_date, views, like_count, stars, comment_count
+		from review_bbs
+ 		where review_id = #{reviewId}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="update_review_views_increase">
+		update review_bbs
+		set views =  views + 1
+		where review_id = #{reviewId}
+	</update>
+	
+	<!-- 추천여부 확인 -->
+	<select id="select_review_like" resultType="LikeDto" parameterType="hashMap">
+	    select *
+	    from review_like
+	    where review_id = #{reviewId}
+	    and user_id = #{userId}
+	</select>
+	
+	<!-- 추천하기 -->
+	<insert id="insert_review_like" parameterType="LikeDto">
+	    insert into review_like
+	    values ( #{reviewId}, #{userId} )
+	</insert>		
+	
+	<!-- 추천수 증가 -->
+	<update id="update_review_like_increase">
+		update review_bbs
+		set like_count = (select count(*) from review_like where review_id = #{reviewId})
+		where review_id = #{reviewId}
+	</update>
+	
+
+
+</mapper>

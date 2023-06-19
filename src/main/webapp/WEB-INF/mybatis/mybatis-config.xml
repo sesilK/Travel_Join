@@ -10,8 +10,8 @@
     </settings>
 
     <typeAliases>
-<!--     	<typeAlias type="com.app.dto.user.UserDto" alias="UserDto"/> -->
-<!--     	<typeAlias type="com.app.dto.user.UserDto" alias="UserDto"/> -->
+    	<typeAlias type="com.app.dto.review.ReviewDto" alias="ReviewDto"/>
+		<typeAlias type="com.app.dto.like.LikeDto" alias="LikeDto"/>
     </typeAliases>
 
 </configuration>
