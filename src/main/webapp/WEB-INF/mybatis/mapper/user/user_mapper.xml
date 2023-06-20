@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-						
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="user_mapper">
 
-<!-- 	<insert id="insert_user" parameterType="UserDto">
-		insert into t_user
-		values ( #{id} , #{name}, #{userType} )
-	</insert> -->
+    <!-- 	<insert id="insert_user" parameterType="UserDto">
+            insert into t_user
+            values ( #{id} , #{name}, #{userType} )
+        </insert> -->
+
+    <insert id="insert_user" parameterType="UserDto">
+        insert into users (user_id, password, email, name, nick, tel, birth, gender)
+        values ( #{userId}, #{password}, #{email}, #{name},
+                #{nick}, #{tel}, TO_DATE(#{birth}, 'YYMMDD'), #{gender} )
+    </insert>
+
+    <select id="select_user_by_id" parameterType="String">
+        select
+    </select>
 
 </mapper>

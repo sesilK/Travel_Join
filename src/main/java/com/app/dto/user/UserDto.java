@@ -4,35 +4,18 @@ import lombok.Data;
 
 @Data
 public class UserDto {
-
-	//사용자 -> 공통부분 -> type(관리자/고객)
-	public String id;
+	public String userId;
+	public String password;
+	public String email;
 	public String name;
-	public String userType;  //ADM, CUS
-//
-//	public String getId() {
-//		return id;
-//	}
-//
-//	public void setId(String id) {
-//		this.id = id;
-//	}
-//
-//	public String getName() {
-//		return name;
-//	}
-//
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-//
-//	public String getUserType() {
-//		return userType;
-//	}
-//
-//	public void setUserType(String userType) {
-//		this.userType = userType;
-//	}
-	
-	
+	public String nick;
+	public String tel;
+	public String birth;
+	public String gender;
+	public int status;
+	public String joinDate;
+	public int rank;
+	public int imageId;
+
+	public int age;	// DB에는 없는 항목, 편의성을 위해 추가
 }
