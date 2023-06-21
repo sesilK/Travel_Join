@@ -14,6 +14,8 @@ public interface ReviewService {
 	
 	public ReviewDto findReview(int reviewId); //글상세 불러오기
 	
+	public ReviewDto findReview(String userId); //글번호 찾기
+	
 	public int increaseViews(int reviewId);	//조회수 증가
 	
 	public LikeDto CheckIfRecommended(int reviewId, String userId); //추천여부 확인

@@ -6,10 +6,10 @@
 
 <mapper namespace="review_mapper">
 
-	<!-- 글 작성 -->				<!-- #{user_id} 수정 필요 -->
+	<!-- 글 작성 -->
 	<insert id="insert_review" parameterType="ReviewDto">
 		insert into review_bbs (review_id, user_id, plan_id, title, content, stars)
-		values ( review_id_seq.NEXTVAL, 'admin' , #{planId}, #{title}, #{content},  #{stars})
+		values ( review_id_seq.NEXTVAL, #{userId} , #{planId}, #{title}, #{content},  #{stars})
 	</insert>					
 	
 	<!-- 글목록 불러오기 (+검색기능) -->
@@ -38,6 +38,13 @@
 		select review_id, user_id, title, content, create_date, views, like_count, stars, comment_count
 		from review_bbs
  		where review_id = #{reviewId}
+	</select>
+	
+	<!-- 글번호 찾기 -->
+	<select id="select_reviewId" resultType="ReviewDto">
+		select max(review_id) review_id
+		from review_bbs
+		where user_id = #{userId}
 	</select>
 	
 	<!-- 조회수 증가 -->

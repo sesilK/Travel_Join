@@ -13,5 +13,7 @@ public interface ReviewDao {
 	
 	public ReviewDto selectReview(int reviewId); //글상세 불러오기
 	
+	public ReviewDto selectReview(String userId); //글번호 찾기
+	
 	public int updateViews(int reviewId); //조회수 증가
 }

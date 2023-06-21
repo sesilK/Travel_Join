@@ -44,9 +44,16 @@ public class ReviewController {
 	@PostMapping("/reviewWrite") //글 작성버튼 클릭
 	public String reviewWrite_process(@ModelAttribute ReviewDto reviewDto) {
 		
-		reviewService.createReview(reviewDto);
+		String userId = "admin";//reviewDto.getUserId();   <- id 세션에서 가져오기
+		reviewDto.setUserId(userId);
 		
-		return "redirect:/reviewBbs";
+		reviewService.createReview(reviewDto); //글 등록
+		
+		// 등록한 글의 review_id 값을 가져옴
+		ReviewDto newReviewDto = reviewService.findReview(userId);
+	    int reviewId = newReviewDto.getReviewId();
+		
+		return "redirect:/reviewView?reviewId=" + reviewId;
 	}
 	
 	@GetMapping("/reviewView") //글상세 페이지 요청 (글제목 클릭)
@@ -56,6 +63,7 @@ public class ReviewController {
 		
 		ReviewDto item = reviewService.findReview(reviewId);
 		model.addAttribute("item", item);
+		
 		
 		return "reviewView";
 	}

@@ -44,7 +44,15 @@ public class ReviewServiceImpl implements ReviewService{
 		
 		return item;
 	}
+	
+	@Override
+	public ReviewDto findReview(String userId){
 
+		ReviewDto item = reviewDao.selectReview(userId);
+		
+		return item;
+	}
+	
 	@Override
 	public int reviewRecommend(int reviewId, String userId) {
 		

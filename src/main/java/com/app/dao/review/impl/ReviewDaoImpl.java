@@ -40,7 +40,16 @@ public class ReviewDaoImpl implements ReviewDao{
 		
 		return reviewDto;
 	}
-
+	
+	@Override
+	public ReviewDto selectReview(String userId) {
+		
+		ReviewDto reviewDto = 
+				sqlsessionTemplate.selectOne("review_mapper.select_reviewId", userId);
+		
+		return reviewDto;
+	}
+	
 	@Override
 	public int updateViews(int reviewId) {
 		
