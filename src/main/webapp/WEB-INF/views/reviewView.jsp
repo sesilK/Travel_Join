@@ -16,18 +16,20 @@
 	<p id="num" data-reviewId="${item.reviewId}">제목 ${item.title}</p>
 	<p>여행 ${item.planId}</p>
 	<p>별점 ${item.stars}</p>
-	<p>${item.userId} | ${item.createDate} | 조회 ${item.views} | 추천 ${item.likeCount} | 댓글 ${item.commentCount}</p>
+	<p>${item.userId} | ${item.createDate} | 조회 ${item.views} | 추천 <span id="likeCount">${item.likeCount}</span> | 댓글 ${item.commentCount}</p>
 	<p>내용 : ${item.content}</p>
 
 	<button id="like" type="submit">추천</button>
+	<button id="" type="">수정</button>
+	<button id="" type="">삭제</button>
 
 		
 	<hr/>
-<%-- 	<form action="" method="POST">
+	<form action="" method="POST">
 		<p>댓글(${item.commentCount})</p>
 		<textarea name="comment"></textarea>
 		<button type="submit">등록</button>
-	</form> --%>
+	</form>
 	
 	<table>
         <tbody>
@@ -62,6 +64,9 @@
 					success : (data)=>{
 						console.log(data);
 						if(data === 'true'){
+							let likeCount = $('#likeCount'); //추천수 요소
+							let currentLikeCount = parseInt(likeCount.text()); //현재 추천수
+							likeCount.text(currentLikeCount+1); // 추천 수 업데이트
 							alert('추천하였습니다.');
 						}
 						if(data === 'false'){
