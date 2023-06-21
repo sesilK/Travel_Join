@@ -30,7 +30,7 @@
         <!--        <org.springframework-version>5.3.28</org.springframework-version>-->
         <javax.validation-version>2.0.1.Final</javax.validation-version>
         <org.hibernate.validator-version>6.2.5.Final</org.hibernate.validator-version>
-        <com.fasterxml.jackson-version>2.12.6</com.fasterxml.jackson-version>
+        <com.fasterxml.jackson-version>1.2.3</com.fasterxml.jackson-version>
     </properties>
 
     <dependencies>

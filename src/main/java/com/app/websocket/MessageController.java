@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
@@ -20,11 +21,13 @@ public class MessageController {
 
     @MessageMapping("/hello")
     public void message(Message message) {
-//    public void message(Map<String, String> map) {
-//        System.out.println(map);
         System.out.println(message);
-//        Message message = new Message();
 
         simpMessageSendingOperations.convertAndSend("/sub/channel/" + message.getChannelId(), message);
+    }
+
+    @RequestMapping("/chatting")
+    public String chat() {
+        return "chat";
     }
 }
