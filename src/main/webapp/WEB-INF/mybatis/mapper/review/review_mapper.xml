@@ -35,7 +35,7 @@
 	
 	<!-- 글상세 불러오기 -->
 	<select id="select_review_view" resultType="ReviewDto">
-		select user_id, title, content, create_date, views, like_count, stars, comment_count
+		select review_id, user_id, title, content, create_date, views, like_count, stars, comment_count
 		from review_bbs
  		where review_id = #{reviewId}
 	</select>

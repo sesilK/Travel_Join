@@ -9,11 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.app.dto.like.LikeDto;
 import com.app.dto.review.ReviewDto;
 import com.app.service.review.ReviewService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class ReviewController {
@@ -21,7 +26,7 @@ public class ReviewController {
 	@Autowired
 	ReviewService reviewService;
 	
-	@GetMapping("/reviewBbs") //글목록 페이지 (게시판)
+	@GetMapping("/reviewBbs") //글목록 페이지 요청
 	public String ViewAndSearchReviewBbs(Model model, @RequestParam Map<String, String> map) {
 		
 		List<ReviewDto> reviewList = reviewService.findReviewList(map);
@@ -30,7 +35,7 @@ public class ReviewController {
 		return "reviewBbs";
 	}
 	
-	@GetMapping("/reviewWrite")	//글작성 페이지
+	@GetMapping("/reviewWrite")	//글작성 페이지 요청
 	public String reviewWrite() {
 		
 		return "reviewWrite";
@@ -44,19 +49,10 @@ public class ReviewController {
 		return "redirect:/reviewBbs";
 	}
 	
-	@GetMapping("/reviewView") //글제목 클릭 -> 글상세 페이지
+	@GetMapping("/reviewView") //글상세 페이지 요청 (글제목 클릭)
 	public String reviewView(Model model, @RequestParam int reviewId) {
 		
 		reviewService.increaseViews(reviewId); //조회수 증가
-		
-		String userId = "admin"; // 아이디 정보 세션에서 가져오게 수정
-		LikeDto likeDto = reviewService.CheckIfRecommended(reviewId, userId);	//추천여부 확인
-		
-	    if (likeDto != null) {
-	        model.addAttribute("alertMessage", "이미 추천한 리뷰입니다.");
-	    } else if (likeDto == null) {
-	        model.addAttribute("alertMessage", "추천하였습니다.");
-	    }
 		
 		ReviewDto item = reviewService.findReview(reviewId);
 		model.addAttribute("item", item);
@@ -64,21 +60,23 @@ public class ReviewController {
 		return "reviewView";
 	}
 	
-	@PostMapping("/reviewView") //추천 버튼 누르기
-	public String reviewLike_process(Model model, @RequestParam int reviewId) {
-
-		String userId = "admin"; // 아이디 정보 세션에서 가져오게 수정
-		LikeDto likeDto = reviewService.CheckIfRecommended(reviewId, userId);	//추천여부 확인
+	@PostMapping("/reviewView") //추천 버튼 클릭
+	@ResponseBody //RestController 처럼 단순 string 텍스트를 반환하는 형태로 수행
+	public String reviewLike_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		
-		if (likeDto == null) {
-			reviewService.reviewRecommend(reviewId, userId);	//추천하기
-			model.addAttribute("alertMessage", "이미 추천한 리뷰입니다.");
-		}
+		ObjectMapper objectMapper = new ObjectMapper();
+		LikeDto likeDto = objectMapper.readValue(requestBody, LikeDto.class);
 		
-		ReviewDto item = reviewService.findReview(reviewId);
-		model.addAttribute("item", item);
 		
-		return "reviewView";				
+		LikeDto isNull =	//추천 여부 확인 
+				reviewService.CheckIfRecommended(likeDto.getReviewId(), likeDto.getUserId());
+		
+		if (isNull == null) { //추천한 적 없으면
+			reviewService.reviewRecommend(likeDto.getReviewId(), likeDto.getUserId()); //추천하기
+			return "true";	//추천 성공
+		} else {
+			return "false";	//추천 실패
+		}			
 	}
 	
 	/*
