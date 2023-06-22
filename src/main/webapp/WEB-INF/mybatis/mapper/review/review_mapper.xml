@@ -52,10 +52,11 @@
 		update review_bbs
 		set views =  views + 1
 		where review_id = #{reviewId}
+		and user_id != #{userId}
 	</update>
 	
 	<!-- 추천여부 확인 -->
-	<select id="select_review_like" resultType="LikeDto" parameterType="hashMap">
+	<select id="select_review_like" resultType="LikeDto">
 	    select *
 	    from review_like
 	    where review_id = #{reviewId}
@@ -66,7 +67,7 @@
 	<insert id="insert_review_like" parameterType="LikeDto">
 	    insert into review_like
 	    values ( #{reviewId}, #{userId} )
-	</insert>		
+	</insert>
 	
 	<!-- 추천수 증가 -->
 	<update id="update_review_like_increase">
@@ -75,6 +76,23 @@
 		where review_id = #{reviewId}
 	</update>
 	
-
+	<!-- 이미지파일명 저장 -->
+	<insert id="insert_review_image" parameterType="ReviewImgDto">
+		insert into review_image (file_path,file_name)
+		values ( #{filePath}, #{fileName} )
+	</insert>
+	
+	<!-- 이미지파일명 조회 -->        <!-- parameterType 필요함??? -->
+	<select id="select_review_image" parameterType="string" resultType="ReviewImgDto">
+		select file_path, file_name
+		from review_image
+ 		where file_name = #{fileName}
+	</select>
+	
+	<!-- 이미지파일명 삭제 -->
+	<delete id="delete_review_image" parameterType="string">
+		delete from review_image
+		where file_name = #{fileName}
+	</delete>
 
 </mapper>

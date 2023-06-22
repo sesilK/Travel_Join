@@ -1,4 +1,4 @@
-package com.app.dto.comment;
+package com.app.dto.review;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
