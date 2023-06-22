@@ -3,8 +3,9 @@ package com.app.service.review;
 import java.util.List;
 import java.util.Map;
 
-import com.app.dto.like.LikeDto;
+import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
+import com.app.dto.review.ReviewImgDto;
 
 public interface ReviewService {
 
@@ -16,9 +17,15 @@ public interface ReviewService {
 	
 	public ReviewDto findReview(String userId); //글번호 찾기
 	
-	public int increaseViews(int reviewId);	//조회수 증가
+	public int increaseViews(ReviewDto reviewDto);	//조회수 증가
 	
 	public LikeDto CheckIfRecommended(int reviewId, String userId); //추천여부 확인
 	
 	public int reviewRecommend(int reviewId, String userId);	//추천하기
+
+	public int uploadReviewImage(ReviewImgDto reviewImgDto); //이미지파일명 저장
+	
+	public ReviewImgDto findReviewImage(String fileName); //이미지파일명 조회
+	
+	public int removeReviewImage(String fileName); //이미지파일명 삭제
 }
