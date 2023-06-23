@@ -3,7 +3,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	  xsi:schemaLocation="http://www.springframework.org/schema/beans
-	  				      http://www.springframework.org/schema/beans/spring-beans.xsd">
+	  				      http://www.springframework.org/schema/beans/spring-beans.xsd"
+	  >
 
 	<bean class="org.apache.commons.dbcp2.BasicDataSource" id="data_source">
 <!-- 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" /> -->
@@ -23,6 +24,7 @@
 	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	
 	
 	
 <!-- 	BasicDataSource data_source = new BasicDataSource(); -->

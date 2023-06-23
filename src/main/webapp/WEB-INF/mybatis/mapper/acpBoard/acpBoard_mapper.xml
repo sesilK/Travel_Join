@@ -6,7 +6,7 @@
 
 <mapper namespace="AcpBoard_mapper">
 	<insert id="create" parameterType="com.app.dto.acpBoard.AcpBoardDto">
-		    INSERT INTO CardBoard (id, is_closed, current_participants, total_participants, title, hashtags, author, content, view_count, comment_count, reg_date)
+		    INSERT INTO TestBoard (id, is_closed, current_participants, total_participants, title, hashtags, author, content, view_count, comment_count, reg_date)
    			VALUES (#{id}, #{isClosed}, #{currentParticipants}, #{totalParticipants}, #{title}, #{hashtags}, #{author}, #{content}, #{viewCount}, #{commentCount}, #{regDate})
 	</insert>
 	<select

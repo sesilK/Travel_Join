@@ -14,13 +14,13 @@ public class AcpBoardDaoImpl implements AcpBoardDao{
 	}
 
 	@Override
-	public AcpBoardDto read(int bno) throws Exception {
+	public AcpBoardDto read(String id) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void delete(int bno) throws Exception {
+	public void delete(String id) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

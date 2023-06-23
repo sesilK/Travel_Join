@@ -15,10 +15,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>동행모집 글작성</h1>
+	<h1>글 작성 페이지</h1>
 
-<h2 th:text="${acpboard.title}">제목입니다</h2>
-<p th:text="${acpboard.content}">내용이들어갈부분입니다</p>
+<h2 th:text="${acpBoard.title}">제목입니다</h2>
+<p th:text="${acpBoard.content}">내용이들어갈부분입니다</p>
 
 
 	<div class="range-slider">
@@ -109,6 +109,8 @@
     	rangeSlider();
     
     
+    	
+    	
     
 </script>
 

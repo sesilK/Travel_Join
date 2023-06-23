@@ -1,6 +1,7 @@
 package com.app.service.acpBoard;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.app.dto.acpBoard.AcpBoardDto;
 public interface AcpBoardService {
@@ -12,6 +13,8 @@ public interface AcpBoardService {
 	void delete(String id) throws SQLException;
 
 	void update(AcpBoardDto dto) throws SQLException;
+
+	public List<AcpBoardDto> listAll() throws Exception;
 
 
 }
