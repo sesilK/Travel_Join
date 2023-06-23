@@ -1,9 +1,8 @@
 package com.app.controller.customer;
 
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
+import com.app.dto.UserDto;
+import com.app.service.user.UserService;
+import com.app.utils.CommonCode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.app.dto.user.UserDto;
-import com.app.service.user.UserService;
-import com.app.utils.CommonCode;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class CustomerController {

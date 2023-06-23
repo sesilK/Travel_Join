@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="chat_mapper">
+
+    <insert id="insert_chatroom_m" parameterType="ChatDto">
+        insert into chatroom_m (room_id, master, status)
+        values (room_id_seq.NEXTVAL, #{sender}, 0)
+    </insert>
+
+    <insert id="insert_chatroom_d" parameterType="ChatDto">
+        insert into chatroom_d (room_id, member)
+        values (#{roomId}, #{sender})
+    </insert>
+
+    <insert id="insert_chat" parameterType="ChatDto">
+        insert into chat (chat_id, room_id, sender, content, type, time_stamp)
+        values (chat_id_seq.NEXTVAL, #{roomId}, #{sender}, #{content}, #{type}, #{timeStamp})
+    </insert>
+
+    <insert id="insert_chat_r" parameterType="ChatDto">
+        insert into chat_r (room_id, chat_id, member)
+        values (#{roomId}, #{chatId}, #{sender})
+    </insert>
+
+    <select id="select_all_chatroom" resultType="ChatRoomDto">
+        select *
+        from chatroom_m
+    </select>
+
+    <select id="select_chatroom_by_id" resultType="ChatRoomDto" parameterType="Integer">
+        select *
+        from chatroom_m
+        where room_id = #{value}
+    </select>
+
+
+</mapper>

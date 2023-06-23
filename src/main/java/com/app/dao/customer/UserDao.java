@@ -1,8 +1,8 @@
 package com.app.dao.customer;
 
-import java.util.List;
+import com.app.dto.UserDto;
 
-import com.app.dto.user.UserDto;
+import java.util.List;
 
 public interface UserDao {
 

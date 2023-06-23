@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.app.dto.user.UserDto;
+import com.app.dto.UserDto;
 import com.app.utils.CommonCode;
 
 public class AdminInterceptor implements HandlerInterceptor {

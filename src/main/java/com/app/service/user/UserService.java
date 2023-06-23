@@ -2,7 +2,7 @@ package com.app.service.user;
 
 import java.util.List;
 
-import com.app.dto.user.UserDto;
+import com.app.dto.UserDto;
 
 public interface UserService {
 	public int saveUser(UserDto userDto);

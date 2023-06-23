@@ -1,13 +1,12 @@
 package com.app.dao.customer.impl;
 
-import java.util.List;
-
+import com.app.dao.customer.UserDao;
+import com.app.dto.UserDto;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.app.dao.customer.UserDao;
-import com.app.dto.user.UserDto;
+import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao{
