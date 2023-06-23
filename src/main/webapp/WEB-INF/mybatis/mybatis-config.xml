@@ -12,6 +12,7 @@
     <typeAliases>
 <!--     	<typeAlias type="com.app.dto.user.UserDto" alias="UserDto"/> -->
 <!--     	<typeAlias type="com.app.dto.user.UserDto" alias="UserDto"/> -->
+    	<package name="com.app.dto.acpBoard.AcpBoardDto"/>
     </typeAliases>
 
 </configuration>
