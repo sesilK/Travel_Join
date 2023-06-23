@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
+import com.app.dto.review.ReviewImgDto;
 import com.app.service.review.ReviewService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -49,31 +50,99 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/reviewWrite")	//글작성 페이지 요청
-	public String reviewWrite() {
+	public String reviewWrite(Model model) {
+		
+		String userId = "admin";  //   <- id 세션에서 가져오게 수정
+		
+		ReviewDto temp = reviewService.CheckIfTemporarySaved(userId); //임시저장된 글이 있는지 확인
+		if(temp != null) { //있으면
+			model.addAttribute("temp", temp); //model에 담아서 전달
+		} else { //없으면
+			ReviewDto nullDto = new ReviewDto(); //null 전달
+			nullDto.setTitle(null);
+			nullDto.setContent(null);
+			model.addAttribute("temp", nullDto);
+		}
 		
 		return "reviewWrite";
 	}
 	
-	@PostMapping("/reviewWrite") //글 작성버튼 클릭
-	public String reviewWrite_process(@ModelAttribute ReviewDto reviewDto) {
+	@PostMapping("/reviewWrite") //글작성 폼 전송 완료 후 페이지 이동
+	public String reviewWrite_(@ModelAttribute ReviewDto reviewDto) {
 		
-		String userId = "admin";//reviewDto.getUserId();   <- id 세션에서 가져오기
+		String userId = "admin";  //   <- id 세션에서 가져오게 수정
 		reviewDto.setUserId(userId);
-		
-		reviewService.createReview(reviewDto); //글 등록
-		
-		// 등록한 글의 review_id 값을 가져옴
-		ReviewDto newReviewDto = reviewService.findReview(userId);
-	    int reviewId = newReviewDto.getReviewId();
+		reviewDto.setDeleteAt("N");
+		ReviewDto resultDto = reviewService.returnReview(reviewDto); //글 반환
+		System.out.println(resultDto);
+		int reviewId = resultDto.getReviewId(); //글 번호
 		
 		return "redirect:/reviewView?reviewId=" + reviewId;
+	}
+	
+	@PostMapping("/reviewWrite_process") //글 작성 버튼 클릭시 폼 전송 과정
+	@ResponseBody
+	public String reviewWrite_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
+		
+		String userId = "admin";  //   <- id 세션에서 가져오게 수정
+		reviewDto.setUserId(userId);
+		
+		int result = reviewService.createReview(reviewDto); //글 등록
+		ReviewDto resultDto = reviewService.returnReview(reviewDto); //글 반환
+		int reviewId = resultDto.getReviewId(); //글 번호
+		
+		ReviewDto temp = reviewService.CheckIfTemporarySaved(userId); //임시저장된 글이 있는지 확인
+		if(result == 1 && temp != null) { //글 등록 성공했을 때 임시저장된 글이 남아있으면,
+			reviewService.removeTemporaryReview(userId); //임시저장된 글 삭제
+		}
+		List<String> imageFileNameList = reviewDto.getImageFileNameList(); //이미지파일명 리스트
+		
+		ReviewImgDto reviewImgDto = new ReviewImgDto();	//이미지정보 객체 생성
+		reviewImgDto.setReviewId(reviewId); //글번호 set
+		
+		for(int i=0; i<imageFileNameList.size(); i++) {
+			reviewImgDto.setFileName(imageFileNameList.get(i)); //파일명 set
+			reviewService.uploadReviewImage(reviewImgDto); //이미지파일명 저장
+		}
+		String reviewIdStr = String.valueOf(reviewId);
+		System.out.println(reviewIdStr);
+		
+		return "/reviewView?reviewId=" + reviewIdStr; //이동할 url 전달 (글 상세페이지)
+	}
+	
+	@PostMapping("/temporarySave") //글 임시저장
+	@ResponseBody
+	public String temporarySave(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
+		
+		String userId = "admin";  //   <- id 세션에서 가져오게 수정
+		reviewDto.setUserId(userId);
+
+		int result = 0;
+		
+		ReviewDto temp = reviewService.CheckIfTemporarySaved(userId); //임시저장된 글이 있는지 확인
+		if(temp != null) { //있으면
+			result = reviewService.modifyTemporaryReview(reviewDto); //임시저장된 내용을 변경
+		} else if (temp == null) { //없으면
+			result = reviewService.saveTemporaryReview(reviewDto); //작성된 것을 임시저장
+		}
+		
+		if(result == 1) { //임시저장 성공
+			return "true";
+		}
+		return "false";
 	}
 	
 	@GetMapping("/reviewView") //글상세 페이지 요청 (글제목 클릭)
 	public String reviewView(Model model, @RequestParam int reviewId) {
 		
 		ReviewDto reviewDto = new ReviewDto();
-		String userId = "admin";//reviewDto.getUserId();   <- id 세션에서 가져오기
+		String userId = "admin";  //   <- id 세션에서 가져오게 수정
 		
 		reviewDto.setReviewId(reviewId);
 		reviewDto.setUserId(userId);

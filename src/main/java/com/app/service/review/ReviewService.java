@@ -11,11 +11,19 @@ public interface ReviewService {
 
 	public int createReview(ReviewDto reviewDto); //글 작성
 	
+	public ReviewDto returnReview(ReviewDto reviewDto); //작성글 반환
+	
+	public int saveTemporaryReview(ReviewDto reviewDto); //글 임시저장
+	
+	public ReviewDto CheckIfTemporarySaved(String userId); //임시저장 조회
+	
+	public int modifyTemporaryReview(ReviewDto reviewDto); //임시저장 변경
+	
+	public int removeTemporaryReview(String userId); //임시저장 삭제
+	
 	public List<ReviewDto> findReviewList(Map<String, String> map); //글목록 불러오기
 	
 	public ReviewDto findReview(int reviewId); //글상세 불러오기
-	
-	public ReviewDto findReview(String userId); //글번호 찾기
 	
 	public int increaseViews(ReviewDto reviewDto);	//조회수 증가
 	

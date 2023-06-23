@@ -18,8 +18,10 @@
 	<p>별점 ${item.stars}</p>
 	<p>${item.userId} | ${item.createDate} | 조회 ${item.views} | 추천 <span id="likeCount">${item.likeCount}</span> | 댓글 ${item.commentCount}</p>
 
-	<button id="">수정</button>
-	<button id="">삭제</button><br/>
+
+	  <button id="editBtn" type="button">수정</button>
+	  <button id="deleteBtn" type="button">삭제</button><br/>
+
 
 	<p>내용 : ${item.content}</p>
 

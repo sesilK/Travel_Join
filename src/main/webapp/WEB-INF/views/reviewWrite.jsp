@@ -12,23 +12,26 @@
 <body>
 	<h1>reviewWrite</h1>
 
-	<form action="reviewWrite" method="POST" name="reviewForm"
-		onsubmit="return checkForm();" enctype="multipart/form-data">
+	<form action="" method="POST" name="reviewForm" 
+			onsubmit="return checkForm();" enctype="multipart/form-data">
 		여행 <select name="planId">
 			<option selected value="">선택해주세요.</option>
 			<option value="여행1">여행1</option>
 			<option value="여행2">여행2</option>
 			<option value="여행3">여행3</option>
-		</select><br /> 별점 <select name="stars">
+		</select><br />
+		별점 <select name="stars">
 			<option selected value="">선택해주세요.</option>
 			<c:forEach var="i" begin="0" end="10" step="1">
 				<option value="${10/2.0 - i/2.0}">${10/2.0 - i/2.0}</option>
 			</c:forEach>
-		</select><br /> 제목 <input type="text" name="title" /><br /> 내용
+		</select><br />
+		<input type="text" name="title" placeholder="제목을 입력해주세요"/><br />
 		<textarea id="summernote" name="content"></textarea>
 		<br />
-		<button type="submit">등록하기</button>
+		<button type="submit" id="submitBtn">등록하기</button>
 		<a href="reviewBbs"><button type="button">돌아가기</button></a>
+		
 	</form>
 
 
@@ -40,14 +43,15 @@
 	
 		$(document).ready(function() {			
 			
+			//썸머노트 불러오기
 			$('#summernote').summernote({
 				width : 800, // set editor width
 				height : 400, // set editor height
 				minHeight : null, // set minimum height of editor
 				maxHeight : null, // set maximum height of editor
-				focus : true, // focus  여부 설정 (false -> focus)
+				focus : false, // focus  여부 설정 (false -> focus)
 				lang : 'ko-KR', // 기본 메뉴언어 US->KR로 변경
-				placeholder : '', //placeholder 설정
+				placeholder : '자동으로 임시저장 됩니다.', //placeholder 설정
 				callbacks: {
 				    onImageUpload: function(files, editor, welEditable) { //이미지 첨부
 				        for (let i = files.length - 1; i >= 0; i--) { // 다중 업로드
@@ -61,8 +65,14 @@
 				}
 			});
 			
+			//임시저장된 내용 불러오기
+			let title = '${temp.title}';
+			let content = '${temp.content}';
+			$('input[name="title"]').val(title);
+			$('#summernote').summernote('code', content);
+			/* $('div[role="textbox"]').append(content); */ // <- <p><br></p> 삽입되는 문제
+			
 		});
-		
 		
 		//파일 업로드 함수
 		function uploadSummernoteImageFile(file, el) {
@@ -95,6 +105,46 @@
 	        })
 	    }
 		
+		let shouldCallTemporarySave = true;  //임시저장을 해야하는 경우 true
+		
+		document.getElementById("submitBtn").addEventListener("click", function() {
+			shouldCallTemporarySave = false;  //등록버튼 클릭시 임시저장 실행여부를 false로 변경
+		});
+
+		window.onbeforeunload = function() { //페이지를 떠날때 (창 닫기, 새로고침, 뒤로가기 등)
+			 if (shouldCallTemporarySave) {	//임시저장 함수를 부를지 확인하기
+			 	temporarySave();
+			 }
+		};
+
+		//글 내용 임시저장 함수
+		function temporarySave() {
+
+			let title = $('input[name="title"]').val();
+			let content = $('div[role="textbox"]')[0].innerHTML;
+
+			$.ajax({
+				type : "POST",	//요청 method
+				contentType : "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
+				url : "/temporarySave",	//어디 경로로 요청할건지
+				data : JSON.stringify({	//객체를 -> JSON string 으로 변환
+					title: title,
+					content: content
+				}),	//파라미터로 같이 담아서 보낼 것들
+				success : (data)=>{
+					console.log(data);
+					if(data === 'true'){
+						//alert('임시저장되었습니다.');
+					}
+					if(data === 'false'){
+						alert('임시저장 실패');
+					}
+				},	//요청에 대해 성공한 경우 수행할 내용
+				error :	()=>{
+					alert('임시저장 실행 오류');
+				}	//요청이 실패,오류난 경우 수행할 내용
+			});
+		}
 		
 		
 		//등록버튼 클릭시 실행 조건 확인
@@ -102,7 +152,8 @@
 			let planId = $('select[name="planId"]').val();
 			let stars = $('select[name="stars"]').val();
 			let title = $('input[name="title"]').val();
-			let content = $('textarea[name="content"]').val();
+			//let content = $('textarea[name="content"]').val();
+			let content = $('div[role="textbox"]')[0].innerHTML;
 			if (planId === "") {
 				alert("여행을 선택해주세요.");
 				return false;
@@ -116,7 +167,39 @@
 				alert("내용을 입력해주세요.");
 				return false;
 			} else {
-				return true;
+				
+				// 써머노트 에디터의 내용 가져오기
+				let content = $('#summernote').summernote('code');
+				
+				// 내용에서 이미지 태그들 추출하여 파일명을 리스트로 만들기
+				let imageFileNameList = [];
+				$(content).find('img').each(function() {
+					let imageUrl = $(this).attr('src');
+					let fileName = imageUrl.split('/').pop();
+					imageFileNameList.push(fileName);
+				});
+
+				//폼 전송
+				$.ajax({
+					type: "POST",	//요청 method
+					contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
+					url: "/reviewWrite_process", //어디 경로로 요청할건지
+					data : JSON.stringify({	//객체를 -> JSON string 으로 변환
+						planId: planId,
+						stars: stars,
+						title: title,
+						content: content,
+						imageFileNameList: imageFileNameList
+					}),	//파라미터로 같이 담아서 보낼 것들
+					success : (data)=>{
+						return true;
+					},	//요청에 대해 성공한 경우 수행할 내용
+					error :	()=>{
+						alert('실행 오류');
+					}	//요청이 실패,오류난 경우 수행할 내용
+					
+				});
+				
 			}
 		};
 		

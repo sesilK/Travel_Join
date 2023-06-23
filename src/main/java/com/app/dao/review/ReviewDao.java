@@ -11,11 +11,19 @@ public interface ReviewDao {
 
 	public int insertReview(ReviewDto reviewDto); //글 작성
 	
+	public ReviewDto selectReviewId(ReviewDto reviewDto); //작성글 반환
+	
+	public int insertTemporaryReview(ReviewDto reviewDto); //글 임시저장
+	
+	public ReviewDto selectTemporaryReview(String userId); //임시저장 조회
+	
+	public int updateTemporaryReview(ReviewDto reviewDto); //임시저장 변경
+	
+	public int deleteTemporaryReview(String userId); //임시저장 삭제
+	
 	public List<ReviewDto> selectReviewList(Map<String, String> map); //글목록 불러오기
 	
 	public ReviewDto selectReview(int reviewId); //글상세 불러오기
-	
-	public ReviewDto selectReview(String userId); //글번호 찾기
 	
 	public int updateViews(ReviewDto reviewDto); //조회수 증가
 

@@ -1,5 +1,7 @@
 package com.app.dto.review;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,5 +23,6 @@ public class ReviewDto {
 	String deleteAt;	//삭제여부
 	String deleteDate;	//삭제일
 	int commentCount;	//댓글수
+	List<String> imageFileNameList; //파일명 리스트
 	
 }

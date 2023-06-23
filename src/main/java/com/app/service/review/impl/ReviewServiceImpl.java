@@ -25,6 +25,46 @@ public class ReviewServiceImpl implements ReviewService{
 		
 		return result;
 	}
+	
+	@Override
+	public ReviewDto returnReview(ReviewDto reviewDto) {
+		
+		ReviewDto resultDto = reviewDao.selectReviewId(reviewDto);
+		
+		return resultDto;
+	}
+	
+	@Override
+	public int saveTemporaryReview(ReviewDto reviewDto) {
+		
+		int result = reviewDao.insertTemporaryReview(reviewDto);
+		
+		return result;
+	}
+	
+	@Override
+	public ReviewDto CheckIfTemporarySaved(String userId) {
+		
+		ReviewDto reviewDto = reviewDao.selectTemporaryReview(userId);
+		
+		return reviewDto;
+	}
+	
+	@Override
+	public int modifyTemporaryReview(ReviewDto reviewDto) {
+		
+		int result = reviewDao.updateTemporaryReview(reviewDto);
+		
+		return result;
+	}
+	
+	@Override
+	public int removeTemporaryReview(String userId) {
+		
+		int result = reviewDao.deleteTemporaryReview(userId);
+		
+		return result;
+	}
 
 	@Override
 	public List<ReviewDto> findReviewList(Map<String, String> map) {
@@ -38,14 +78,6 @@ public class ReviewServiceImpl implements ReviewService{
 	public ReviewDto findReview(int reviewId){
 
 		ReviewDto item = reviewDao.selectReview(reviewId);
-		
-		return item;
-	}
-	
-	@Override
-	public ReviewDto findReview(String userId){
-
-		ReviewDto item = reviewDao.selectReview(userId);
 		
 		return item;
 	}

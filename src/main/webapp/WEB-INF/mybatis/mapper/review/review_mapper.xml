@@ -10,7 +10,42 @@
 	<insert id="insert_review" parameterType="ReviewDto">
 		insert into review_bbs (review_id, user_id, plan_id, title, content, stars)
 		values ( review_id_seq.NEXTVAL, #{userId} , #{planId}, #{title}, #{content},  #{stars})
-	</insert>					
+	</insert>
+	
+	<!-- 작성한 글 반환 -->
+	<select id="select_review_id" resultType="ReviewDto">
+		select review_id
+		from review_bbs
+		where user_id = #{userId}
+		and plan_id = #{planId}
+		and delete_at = 'N'
+	</select>
+	
+	<!-- 글 임시저장 -->
+	<insert id="insert_review_temp" parameterType="ReviewDto">
+		insert into review_temp (user_id, title, content)
+		values ( #{userId}, #{title}, #{content} )
+	</insert>
+	
+	<!-- 임시저장 불러오기 -->
+	<select id="select_review_temp" resultType="ReviewDto">
+		select title, content
+		from review_temp
+		where user_id = #{userId}
+	</select>
+	
+	<!-- 글 임시저장 변경 -->
+	<update id="update_review_temp">
+		update review_temp
+		set title = #{title}, content = #{content}
+		where user_id = #{userId}
+	</update>
+	
+	<!-- 임시저장 삭제 -->
+	<delete id="delete_review_temp">
+		delete from review_temp
+		where user_id = #{userId}
+	</delete>
 	
 	<!-- 글목록 불러오기 (+검색기능) -->
 	<select id="select_review_list" resultType="ReviewDto" parameterType="hashMap">
@@ -35,16 +70,9 @@
 	
 	<!-- 글상세 불러오기 -->
 	<select id="select_review_view" resultType="ReviewDto">
-		select review_id, user_id, title, content, create_date, views, like_count, stars, comment_count
+		select review_id, plan_id, user_id, title, content, create_date, views, like_count, stars, comment_count
 		from review_bbs
  		where review_id = #{reviewId}
-	</select>
-	
-	<!-- 글번호 찾기 -->
-	<select id="select_reviewId" resultType="ReviewDto">
-		select max(review_id) review_id
-		from review_bbs
-		where user_id = #{userId}
 	</select>
 	
 	<!-- 조회수 증가 -->
@@ -78,19 +106,19 @@
 	
 	<!-- 이미지파일명 저장 -->
 	<insert id="insert_review_image" parameterType="ReviewImgDto">
-		insert into review_image (file_path,file_name)
-		values ( #{filePath}, #{fileName} )
+		insert into review_image (review_id, file_name)
+		values ( #{reviewId}, #{fileName} )
 	</insert>
 	
-	<!-- 이미지파일명 조회 -->        <!-- parameterType 필요함??? -->
-	<select id="select_review_image" parameterType="string" resultType="ReviewImgDto">
-		select file_path, file_name
+	<!-- 이미지파일명 조회 -->
+	<select id="select_review_image" resultType="ReviewImgDto">
+		select review_id, file_name
 		from review_image
  		where file_name = #{fileName}
 	</select>
 	
 	<!-- 이미지파일명 삭제 -->
-	<delete id="delete_review_image" parameterType="string">
+	<delete id="delete_review_image">
 		delete from review_image
 		where file_name = #{fileName}
 	</delete>

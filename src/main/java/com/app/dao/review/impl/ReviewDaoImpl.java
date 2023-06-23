@@ -26,6 +26,46 @@ public class ReviewDaoImpl implements ReviewDao{
 		
 		return result;
 	}
+	
+	@Override
+	public ReviewDto selectReviewId(ReviewDto reviewDto) {
+		
+		ReviewDto resultDto = sqlsessionTemplate.selectOne("review_mapper.select_review_id", reviewDto);
+		
+		return resultDto;
+	}
+	
+	@Override
+	public int insertTemporaryReview(ReviewDto reviewDto) {
+		
+		int result = sqlsessionTemplate.insert("review_mapper.insert_review_temp", reviewDto);
+		
+		return result;
+	}
+	
+	@Override
+	public ReviewDto selectTemporaryReview(String userId) {
+		
+		ReviewDto reviewDto = sqlsessionTemplate.selectOne("review_mapper.select_review_temp", userId);
+		
+		return reviewDto;
+	}
+	
+	@Override
+	public int updateTemporaryReview(ReviewDto reviewDto) {
+		
+		int result = sqlsessionTemplate.update("review_mapper.update_review_temp", reviewDto);
+		
+		return result;
+	}
+	
+	@Override
+	public int deleteTemporaryReview(String userId) {
+		
+		int result = sqlsessionTemplate.delete("review_mapper.delete_review_temp", userId);
+		
+		return result;
+	}
 
 	@Override
 	public List<ReviewDto> selectReviewList(Map<String, String> map) {
@@ -40,15 +80,6 @@ public class ReviewDaoImpl implements ReviewDao{
 		
 		ReviewDto reviewDto = 
 				sqlsessionTemplate.selectOne("review_mapper.select_review_view", reviewId);
-		
-		return reviewDto;
-	}
-	
-	@Override
-	public ReviewDto selectReview(String userId) {
-		
-		ReviewDto reviewDto = 
-				sqlsessionTemplate.selectOne("review_mapper.select_reviewId", userId);
 		
 		return reviewDto;
 	}

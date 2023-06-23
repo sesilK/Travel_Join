@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ReviewImgDto {
 
-	String reviewId;
+	int reviewId;
    	String fileName;
 
 }
