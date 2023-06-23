@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+						
+<mapper namespace="join_mapper">
+
+	<select id="select_GroupBuying" resultType="JoinDto">
+		select  NO, ID, TITLE, CONTENT, TO_CHAR(reg_date, 'YYYY/MM/DD') REG_DATE
+		from join_board order by no
+	</select>
+
+</mapper>
