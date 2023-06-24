@@ -123,9 +123,9 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 
 	@Override
-	public int removeReviewImage(String fileName) {
+	public int removeReviewImage(int reviewId) {
 
-		int result = reviewDao.deleteReviewImg(fileName);
+		int result = reviewDao.deleteReviewImg(reviewId);
 		
 		return result;
 
@@ -135,6 +135,14 @@ public class ReviewServiceImpl implements ReviewService{
 	public int blindReview(int reviewId) {
 
 		int result = reviewDao.updateReviewDeleteAt(reviewId);
+		
+		return result;
+	}
+
+	@Override
+	public int modifyReview(ReviewDto reviewDto) {
+
+		int result = reviewDao.updateReview(reviewDto);
 		
 		return result;
 	}

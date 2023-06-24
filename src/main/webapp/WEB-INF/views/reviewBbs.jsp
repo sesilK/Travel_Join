@@ -71,6 +71,7 @@
 						window.location.href = "/reviewView?reviewId="+reviewId;
 					}
 					if(data === 'false'){
+						alert("삭제된 글입니다.");
 						window.location.href = "/reviewNotExist";
 					}
 				},	//요청에 대해 성공한 경우 수행할 내용

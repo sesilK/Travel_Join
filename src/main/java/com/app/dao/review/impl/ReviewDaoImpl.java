@@ -135,9 +135,9 @@ public class ReviewDaoImpl implements ReviewDao{
 	}
 
 	@Override
-	public int deleteReviewImg(String fileName) {
+	public int deleteReviewImg(int reviewId) {
 		
-		int result = sqlsessionTemplate.delete("review_mapper.delete_review_image", fileName);
+		int result = sqlsessionTemplate.delete("review_mapper.delete_review_image", reviewId);
 		
 		return result;
 	}
@@ -146,6 +146,14 @@ public class ReviewDaoImpl implements ReviewDao{
 	public int updateReviewDeleteAt(int reviewId) {
 		
 		int result = sqlsessionTemplate.update("review_mapper.update_review_delete_at", reviewId);
+		
+		return result;
+	}
+
+	@Override
+	public int updateReview(ReviewDto reviewDto) {
+		
+		int result = sqlsessionTemplate.update("review_mapper.update_review_modify", reviewDto);
 		
 		return result;
 	}

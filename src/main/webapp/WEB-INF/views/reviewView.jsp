@@ -17,11 +17,15 @@
 	<p>여행 ${item.planId}</p>
 	<p>별점 ${item.stars}</p>
 	<p>${item.userId} | ${item.createDate} | 조회 ${item.views} | 추천 <span id="likeCount">${item.likeCount}</span> | 댓글 ${item.commentCount}</p>
+	<c:if test="${item.updateDate != null}">
+		<p>${item.updateDate} 수정됨</p>
+	</c:if>
 
-
-	  <button id="editBtn" type="button">수정</button>
+	<c:if test="${item.userId == 'admin'}">
+	<%-- <c:if test="${item.userId eq sessionScope.userId}"> --%>
+	  <button id="modifyBtn" type="button">수정</button>
 	  <button id="deleteBtn" type="button">삭제</button><br/>
-
+	</c:if>
 
 	<p>내용 : ${item.content}</p>
 
@@ -61,7 +65,7 @@
 				$.ajax({
 					type : "POST",	//요청 method
 					contentType : "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
-					url : "/reviewView",	//어디 경로로 요청할건지 (Restful Api 서버 요청 주소)
+					url : "/reviewLike",	//어디 경로로 요청할건지 (Restful Api 서버 요청 주소)
 					data : JSON.stringify({	//객체를 -> JSON string 으로 변환
 						userId: userId,
 						reviewId: reviewId
@@ -85,6 +89,10 @@
 			
 			});
 			
+			// 수정 버튼 클릭 이벤트 처리
+			$('#modifyBtn').click(function(){
+				window.location.href = "/reviewModify?reviewId="+reviewId;
+			});
 			
 			// 삭제 버튼 클릭 이벤트 처리
 			$('#deleteBtn').click(function(){
@@ -95,6 +103,7 @@
 				        contentType : "application/json; charset=utf-8",
 				        url: "/deleteReview",
 				        data: JSON.stringify({
+				        	userId: userId,
 				        	reviewId: reviewId
 				    	}),
 					    success: function(data){
@@ -102,7 +111,7 @@
 					            alert('게시물이 삭제되었습니다.');
 					            window.location.href = "/reviewBbs";
 					        } else {
-					            alert('게시물 삭제 실패');
+					            alert('삭제 권한이 없습니다.');
 					        }
 					    },
 					    error: function(){

@@ -35,8 +35,10 @@ public interface ReviewDao {
 	
 	public ReviewImgDto selectReviewImg(String fileName); //이미지파일명 조회
 	
-	public int deleteReviewImg(String fileName); //이미지파일명 삭제
+	public int deleteReviewImg(int reviewId); //이미지파일명 전부 삭제
 	
 	public int updateReviewDeleteAt(int reviewId); //글 삭제
+	
+	public int updateReview(ReviewDto reviewDto); //글 수정
 	
 }
