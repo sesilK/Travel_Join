@@ -29,7 +29,7 @@
 	
 	<!-- 임시저장 불러오기 -->
 	<select id="select_review_temp" resultType="ReviewDto">
-		select title, content
+		select user_id, title, content
 		from review_temp
 		where user_id = #{userId}
 	</select>
@@ -65,6 +65,7 @@
 		<if test="searchCondition == 'user'">
 			and user_id like '%'||#{keyword}||'%'
 		</if>
+		and delete_at = 'N'
 		order by review_id desc
 	</select>
 	
@@ -73,6 +74,7 @@
 		select review_id, plan_id, user_id, title, content, create_date, views, like_count, stars, comment_count
 		from review_bbs
  		where review_id = #{reviewId}
+ 		and delete_at = 'N'
 	</select>
 	
 	<!-- 조회수 증가 -->
@@ -122,5 +124,12 @@
 		delete from review_image
 		where file_name = #{fileName}
 	</delete>
-
+	
+	<!-- 글 삭제 -->
+	<update id="update_review_delete_at">
+		update review_bbs
+		set delete_at = 'Y'
+		where review_id = #{reviewId}
+	</update>
+	
 </mapper>

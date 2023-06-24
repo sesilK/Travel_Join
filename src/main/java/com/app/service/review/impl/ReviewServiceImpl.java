@@ -131,4 +131,12 @@ public class ReviewServiceImpl implements ReviewService{
 
 	}
 
+	@Override
+	public int blindReview(int reviewId) {
+
+		int result = reviewDao.updateReviewDeleteAt(reviewId);
+		
+		return result;
+	}
+
 }

@@ -36,4 +36,6 @@ public interface ReviewService {
 	public ReviewImgDto findReviewImage(String fileName); //이미지파일명 조회
 	
 	public int removeReviewImage(String fileName); //이미지파일명 삭제
+	
+	public int blindReview(int reviewId); //글 삭제
 }

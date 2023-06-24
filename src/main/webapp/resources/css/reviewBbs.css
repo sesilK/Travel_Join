@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+td.title {
+	cursor: pointer;
+}
+
+td.title:hover {
+	text-decoration: underline;
+}

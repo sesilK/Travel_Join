@@ -37,5 +37,6 @@ public interface ReviewDao {
 	
 	public int deleteReviewImg(String fileName); //이미지파일명 삭제
 	
+	public int updateReviewDeleteAt(int reviewId); //글 삭제
 	
 }

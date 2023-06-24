@@ -53,18 +53,18 @@
 	
 		$(document).ready(function(){
 			
-			$('#like').click(function(){
+			let reviewId = $('#num').data('reviewid');
+			let userId = '${item.userId}';
 			
-				let num = $('#num').data('reviewid');
-				let id = '${item.userId}';
+			$('#like').click(function(){
 
 				$.ajax({
 					type : "POST",	//요청 method
 					contentType : "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
-					url : "http://localhost:8080/reviewView",	//어디 경로로 요청할건지 (Restful Api 서버 요청 주소)
+					url : "/reviewView",	//어디 경로로 요청할건지 (Restful Api 서버 요청 주소)
 					data : JSON.stringify({	//객체를 -> JSON string 으로 변환
-						userId: id,
-						reviewId: num
+						userId: userId,
+						reviewId: reviewId
 					}),	//파라미터로 같이 담아서 보낼 것들
 					success : (data)=>{
 						console.log(data);
@@ -84,6 +84,34 @@
 				});
 			
 			});
+			
+			
+			// 삭제 버튼 클릭 이벤트 처리
+			$('#deleteBtn').click(function(){
+
+				if(confirm('삭제하시겠습니까?')){
+				    $.ajax({
+				        type: "POST",
+				        contentType : "application/json; charset=utf-8",
+				        url: "/deleteReview",
+				        data: JSON.stringify({
+				        	reviewId: reviewId
+				    	}),
+					    success: function(data){
+					        if(data === 'true'){
+					            alert('게시물이 삭제되었습니다.');
+					            window.location.href = "/reviewBbs";
+					        } else {
+					            alert('게시물 삭제 실패');
+					        }
+					    },
+					    error: function(){
+					        alert('게시물 삭제 실행 오류');
+					    }
+					});
+				}
+			});
+			
 			
 		});
 

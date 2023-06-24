@@ -141,5 +141,13 @@ public class ReviewDaoImpl implements ReviewDao{
 		
 		return result;
 	}
+
+	@Override
+	public int updateReviewDeleteAt(int reviewId) {
+		
+		int result = sqlsessionTemplate.update("review_mapper.update_review_delete_at", reviewId);
+		
+		return result;
+	}
 	
 }

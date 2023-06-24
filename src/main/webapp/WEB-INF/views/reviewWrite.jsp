@@ -12,8 +12,7 @@
 <body>
 	<h1>reviewWrite</h1>
 
-	<form action="" method="POST" name="reviewForm" 
-			onsubmit="return checkForm();" enctype="multipart/form-data">
+
 		여행 <select name="planId">
 			<option selected value="">선택해주세요.</option>
 			<option value="여행1">여행1</option>
@@ -32,7 +31,7 @@
 		<button type="submit" id="submitBtn">등록하기</button>
 		<a href="reviewBbs"><button type="button">돌아가기</button></a>
 		
-	</form>
+
 
 
 	<!-- include jquery, summernote js -->
@@ -107,8 +106,65 @@
 		
 		let shouldCallTemporarySave = true;  //임시저장을 해야하는 경우 true
 		
-		document.getElementById("submitBtn").addEventListener("click", function() {
-			shouldCallTemporarySave = false;  //등록버튼 클릭시 임시저장 실행여부를 false로 변경
+		
+		document.getElementById("submitBtn").addEventListener("click", function() { //등록버튼 클릭시
+			
+			shouldCallTemporarySave = false;  // 임시저장 실행여부를 false로 변경
+			
+			let planId = $('select[name="planId"]').val();
+			let stars = $('select[name="stars"]').val();
+			let title = $('input[name="title"]').val();
+			let content = $('div[role="textbox"]')[0].innerHTML;
+			
+			if (planId === "") {
+				alert("여행을 선택해주세요.");
+				return false;
+			} else if (stars === "") {
+				alert("별점을 선택해주세요.");
+				return false;
+			} else if (title === "") {
+				alert("제목을 입력해주세요.");
+				return false;
+			} else if (content === "") {
+				alert("내용을 입력해주세요.");
+				return false;
+			} else {
+				
+				// 써머노트 에디터의 내용 가져오기
+				//let content = $('#summernote').summernote('code');
+				
+				// 내용에서 이미지 태그들 추출하여 파일명을 리스트로 만들기
+				let imageFileNameList = [];
+				$(content).find('img').each(function() {
+					let imageUrl = $(this).attr('src');
+					let fileName = imageUrl.split('/').pop();
+					imageFileNameList.push(fileName);
+				});
+
+				//폼 전송
+				$.ajax({
+					type: "POST",	//요청 method
+					contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
+					url: "/reviewWrite", //어디 경로로 요청할건지
+					data : JSON.stringify({	//객체를 -> JSON string 으로 변환
+						planId: planId,
+						stars: stars,
+						title: title,
+						content: content,
+						imageFileNameList: imageFileNameList
+					}),	//파라미터로 같이 담아서 보낼 것들
+					success : (data)=>{
+						window.location.href = "/reviewView?reviewId="+data;
+						//return true;
+					},	//요청에 대해 성공한 경우 수행할 내용
+					error :	()=>{
+						alert('실행 오류');
+					}	//요청이 실패,오류난 경우 수행할 내용
+					
+				});
+				
+			}
+			
 		});
 
 		window.onbeforeunload = function() { //페이지를 떠날때 (창 닫기, 새로고침, 뒤로가기 등)
@@ -132,7 +188,6 @@
 					content: content
 				}),	//파라미터로 같이 담아서 보낼 것들
 				success : (data)=>{
-					console.log(data);
 					if(data === 'true'){
 						//alert('임시저장되었습니다.');
 					}
@@ -145,63 +200,7 @@
 				}	//요청이 실패,오류난 경우 수행할 내용
 			});
 		}
-		
-		
-		//등록버튼 클릭시 실행 조건 확인
-		function checkForm() {
-			let planId = $('select[name="planId"]').val();
-			let stars = $('select[name="stars"]').val();
-			let title = $('input[name="title"]').val();
-			//let content = $('textarea[name="content"]').val();
-			let content = $('div[role="textbox"]')[0].innerHTML;
-			if (planId === "") {
-				alert("여행을 선택해주세요.");
-				return false;
-			} else if (stars === "") {
-				alert("별점을 선택해주세요.");
-				return false;
-			} else if (title === "") {
-				alert("제목을 입력해주세요.");
-				return false;
-			} else if (content === "") {
-				alert("내용을 입력해주세요.");
-				return false;
-			} else {
-				
-				// 써머노트 에디터의 내용 가져오기
-				let content = $('#summernote').summernote('code');
-				
-				// 내용에서 이미지 태그들 추출하여 파일명을 리스트로 만들기
-				let imageFileNameList = [];
-				$(content).find('img').each(function() {
-					let imageUrl = $(this).attr('src');
-					let fileName = imageUrl.split('/').pop();
-					imageFileNameList.push(fileName);
-				});
 
-				//폼 전송
-				$.ajax({
-					type: "POST",	//요청 method
-					contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
-					url: "/reviewWrite_process", //어디 경로로 요청할건지
-					data : JSON.stringify({	//객체를 -> JSON string 으로 변환
-						planId: planId,
-						stars: stars,
-						title: title,
-						content: content,
-						imageFileNameList: imageFileNameList
-					}),	//파라미터로 같이 담아서 보낼 것들
-					success : (data)=>{
-						return true;
-					},	//요청에 대해 성공한 경우 수행할 내용
-					error :	()=>{
-						alert('실행 오류');
-					}	//요청이 실패,오류난 경우 수행할 내용
-					
-				});
-				
-			}
-		};
 		
 		
 	</script>

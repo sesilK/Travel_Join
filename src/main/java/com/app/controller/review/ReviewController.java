@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,20 +66,7 @@ public class ReviewController {
 		return "reviewWrite";
 	}
 	
-	@PostMapping("/reviewWrite") //글작성 폼 전송 완료 후 페이지 이동
-	public String reviewWrite_(@ModelAttribute ReviewDto reviewDto) {
-		
-		String userId = "admin";  //   <- id 세션에서 가져오게 수정
-		reviewDto.setUserId(userId);
-		reviewDto.setDeleteAt("N");
-		ReviewDto resultDto = reviewService.returnReview(reviewDto); //글 반환
-		System.out.println(resultDto);
-		int reviewId = resultDto.getReviewId(); //글 번호
-		
-		return "redirect:/reviewView?reviewId=" + reviewId;
-	}
-	
-	@PostMapping("/reviewWrite_process") //글 작성 버튼 클릭시 폼 전송 과정
+	@PostMapping("/reviewWrite") //글 작성 버튼 클릭시 폼 전송 과정
 	@ResponseBody
 	public String reviewWrite_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		
@@ -89,6 +75,7 @@ public class ReviewController {
 		
 		String userId = "admin";  //   <- id 세션에서 가져오게 수정
 		reviewDto.setUserId(userId);
+		reviewDto.setDeleteAt("N");
 		
 		int result = reviewService.createReview(reviewDto); //글 등록
 		ReviewDto resultDto = reviewService.returnReview(reviewDto); //글 반환
@@ -107,10 +94,8 @@ public class ReviewController {
 			reviewImgDto.setFileName(imageFileNameList.get(i)); //파일명 set
 			reviewService.uploadReviewImage(reviewImgDto); //이미지파일명 저장
 		}
-		String reviewIdStr = String.valueOf(reviewId);
-		System.out.println(reviewIdStr);
 		
-		return "/reviewView?reviewId=" + reviewIdStr; //이동할 url 전달 (글 상세페이지)
+		return ""+reviewId;	//글번호 전달
 	}
 	
 	@PostMapping("/temporarySave") //글 임시저장
@@ -145,15 +130,38 @@ public class ReviewController {
 		String userId = "admin";  //   <- id 세션에서 가져오게 수정
 		
 		reviewDto.setReviewId(reviewId);
-		reviewDto.setUserId(userId);
+		reviewDto.setUserId(userId); //조회수 증가 확인용
 		
 		reviewService.increaseViews(reviewDto); //조회수 증가
 		
 		ReviewDto item = reviewService.findReview(reviewId);
-		model.addAttribute("item", item);
+		if(item != null) {
+			model.addAttribute("item", item);
+			return "reviewView";
+		} else {
+			return "redirect:/reviewNotExist";
+		}	
+	}
+	
+	@GetMapping("/reviewNotExist") //글상세 페이지 요청 (글제목 클릭)
+	public String reviewNotExist() {
+		return "reviewNotExist";
+	}
+	
+	@PostMapping("/reviewViewIsExist") //글 존재 확인
+	@ResponseBody
+	public String reviewViewIsExist(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 		
-		return "reviewView";
+		ReviewDto item = reviewService.findReview(reviewDto.getReviewId());
+
+		if(item != null) {
+			return "true";
+		} else {
+			return "false";
+		}			
 	}
 	
 	@PostMapping("/reviewView") //추천 버튼 클릭
@@ -163,7 +171,6 @@ public class ReviewController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		LikeDto likeDto = objectMapper.readValue(requestBody, LikeDto.class);
 		
-		
 		LikeDto isNull =	//추천 여부 확인 
 				reviewService.CheckIfRecommended(likeDto.getReviewId(), likeDto.getUserId());
 		
@@ -172,6 +179,22 @@ public class ReviewController {
 			return "true";	//추천 성공
 		} else {
 			return "false";	//추천 실패
+		}			
+	}
+	
+	@PostMapping("/deleteReview") //추천 버튼 클릭
+	@ResponseBody
+	public String deleteReview(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
+		int reviewId = reviewDto.getReviewId();
+		int result = reviewService.blindReview(reviewId); //글 삭제처리 (안보이게)
+		
+		if (result == 1) {
+			return "true";	//성공
+		} else {
+			return "false";	//실패
 		}			
 	}
 	
