@@ -51,38 +51,38 @@ $(document).ready(function () {
 
     $(".friend").each(function () {
 
-        // 내 채팅방 모두 연결
-        roomId = $(this).data("roomid");
-        console.log(roomId);
-
-        stomp.subscribe("/sub/channel/" + roomId, function (chat) {
-            console.log(chat);
-            var message = JSON.parse(chat.body);
-            var sender = message.sender;
-            var content = message.content;
-            var timeStamp = message.timeStamp;
-            var str = '';
-
-            if (username === sender) {
-                str = "<div class='chat-box'>";
-                str += '<p> ' + username + ': ' + content + ' [' + timeStamp + ']</p>';
-                str += '</div>';
-            } else {
-                str = "<div class='chat-box'>";
-                str += '<p> ' + content + '  [' + timeStamp + '] </p>';
-                str += '</div>';
-            }
-
-            $('#chat-area').append(str); // 새로운 채팅 업데이트
-            $("body").scrollTop($('#chat-area').height() - 100); // 채팅 오면 스크롤 맨 아래로
-        });
-
         $(this).click(function () {
             var childOffset = $(this).offset();
             var parentOffset = $(this).parent().parent().offset();
             var childTop = childOffset.top - parentOffset.top;
             var clone = $(this).find('img').eq(0).clone();
             var top = childTop + 12 + "px";
+
+            // 내 채팅방 모두 연결
+            roomId = $(this).data("roomid");
+            console.log(roomId);
+
+            stomp.subscribe("/sub/channel/" + roomId, function (chat) {
+                console.log(chat);
+                var message = JSON.parse(chat.body);
+                var sender = message.sender;
+                var content = message.content;
+                var timeStamp = message.timeStamp;
+                var str = '';
+
+                if (username === sender) {
+                    str = "<div class='chat-box'>";
+                    str += '<p> ' + username + ': ' + content + ' [' + timeStamp + ']</p>';
+                    str += '</div>';
+                } else {
+                    str = "<div class='chat-box'>";
+                    str += '<p> ' + content + '  [' + timeStamp + '] </p>';
+                    str += '</div>';
+                }
+
+                $('#chat-area').append(str); // 새로운 채팅 업데이트
+                $("body").scrollTop($('#chat-area').height() - 100); // 채팅 오면 스크롤 맨 아래로
+            });
 
 
             $(clone).css({'top': top}).addClass("floatingImg").appendTo("#chatbox");

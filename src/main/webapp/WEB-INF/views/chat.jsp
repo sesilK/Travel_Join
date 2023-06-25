@@ -52,7 +52,29 @@
 
         <div id="chat-messages">
             <label>2023-06-25</label>
+
+            <div class="message">
+                <span class="nick">닉네임</span>
+                <span class="timestamp">20:54</span>
+                <span class="unread">3</span>
+                <img src="/profile/default_profile.png"/>
+                <div class="bubble">
+                    채팅 샘플 메세지ㅣ이이이ㅣㅣ
+                </div>
+            </div>
+
+            <div class="message right">
+                <img src="/profile/default_profile.png"/>
+                <div class="bubble">
+                    학원가기 싫다ㅏㅏㅏㅏㅏㅏㅏㅏ
+                    <span class="timestamp">20:54</span>
+                    <span class="unread">3</span>
+                </div>
+            </div>
+
         </div>
+
+
 
         <div id="sendmessage">
             <input type="text" value="메세지를 입력하세요"/>
