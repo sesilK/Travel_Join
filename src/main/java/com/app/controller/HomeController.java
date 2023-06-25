@@ -33,11 +33,14 @@ public class HomeController {
         return "login";
     }
 
-    @RequestMapping("/roomlist")
+    @RequestMapping("/chat")
     public String roomList(Model model) {
         List<ChatRoomDto> rooms = chatService.getAllChatRooms();
         model.addAttribute("rooms", rooms);
-        return "roomlist";
+        for (ChatRoomDto room : rooms) {
+            System.out.println(room.toString());
+        }
+        return "chat";
     }
 
     @RequestMapping("/enter/{roomId}")
@@ -49,6 +52,11 @@ public class HomeController {
 
         model.addAttribute("room", chatRoomDto);
         return "chat";
+    }
+
+    @RequestMapping("/test")
+    public String test() {
+        return "test";
     }
 
 }

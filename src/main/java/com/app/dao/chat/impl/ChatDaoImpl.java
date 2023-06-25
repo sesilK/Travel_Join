@@ -42,7 +42,6 @@ public class ChatDaoImpl implements ChatDao {
     @Override
     public List<ChatRoomDto> select_all_chatroom_m() {
         List<ChatRoomDto> list = sqlSessionTemplate.selectList("select_all_chatroom");
-        System.out.println(list.toString());
         return list;
     }
 

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="roomId" value="${room.roomId}"></c:set>
 <html>
 <head>
     <title>Title</title>
@@ -8,7 +9,7 @@
             integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <link href="/css/chat.css" rel="stylesheet" type="text/css">
+    <link href="/css/test.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
@@ -24,7 +25,7 @@
         <c:forEach var="room" items="${rooms}">
             <div id="friends">
 
-                <div class="friend" data-roomId="${room.roomId}">
+                <div class="friend" data-roomId="${roomId}">
                     <img src="/profile/default_profile.png"/>
                     <p>
                         <strong>채팅방${room.roomId}</strong><br>
@@ -63,6 +64,6 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="/js/chat.js"></script>
+<script src="/js/test.js"></script>
 </body>
 </html>

@@ -26,8 +26,18 @@
     </insert>
 
     <select id="select_all_chatroom" resultType="ChatRoomDto">
-        select *
-        from chatroom_m
+        SELECT m.room_id, m.master, m.status, NVL(c.content, '새로운 채팅방') AS content
+        FROM chatroom_m m
+                 LEFT JOIN (
+            SELECT room_id, content
+            FROM chat
+            WHERE (room_id, chat_id) IN (
+                SELECT room_id, MAX(chat_id)
+                FROM chat
+                WHERE type = 'text'
+                GROUP BY room_id)
+        ) c ON m.room_id = c.room_id
+        ORDER BY m.room_id
     </select>
 
     <select id="select_chatroom_by_id" resultType="ChatRoomDto" parameterType="Integer">

@@ -1,5 +1,6 @@
 package com.app.websocket;
 
+
 import com.app.dto.ChatDto;
 import com.app.utils.TimeStampUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class MessageController {
     @MessageMapping("/send")
     public void message(ChatDto message) {
         message.setTimeStamp(TimeStampUtil.sysDate());
+        System.out.println(message.toString());
         simpMessageSendingOperations.convertAndSend("/sub/channel/" + message.getRoomId(), message);
     }
 }
