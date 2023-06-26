@@ -10,8 +10,9 @@ public class CommentDto {
 
 	int reviewId;			//글번호
 	int commentId;			//댓글번호	
-	String userId;			//작성자
+	int commentLv;			//댓글레벨
 	int parentCommentId;	//부모댓글번호
+	String userId;			//작성자
 	String content;			//내용
 	String createDate;		//작성일
 	String updateDate;		//수정일

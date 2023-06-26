@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.app.dao.review.ReviewDao;
+import com.app.dto.review.CommentDto;
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
@@ -28,11 +29,12 @@ public class ReviewDaoImpl implements ReviewDao{
 	}
 	
 	@Override
-	public ReviewDto selectReviewId(ReviewDto reviewDto) {
+	public int selectReviewId(ReviewDto reviewDto) {
 		
 		ReviewDto resultDto = sqlsessionTemplate.selectOne("review_mapper.select_review_id", reviewDto);
+		int reviewId = resultDto.getReviewId();
 		
-		return resultDto;
+		return reviewId;
 	}
 	
 	@Override
@@ -108,13 +110,15 @@ public class ReviewDaoImpl implements ReviewDao{
 	public int insertLike(int reviewId, String userId) {
 
 		//추천 테이블에 insert
-		LikeDto newLikeDto = new LikeDto(reviewId, userId);
-		int result1 = sqlsessionTemplate.insert("review_mapper.insert_review_like", newLikeDto);
+		LikeDto likeDto = new LikeDto(reviewId, userId);
+		sqlsessionTemplate.insert("review_mapper.insert_review_like", likeDto);
 		//리뷰 테이블에 추천수 증가
-		int result2 = sqlsessionTemplate.update("review_mapper.update_review_like_increase", reviewId);
+		sqlsessionTemplate.update("review_mapper.update_review_like_count", reviewId);
+		//추천수 반환
+		ReviewDto reviewDto = sqlsessionTemplate.selectOne("review_mapper.select_review_like_count", reviewId);
+		int result = reviewDto.getLikeCount();
 		
-		return result1 + result2;
-
+		return result;
 	}
 	
 	@Override
@@ -156,6 +160,55 @@ public class ReviewDaoImpl implements ReviewDao{
 		int result = sqlsessionTemplate.update("review_mapper.update_review_modify", reviewDto);
 		
 		return result;
+	}
+
+	@Override
+	public int insertComment(CommentDto commentDto) {
+		
+		//댓글 테이블에 insert
+		int result1 = sqlsessionTemplate.insert("review_mapper.insert_comment", commentDto);
+		//리뷰 테이블에 댓글수 증가
+		int reviewId = commentDto.getReviewId();
+		int result2 = sqlsessionTemplate.update("review_mapper.update_review_comment_count", reviewId);
+		
+		return result1 + result2;
+	}
+
+	@Override
+	public int updateCommentDeleteAt(int commentId, int reviewId) {
+		
+		//댓글 테이블에 삭제여부 update
+		int result1 = sqlsessionTemplate.update("review_mapper.update_comment_delete_at", commentId);
+		//리뷰 테이블에 댓글수 감소
+		int result2 = sqlsessionTemplate.update("review_mapper.update_review_comment_count", reviewId);
+		
+		return result1 + result2;
+	}
+
+	@Override
+	public int updateComment(CommentDto commentDto) {
+		
+		int result = sqlsessionTemplate.update("review_mapper.update_comment_modify", commentDto);
+		
+		return result;
+	}
+
+	@Override
+	public int selectCommentCount(int reviewId) {
+		
+		ReviewDto reviewDto = sqlsessionTemplate.selectOne("review_mapper.select_review_comment_count", reviewId);
+		int commentCount = reviewDto.getCommentCount();
+		
+		return commentCount;
+	}
+	
+	@Override
+	public List<CommentDto> selectCommentList(int reviewId) {
+		
+		List<CommentDto> list = 
+				sqlsessionTemplate.selectList("review_mapper.select_comment_list", reviewId);
+		
+		return list;
 	}
 	
 }

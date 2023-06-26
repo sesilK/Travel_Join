@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dao.review.ReviewDao;
+import com.app.dto.review.CommentDto;
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
@@ -27,11 +28,11 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 	
 	@Override
-	public ReviewDto returnReview(ReviewDto reviewDto) {
+	public int returnReviewId(ReviewDto reviewDto) {
 		
-		ReviewDto resultDto = reviewDao.selectReviewId(reviewDto);
+		int reviewId = reviewDao.selectReviewId(reviewDto);
 		
-		return resultDto;
+		return reviewId;
 	}
 	
 	@Override
@@ -145,6 +146,46 @@ public class ReviewServiceImpl implements ReviewService{
 		int result = reviewDao.updateReview(reviewDto);
 		
 		return result;
+	}
+
+	@Override
+	public int createComment(CommentDto CommentDto) {
+		
+		int result = reviewDao.insertComment(CommentDto);
+		
+		return result;
+	}
+
+	@Override
+	public int blindComment(int CommentId, int reviewId) {
+		
+		int result = reviewDao.updateCommentDeleteAt(CommentId, reviewId);
+		
+		return result;
+	}
+
+	@Override
+	public int modifyComment(CommentDto CommentDto) {
+		
+		int result = reviewDao.updateComment(CommentDto);
+		
+		return result;
+	}
+	
+	@Override
+	public int returnCommentCount(int reviewId) {
+		
+		int commentCount = reviewDao.selectCommentCount(reviewId);
+		
+		return commentCount;
+	}
+
+	@Override
+	public List<CommentDto> findCommentList(int reviewId) {
+		
+		List<CommentDto> list = reviewDao.selectCommentList(reviewId);
+		
+		return list;
 	}
 
 }

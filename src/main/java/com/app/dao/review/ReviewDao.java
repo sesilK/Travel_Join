@@ -3,6 +3,7 @@ package com.app.dao.review;
 import java.util.List;
 import java.util.Map;
 
+import com.app.dto.review.CommentDto;
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
@@ -11,7 +12,7 @@ public interface ReviewDao {
 
 	public int insertReview(ReviewDto reviewDto); //글 작성
 	
-	public ReviewDto selectReviewId(ReviewDto reviewDto); //작성글 반환
+	public int selectReviewId(ReviewDto reviewDto); //작성글 번호찾기
 	
 	public int insertTemporaryReview(ReviewDto reviewDto); //글 임시저장
 	
@@ -29,7 +30,7 @@ public interface ReviewDao {
 
 	public LikeDto selectLike(int reviewId, String userId);	//추천여부 확인
 	
-	public int insertLike(int reviewId, String userId); //추천하기
+	public int insertLike(int reviewId, String userId); //추천하기 (증가한 추천수 반환)
 	
 	public int insertReviewImg(ReviewImgDto reviewImgDto); //이미지파일명 저장
 	
@@ -41,4 +42,13 @@ public interface ReviewDao {
 	
 	public int updateReview(ReviewDto reviewDto); //글 수정
 	
+	public int insertComment(CommentDto commentDto); //댓글 작성 (댓글수 증가)
+	
+	public int updateCommentDeleteAt(int commentId, int reviewId); //댓글 삭제 (댓글수 감소)
+	
+	public int updateComment(CommentDto commentDto); //댓글 수정
+	
+	public int selectCommentCount(int reviewId); //댓글수 불러오기
+	
+	public List<CommentDto> selectCommentList(int reviewId); //댓글목록 불러오기
 }

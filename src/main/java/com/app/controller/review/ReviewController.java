@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.dto.review.CommentDto;
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
@@ -78,8 +80,7 @@ public class ReviewController {
 		reviewDto.setDeleteAt("N");
 		
 		int result = reviewService.createReview(reviewDto); //글 등록
-		ReviewDto resultDto = reviewService.returnReview(reviewDto); //글 반환
-		int reviewId = resultDto.getReviewId(); //글 번호
+		int reviewId = reviewService.returnReviewId(reviewDto); //글 번호
 		
 		ReviewDto temp = reviewService.CheckIfTemporarySaved(sessionId); //임시저장된 글이 있는지 확인
 		if(result == 1 && temp != null) { //글 등록 성공했을 때 임시저장된 글이 남아있으면,
@@ -134,14 +135,30 @@ public class ReviewController {
 		
 		reviewService.increaseViews(reviewDto); //조회수 증가
 		
-		ReviewDto item = reviewService.findReview(reviewId);
+		ReviewDto item = reviewService.findReview(reviewId); //해당글 불러오기
+		List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
 		if(item != null) {
 			model.addAttribute("item", item);
+			model.addAttribute("commentList", commentList);
 			return "reviewView";
 		} else {
 			return "redirect:/reviewNotExist";
 		}	
 	}
+	
+//	@PostMapping("/reviewView") //글상세 페이지 요청 (댓글 등록)
+//	public String reviewView_process(Model model, @RequestParam int reviewId) {
+//		
+//		ReviewDto item = reviewService.findReview(reviewId); //해당글 불러오기
+//		List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
+//		if(item != null) {
+//			model.addAttribute("item", item);
+//			model.addAttribute("commentList", commentList);
+//			return "reviewView";
+//		} else {
+//			return "redirect:/reviewNotExist";
+//		}
+//	}
 	
 	@GetMapping("/reviewModify") //글 수정 페이지 요청
 	public String reviewModify(Model model, @RequestParam int reviewId) {
@@ -208,7 +225,7 @@ public class ReviewController {
 	
 	@PostMapping("/reviewLike") //추천 버튼 클릭
 	@ResponseBody
-	public String reviewLike(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public int reviewLike(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		LikeDto likeDto = objectMapper.readValue(requestBody, LikeDto.class);
@@ -217,10 +234,10 @@ public class ReviewController {
 				reviewService.CheckIfRecommended(likeDto.getReviewId(), likeDto.getUserId());
 		
 		if (isNull == null) { //추천한 적 없으면
-			reviewService.reviewRecommend(likeDto.getReviewId(), likeDto.getUserId()); //추천하기
-			return "true";	//추천 성공
+			int likeCount = reviewService.reviewRecommend(likeDto.getReviewId(), likeDto.getUserId()); //추천하기
+			return likeCount; //추천 성공 (추천수 반환)
 		} else {
-			return "false";	//추천 실패
+			return -1;	//추천 실패
 		}			
 	}
 	
@@ -243,15 +260,55 @@ public class ReviewController {
 		}			
 	}
 	
-	/*
-	 * @PostMapping("/reviewView") //댓글 달기 public String reviewView_process(Model
-	 * model, @RequestParam int reviewId) {
-	 * 
-	 * ReviewDto item = reviewService.findReview(reviewId);
-	 * model.addAttribute("item", item);
-	 * 
-	 * return "reviewView"; }
-	 */
+	@PostMapping("/comment") //댓글 등록
+	@ResponseBody
+	public List<CommentDto> comment(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		CommentDto commentDto = objectMapper.readValue(requestBody, CommentDto.class);
+		
+		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		commentDto.setUserId(sessionId);
+		int reviewId = commentDto.getReviewId();
+
+		reviewService.createComment(commentDto); //댓글 등록
+		
+		List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
+
+		return commentList;	//성공
+	}
+	
+	@PostMapping("/updateComment") //댓글 수정
+	@ResponseBody
+	public List<CommentDto> updateComment(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		CommentDto commentDto = objectMapper.readValue(requestBody, CommentDto.class);
+		
+		reviewService.modifyComment(commentDto); //댓글 수정
+		
+		int reviewId = commentDto.getReviewId();
+		List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
+
+		return commentList;	//성공
+	}
+	
+	@PostMapping("/deleteComment") //댓글 삭제
+	@ResponseBody
+	public List<CommentDto> deleteComment(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		CommentDto commentDto = objectMapper.readValue(requestBody, CommentDto.class);
+		
+		int commentId = commentDto.getCommentId();
+		int reviewId = commentDto.getReviewId();
+
+		reviewService.blindComment(commentId, reviewId); //댓글 삭제
+		
+		List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
+
+		return commentList;	//성공
+	}
 	
 	//리뷰 작성시 첨부한 이미지 파일을 경로에 저장하기
 	@PostMapping(value="/uploadSummernoteImageFile", produces = "application/json; charset=utf8")

@@ -12,7 +12,7 @@
 		values ( review_id_seq.NEXTVAL, #{userId} , #{planId}, #{title}, #{content},  #{stars})
 	</insert>
 	
-	<!-- 작성한 글 반환 -->
+	<!-- 작성한 글번호 반환 -->
 	<select id="select_review_id" resultType="ReviewDto">
 		select review_id
 		from review_bbs
@@ -100,11 +100,17 @@
 	</insert>
 	
 	<!-- 추천수 증가 -->
-	<update id="update_review_like_increase">
+	<update id="update_review_like_count">
 		update review_bbs
 		set like_count = (select count(*) from review_like where review_id = #{reviewId})
 		where review_id = #{reviewId}
 	</update>
+	
+	<!-- 추천수 조회 -->
+	<select id="select_review_like_count" resultType="ReviewDto">
+		select count(*) like_count from review_like
+		where review_id = #{reviewId}
+	</select>
 	
 	<!-- 이미지파일명 저장 -->
 	<insert id="insert_review_image" parameterType="ReviewImgDto">
@@ -138,5 +144,87 @@
 		set title = #{title}, content = #{content}, stars = #{stars}, plan_id = #{planId}, update_date = SYSDATE
 		where review_id = #{reviewId}
 	</update>
+	
+	<!-- 댓글 작성 -->
+	<insert id="insert_comment" parameterType="CommentDto">
+		insert into review_comment (comment_id, comment_lv, review_id, user_id, content, parent_comment_id)
+		values ( comment_id_seq.NEXTVAL, #{commentLv}, #{reviewId}, #{userId}, #{content}, #{parentCommentId})
+	</insert>
+	
+	<!-- 댓글 삭제 -->
+	<update id="update_comment_delete_at">
+		update review_comment
+		set delete_at = 'Y', delete_date = SYSDATE
+		where comment_id = #{commentId}
+	</update>
+	
+	<!-- 댓글 수정 -->
+	<update id="update_comment_modify">
+		update review_comment
+		set content = #{content}, update_date = SYSDATE
+		where comment_id = #{commentId}
+	</update>
+	
+	<!-- 댓글수 수정 -->
+	<update id="update_review_comment_count">
+		update review_bbs
+		set comment_count = (select count(*) from review_comment
+							 where review_id = #{reviewId}
+							 and delete_at = 'N')
+		where review_id = #{reviewId}
+	</update>
+	
+	<!-- 댓글수 불러오기 -->
+<!-- 	<select id="select_review_comment_count" resultType="ReviewDto">
+		select count(*) comment_count from review_comment
+		where review_id = #{reviewId}
+		and delete_at = 'N'
+	</select> -->
+	
+	<!-- 댓글목록 불러오기 -->
+	<select id="select_comment_list" resultType="CommentDto">
+		WITH deleted_children AS (
+    		SELECT DISTINCT parent_comment_id
+    		FROM review_comment
+    		WHERE review_id = #{reviewId} AND delete_at = 'Y'
+		)
+		select LEVEL COMMENTLEVEL, comment_lv, comment_id, parent_comment_id, 
+			   user_id, create_date, update_date, delete_at, content	
+		from review_comment
+ 		where review_id = #{reviewId}
+ 		<!-- 삭제된 댓글은 조회하지 않음. 단, 삭제되지 않은 자식계층이 남아있으면 '삭제된 댓글입니다'라고 표시함 -->
+ 		and (comment_id NOT IN (
+            					SELECT parent_comment_id
+            					FROM deleted_children
+        						)
+             or delete_at = 'N') <!-- 삭제되지 않은 댓글은 항상 조회 -->
+		<!-- 계층구조 시작조건 : parent_comment_id가 0인 댓글부터 시작하여 계층형성 -->
+		start with parent_comment_id = 0
+		<!-- 계층구조 연결조건 : 이전 댓글의 id가 현재 댓글의 parent_comment_id와 일치하는 경우 계층형성 -->
+		connect by prior comment_id = parent_comment_id
+		<!-- 같은 부모를 가지는 댓글들 중에서 댓글id로 정렬 -->
+		order siblings by comment_id
+	</select>
+	
+	<!-- 댓글목록 불러오기 -->
+	<select id="select_comment_list2" resultType="CommentDto">
+		select LEVEL COMMENTLEVEL, comment_lv, comment_id, parent_comment_id, 
+			   user_id, create_date, update_date, delete_at, content	
+		from review_comment
+ 		where review_id = #{reviewId}
+ 		<!-- 삭제된 댓글은 조회하지 않음. 단, 삭제되지 않은 자식계층이 남아있으면 '삭제된 댓글입니다'라고 표시함 -->
+ 		and (comment_id in (
+                        	select parent_comment_id from review_comment
+                        	where review_id = #{reviewId} and delete_at = 'N'
+                        	)
+             or comment_lv = 3 <!-- 3계층의 댓글은 항상 조회 --> 
+             or delete_at = 'N')
+		<!-- 계층구조 시작조건 : parent_comment_id가 0인 댓글부터 시작하여 계층형성 -->
+		start with parent_comment_id = 0
+		<!-- 계층구조 연결조건 : 이전 댓글의 id가 현재 댓글의 parent_comment_id와 일치하는 경우 계층형성 -->
+		connect by prior comment_id = parent_comment_id
+		<!-- 같은 부모를 가지는 댓글들 중에서 댓글id로 정렬 -->
+		order siblings by comment_id
+	</select>
 	
 </mapper>
