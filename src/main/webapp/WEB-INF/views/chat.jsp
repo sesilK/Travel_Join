@@ -69,7 +69,7 @@
                             <div class="bubble">
                                     ${chat.content}
                                 <span class="timestamp">${chat.timeStamp}</span>
-                                <span class="unread">3</span>
+                                <span class="unread" data-chatid="${chat.chatId}">${chat.unRead}</span>
                             </div>
                         </div>
                     </c:if>
@@ -78,7 +78,7 @@
                         <div class="message">
                             <span class="nick">${chat.sender}</span>
                             <span class="timestamp">${chat.timeStamp}</span>
-                            <span class="unread">3</span>
+                            <span class="unread" data-chatid="${chat.chatId}">${chat.unRead}</span>
                             <img src="/profile/default_profile.png"/>
                             <div class="bubble">
                                     ${chat.content}

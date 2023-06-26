@@ -14,6 +14,7 @@ $(function () {
 
     stomp.connect({}, function () {
         // console.log("stomp 연결됨 2.12.6");
+        sendMessage('in', roomId, username); // in 신호 보내기
 
         stomp.subscribe("/sub/channel/" + roomId, function (chat) {
             console.log(chat);
@@ -22,35 +23,57 @@ $(function () {
             var content = message.content;
             var timeStamp = message.timeStamp;
             var chatId = message.chatId;
+            var unRead = message.unRead;
             var str = '';
-
-            if (username === sender) {
-                // str = "<div class='chat-box'>";
-                // str += '<p> ' + username + ': ' + content + ' [' + timeStamp + ']</p>';
-                // str += '</div>';
-                str = "<div class='message right' data-chatid='" + chatId + "'>";
-                str += "<img src='/profile/default_profile.png'/>";
-                str += "<div class='bubble'>";
-                str += content;
-                str += "<span class='timestamp'>" + timeStamp + "</span>";
-                str += "<span class='unread'>3</span>";
-                str += "</div>";
-                str += "</div>";
+            var type = message.type;
 
 
-            } else {
-                // str = "<div class='chat-box'>";
-                // str += '<p> ' + content + '  [' + timeStamp + '] </p>';
-                // str += '</div>';
-                str = "<div class='message' data-chatid='" + chatId + "'>";
-                str += "<span class='nick'>" + sender + "</span>";
-                str += "<span class='timestamp'>" + timeStamp + "</span>";
-                str += "<span class='unread'>3</span>";
-                str += "<img src='/profile/default_profile.png'/>";
-                str += "<div class='bubble'>";
-                str += content;
-                str += "</div>";
-                str += "</div>";
+            $.ajax({
+                type: 'post',   //get방식으로 명시
+                url: '/api/chat/read?roomId=' + roomId,  //이동할 jsp 파일 주소
+                dataType: 'json',   //문자형식으로 받기
+                success: function (data) {   //데이터 주고받기 성공했을 경우 실행할 결과
+                    //function(data)를 쓰게 되면 전달받은 데이터가 data안에 담아서 들어오게 된다.
+
+                    for (var chat of data) {
+                        $('span.unread[data-chatid=' + chat.chatId + ']').text(chat.unRead);
+                    }
+                },
+                error: function () {   //데이터 주고받기가 실패했을 경우 실행할 결과
+                    console("unRead 업데이트 실패");
+                }
+            })
+
+
+            if (message.type === 'text') {
+                if (username === sender) {
+                    // str = "<div class='chat-box'>";
+                    // str += '<p> ' + username + ': ' + content + ' [' + timeStamp + ']</p>';
+                    // str += '</div>';
+                    str = "<div class='message right' data-chatid='" + chatId + "'>";
+                    str += "<img src='/profile/default_profile.png'/>";
+                    str += "<div class='bubble'>";
+                    str += content;
+                    str += "<span class='timestamp'>" + timeStamp + "</span>";
+                    str += "<span class='unread' data-chatid='" + chatId + "'>" + unRead + "</span>";
+                    str += "</div>";
+                    str += "</div>";
+
+
+                } else {
+                    // str = "<div class='chat-box'>";
+                    // str += '<p> ' + content + '  [' + timeStamp + '] </p>';
+                    // str += '</div>';
+                    str = "<div class='message' data-chatid='" + chatId + "'>";
+                    str += "<span class='nick'>" + sender + "</span>";
+                    str += "<span class='timestamp'>" + timeStamp + "</span>";
+                    str += "<span class='unread' data-chatid='" + chatId + "'>" + unRead + "</span>";
+                    str += "<img src='/profile/default_profile.png'/>";
+                    str += "<div class='bubble'>";
+                    str += content;
+                    str += "</div>";
+                    str += "</div>";
+                }
             }
 
             $('#chat-messages').append(str); // 새로운 채팅 업데이트
@@ -62,7 +85,27 @@ $(function () {
                 }, 100);
             }
 
+            if (type === 'text') {
+                sendMessage('in', roomId, username); // in 신호 보내기
+            }
+
         });
+    });
+
+    // stomp send 함수 type, content 기본값은 null
+    function sendMessage(_subURL, _roomId, _username, _type = null, _content = null) {
+        stomp.send('/pub/' + _subURL, {}, JSON.stringify({
+            roomId: _roomId,
+            sender: _username,
+            content: _content,
+            type: _type
+        }));
+    }
+
+    // 페이지 나가면 out 신호 보내기
+    $(window).on("beforeunload", function () {
+        alert("out");
+        sendMessage('out', roomId, username); // out 신호 보내기
     });
 
 
@@ -73,14 +116,16 @@ $(function () {
             return;
         }
 
-        stomp.send('/pub/send', {}, JSON.stringify({
-            roomId: roomId,
-            sender: username,
-            content: content,
-            type: "text"
-        }));
-        $('#sendmessage input').val('');
+        // 채팅메세지 서버로 전송
+        sendMessage('send', roomId, username, "text", content);
+        // stomp.send('/pub/send', {}, JSON.stringify({
+        //     roomId: roomId,
+        //     sender: username,
+        //     content: content,
+        //     type: "text"
+        // }));
 
+        $('#sendmessage input').val('');
     });
 
     // 채팅 input창 엔터키 연결
@@ -135,9 +180,11 @@ $(function () {
         }
     });
 
-    $("#chat-messages").animate({
-        scrollTop: $("#chat-messages").prop("scrollHeight") - 270
-    }, 100);
+    // 페이지 로딩 끝나면 채팅 스크롤 하단으로 옮기기
+    // $("#chat-messages").animate({
+    //     scrollTop: $("#chat-messages").prop("scrollHeight") - 270
+    // }, 100);
 
+    $("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight") - 270);
 
 });
