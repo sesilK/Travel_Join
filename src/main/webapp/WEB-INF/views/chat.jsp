@@ -8,35 +8,37 @@
             integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
     <link href="/css/chat.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body data-username="${sessionScope.username}">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 
 
-<div id="chatbox" class="animate">
-    <div id="friendslist">
+<div id="chatbox" class="animate" data-roomid="${room.roomId}">
+    <%--    <div id="friendslist">--%>
 
-        <div id="topmenu">
-            <span class="chats"></span>
-        </div>
+    <%--        <div id="topmenu">--%>
+    <%--            <span class="chats"></span>--%>
+    <%--        </div>--%>
 
-        <c:forEach var="room" items="${rooms}">
-            <div id="friends">
+    <%--        <c:forEach var="room" items="${rooms}">--%>
+    <%--            <div id="friends">--%>
 
-                <div class="friend" data-roomId="${room.roomId}">
-                    <img src="/profile/default_profile.png"/>
-                    <p>
-                        <strong>채팅방${room.roomId}</strong><br>
-                        <span>마지막 채팅</span>
-                    </p>
-                    <div class="status available"></div>
-                </div>
+    <%--                <div class="friend" data-roomId="${room.roomId}">--%>
+    <%--                    <img src="/profile/default_profile.png"/>--%>
+    <%--                    <p>--%>
+    <%--                        <strong>채팅방${room.roomId}</strong><br>--%>
+    <%--                        <span>마지막 채팅</span>--%>
+    <%--                    </p>--%>
+    <%--                    <div class="status available"></div>--%>
+    <%--                </div>--%>
 
-            </div>
-        </c:forEach>
+    <%--            </div>--%>
+    <%--        </c:forEach>--%>
 
-    </div>
+    <%--    </div>--%>
 
     <div id="chatview" class="p1">
         <div id="profile">
@@ -51,29 +53,43 @@
         </div>
 
         <div id="chat-messages">
-            <label>2023-06-25</label>
-
-            <div class="message">
-                <span class="nick">닉네임</span>
-                <span class="timestamp">20:54</span>
-                <span class="unread">3</span>
-                <img src="/profile/default_profile.png"/>
-                <div class="bubble">
-                    채팅 샘플 메세지ㅣ이이이ㅣㅣ
-                </div>
+            <div class="scroll-btn">
+                <span class="material-symbols-outlined">stat_minus_2</span>
             </div>
 
-            <div class="message right">
-                <img src="/profile/default_profile.png"/>
-                <div class="bubble">
-                    학원가기 싫다ㅏㅏㅏㅏㅏㅏㅏㅏ
-                    <span class="timestamp">20:54</span>
-                    <span class="unread">3</span>
-                </div>
-            </div>
+            <%--            <label>2023-06-25</label>--%>
+
+            <c:forEach items="${chats}" var="chat">
+                <c:if test="${chat.type eq 'text'}">
+
+
+                    <c:if test="${chat.sender eq sessionScope.username}">
+                        <div class="message right">
+                            <img src="/profile/default_profile.png"/>
+                            <div class="bubble">
+                                    ${chat.content}
+                                <span class="timestamp">${chat.timeStamp}</span>
+                                <span class="unread">3</span>
+                            </div>
+                        </div>
+                    </c:if>
+
+                    <c:if test="${chat.sender!= sessionScope.username}">
+                        <div class="message">
+                            <span class="nick">${chat.sender}</span>
+                            <span class="timestamp">${chat.timeStamp}</span>
+                            <span class="unread">3</span>
+                            <img src="/profile/default_profile.png"/>
+                            <div class="bubble">
+                                    ${chat.content}
+                            </div>
+                        </div>
+                    </c:if>
+
+                </c:if>
+            </c:forEach>
 
         </div>
-
 
 
         <div id="sendmessage">

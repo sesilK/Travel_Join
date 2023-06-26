@@ -15,17 +15,6 @@ public class ChatServiceImpl implements ChatService {
     @Autowired
     private ChatDao chatDao;
 
-    @Override
-    public int createChatRoom(ChatDto chatDto) {
-        int result = chatDao.insert_chatroom_m(chatDto);
-        return result;
-    }
-
-    @Override
-    public int joinChatRoom(ChatDto chatDto) {
-        int result = chatDao.insert_chatroom_d(chatDto);
-        return result;
-    }
 
     @Override
     public int sendChatMessage(ChatDto chatDto) {
@@ -43,5 +32,11 @@ public class ChatServiceImpl implements ChatService {
     public ChatRoomDto getChatRoomById(int roomId) {
         ChatRoomDto room = chatDao.select_chatroom_by_id(roomId);
         return room;
+    }
+
+    @Override
+    public List<ChatDto> getAllChatByRoomId(int id) {
+        List<ChatDto> chats = chatDao.select_all_chat_by_roomid(id);
+        return chats;
     }
 }

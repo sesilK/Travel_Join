@@ -18,4 +18,6 @@ public interface ChatDao {
     List<ChatRoomDto> select_all_chatroom_m();
 
     ChatRoomDto select_chatroom_by_id(int roomId);
+
+    List<ChatDto> select_all_chat_by_roomid(int roomId);
 }

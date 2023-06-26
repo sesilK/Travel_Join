@@ -1,14 +1,9 @@
 package com.app.controller;
 
-import com.app.dto.ChatRoomDto;
 import com.app.service.chat.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 
 @Controller
@@ -33,31 +28,7 @@ public class HomeController {
         return "login";
     }
 
-    @RequestMapping("/chat")
-    public String roomList(Model model) {
-        List<ChatRoomDto> rooms = chatService.getAllChatRooms();
-        model.addAttribute("rooms", rooms);
-        for (ChatRoomDto room : rooms) {
-            System.out.println(room.toString());
-        }
-        return "chat";
-    }
 
-    @RequestMapping("/enter/{roomId}")
-    public String enterRoom(@PathVariable String roomId, Model model) {
-        ChatRoomDto chatRoomDto = chatService.getChatRoomById(Integer.parseInt(roomId));
-
-        System.out.println(chatRoomDto);
-        System.out.println(roomId);
-
-        model.addAttribute("room", chatRoomDto);
-        return "chat";
-    }
-
-    @RequestMapping("/test")
-    public String test() {
-        return "test";
-    }
 
 }
 
