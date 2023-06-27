@@ -7,9 +7,6 @@ import com.app.utils.TimeStampUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.SimpAttributes;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageMappingInfo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
@@ -28,11 +25,11 @@ public class MessageController {
         /pub/send              - 메시지 발행
     */
 
+
     /** 모든 타입 메세지 핸들러 */
     @MessageMapping("/send")
-    public void message(ChatDto message, SimpMessageHeaderAccessor accessor) {
+    public void message(ChatDto message) {
         message.setTimeStamp(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기
-        Object a = accessor.getMessageHeaders().get("simpSessionId");
         chatService.sendChatMessage(message); // 전송된 채팅 db에 저장
         simpMessageSendingOperations.convertAndSend(subScribeURL + message.getRoomId(), message); // 가공된 메세지 다시 구독자들에게 메세지 보냄 (채팅방 멤버들)
     }
@@ -53,7 +50,7 @@ public class MessageController {
 
     /** 채팅방 입장 핸들러 */
     @MessageMapping("/in")
-    public void chatIn(ChatDto message, SimpMessageHeaderAccessor accessor) {
+    public void chatIn(ChatDto message) {
         message.setTimeStamp(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기
 
         int readUpdate = chatService.insert_all_chat_r_read_up_to_recent_by_user_id(message.getSender()); // db에 읽음처리

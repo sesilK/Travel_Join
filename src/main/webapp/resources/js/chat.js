@@ -34,9 +34,12 @@ $(function () {
                 dataType: 'json',   //문자형식으로 받기
                 success: function (data) {   //데이터 주고받기 성공했을 경우 실행할 결과
                     //function(data)를 쓰게 되면 전달받은 데이터가 data안에 담아서 들어오게 된다.
+                    console.log(data);
 
                     for (var chat of data) {
-                        $('span.unread[data-chatid=' + chat.chatId + ']').text(chat.unRead);
+                        // unRead 가 0 이면 공백으로 치환
+                        const temp_unRead = (chat.unRead == 0) ? "" : chat.unRead;
+                        $('span.unread[data-chatid=' + chat.chatId + ']').text(temp_unRead);
                     }
                 },
                 error: function () {   //데이터 주고받기가 실패했을 경우 실행할 결과
@@ -172,7 +175,7 @@ $(function () {
     });
 
     // 스크롤버튼 클릭
-    $("#chat-messages").click(function () {
+    $(".scroll-btn").click(function () {
         if (isScrolled) {
             $("#chat-messages").animate({
                 scrollTop: $("#chat-messages").prop("scrollHeight") - 270

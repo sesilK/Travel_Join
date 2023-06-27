@@ -63,6 +63,7 @@
                 <c:if test="${chat.type eq 'text'}">
 
 
+
                     <c:if test="${chat.sender eq sessionScope.username}">
                         <div class="message right">
                             <img src="/profile/default_profile.png"/>

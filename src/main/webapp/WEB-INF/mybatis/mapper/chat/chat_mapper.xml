@@ -17,13 +17,16 @@
         values (#{roomId}, #{sender})
     </insert>
 
-<!--    insert to chat 테이블-->
+    <!--    insert to chat 테이블-->
     <insert id="insert_chat" parameterType="ChatDto">
+        <selectKey resultType="Integer" keyProperty="chatId" order="BEFORE">
+            select chat_id_seq.NEXTVAL from dual
+        </selectKey>
         insert all
             into chat (chat_id, room_id, sender, content, type, time_stamp)
-                values (chat_id_seq.NEXTVAL, #{roomId}, #{sender}, #{content}, #{type}, TO_DATE(#{timeStamp}, 'YYYY-MM-DD HH24:MI:SS'))
+                values (#{chatId}, #{roomId}, #{sender}, #{content}, #{type}, TO_DATE(#{timeStamp}, 'YYYY-MM-DD HH24:MI:SS'))
             into chat_r (room_id, chat_id, member)
-                values (#{roomId}, chat_id_seq.CURRVAL, #{sender})
+                values (#{roomId}, #{chatId}, #{sender})
         select * from dual
     </insert>
 
