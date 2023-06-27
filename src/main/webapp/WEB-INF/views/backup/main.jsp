@@ -18,7 +18,7 @@ width: 150px;
 }
 </style>
 <body>
-	<%@ include file="header.jsp"%>
+	<%@ include file="header2.jsp"%>
 	<div class="main">
 		<h1>메인</h1>
 	</div>

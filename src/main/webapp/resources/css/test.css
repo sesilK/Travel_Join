@@ -330,11 +330,13 @@ body:before {
 }
 .main-blog__title {
   font-size: 25px;
-  max-width: 12ch;
+  max-width: 40ch;
   font-weight: 600;
   letter-spacing: 1px;
   color: #fff;
   margin-bottom: 30px;
+  text-align: left;
+  word-break: keep-all;
 }
 .main-blog {
   background-image: url("https://assets.codepen.io/3364143/skate-removebg-preview.png");
@@ -472,7 +474,7 @@ body:before {
   color: #fff;
   font-size: 16px;
   line-height: 1.4em;
-  padding: 12px 20px 0;
+  padding: 12px 4px 0;
   overflow: hidden;
   background-color: var(--video-bg);
   z-index: 9;
@@ -480,6 +482,8 @@ body:before {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  text-align: center;
+  word-break: keep-all;
 }
 .video-view {
   font-size: 12px;

@@ -1,21 +1,21 @@
 package com.app.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
 
+	@GetMapping("/")
+	public String index() {
+        return "redirect:/home";
+    }
 
-	@RequestMapping("/header")
-	public String header() {
-		return "header";
-	}
-	
-	@RequestMapping("/test")
-	public String test() {
-		return "test";
-	}
+	@GetMapping("/home")
+	public String home() {
+        return "home";
+    }
+
 
 
 

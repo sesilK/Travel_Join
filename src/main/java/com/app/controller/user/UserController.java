@@ -3,8 +3,6 @@ package com.app.controller.user;
 import com.app.dto.user.UserDto;
 import com.app.service.user.UserService;
 
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
@@ -23,7 +20,7 @@ public class UserController {
 	
 	@RequestMapping("/main")
 	public String main() {
-		return "main";
+		return "backup/main";
 	}
 	
 
@@ -36,7 +33,7 @@ public class UserController {
 	public String register_proc(@ModelAttribute UserDto userDto) {
 		int result = userService.saveUser(userDto);
 
-		return "main";
+		return "backup/main";
 	}
 
 	@GetMapping("/login")
