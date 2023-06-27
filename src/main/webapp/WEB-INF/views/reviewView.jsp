@@ -71,12 +71,9 @@
 	            	</c:if>
 	            </c:if>
 	            <c:if test="${comment.deleteAt == 'Y'}">
-	            	<c:if test="${comment.commentLv > 1}">
-	            	<c:forEach var="i" begin="1" end="${comment.commentLv-1}">
-        				&emsp;
-    				</c:forEach>
-    				</c:if>
-					<td>삭제된 댓글입니다.</td>
+					<td>
+						<c:if test="${comment.commentLv > 1}"><c:forEach var="i" begin="1" end="${comment.commentLv-1}">&emsp;</c:forEach></c:if>삭제된 댓글입니다.
+					</td>
 				</c:if>
 	            </tr>
 			</c:forEach>
@@ -88,7 +85,6 @@
 	
 		let reviewId = $('#num').data('reviewid');	//글 번호
 		let userId = '${item.userId}'; //글 작성자
-		let commentCountEl = $('.commentCount'); // 댓글수 요소
 		
 		$(document).ready(function(){			
 			
@@ -391,7 +387,13 @@
 		        html += '<td><button class="deleteBtn" type="button">삭제</button></td>';
 		      }
 		    } else if (comment.deleteAt == 'Y') {// 삭제된 댓글
-		      html += '<td>삭제된 댓글입니다.</td>';
+		      html += '<td>';
+		      if(comment.commentLv > 1){
+		    	  for(let i=1; i<comment.commentLv; i++){
+		    		  html += '&emsp;';
+		    	  }
+		      }
+		      html += '삭제된 댓글입니다.</td>';
 		    }
 
 		    html += '</tr>';
