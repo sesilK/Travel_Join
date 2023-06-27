@@ -17,9 +17,10 @@
 	<table>
         <thead>
         	<tr>
-	            <th>작성일</th>
+	            <th>별점</th>
 	            <th>제목</th>
 	            <th>글쓴이</th>
+	            <th>작성</th>
 	            <th>조회</th>
 	            <th>추천</th>
             </tr>
@@ -27,10 +28,11 @@
         <tbody>
         	<c:forEach var="item" items="${reviewList}">
 	            <tr>
-	            	<td>${item.createDate}</td>
+	            	<td>${item.stars}</td>
 	            	<td class="title" data-reviewId="${item.reviewId}">${item.title}
 	            	    <c:if test="${item.commentCount > 0}">[${item.commentCount}]</c:if></td>
-	            	<td>${item.userId}</td>
+	            	<td>${item.nick}</td>
+	            	<td>${item.createDate}</td>
 	            	<td>${item.views}</td>
 	            	<td>${item.likeCount}</td>
 	            </tr>
@@ -72,7 +74,6 @@
 					}
 					if(data === 'false'){
 						alert("삭제된 글입니다.");
-						window.location.href = "/reviewNotExist";
 					}
 				},	//요청에 대해 성공한 경우 수행할 내용
 				error :	()=>{

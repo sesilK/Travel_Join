@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dao.review.ReviewDao;
+import com.app.dto.join.JoinDto;
 import com.app.dto.review.CommentDto;
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
@@ -171,14 +172,6 @@ public class ReviewServiceImpl implements ReviewService{
 		
 		return result;
 	}
-	
-	@Override
-	public int returnCommentCount(int reviewId) {
-		
-		int commentCount = reviewDao.selectCommentCount(reviewId);
-		
-		return commentCount;
-	}
 
 	@Override
 	public List<CommentDto> findCommentList(int reviewId) {
@@ -186,6 +179,22 @@ public class ReviewServiceImpl implements ReviewService{
 		List<CommentDto> list = reviewDao.selectCommentList(reviewId);
 		
 		return list;
+	}
+
+	@Override
+	public List<JoinDto> findJoinList(String userId) {
+
+		List<JoinDto> list = reviewDao.selectJoinList(userId);
+		
+		return list;
+	}
+
+	@Override
+	public JoinDto findJoinInfo(int planId) {
+		
+		JoinDto joinDto = reviewDao.selectJoinInfo(planId);
+		
+		return joinDto;
 	}
 
 }

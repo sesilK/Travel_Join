@@ -18,4 +18,6 @@ public class CommentDto {
 	String updateDate;		//수정일
 	String deleteAt;		//삭제여부
 	String deleteDate;		//삭제일
+	
+	String nick;		//작성자닉네임
 }

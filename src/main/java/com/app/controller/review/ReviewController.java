@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.dto.join.JoinDto;
 import com.app.dto.review.CommentDto;
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
@@ -53,6 +53,9 @@ public class ReviewController {
 	public String reviewWrite(Model model) {
 		
 		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		
+		List<JoinDto> joinList = reviewService.findJoinList(sessionId);	//여행목록 불러오기
+		model.addAttribute("joinList", joinList);
 		
 		ReviewDto temp = reviewService.CheckIfTemporarySaved(sessionId); //임시저장된 글이 있는지 확인
 		if(temp != null) { //있으면
@@ -146,27 +149,20 @@ public class ReviewController {
 		}	
 	}
 	
-//	@PostMapping("/reviewView") //글상세 페이지 요청 (댓글 등록)
-//	public String reviewView_process(Model model, @RequestParam int reviewId) {
-//		
-//		ReviewDto item = reviewService.findReview(reviewId); //해당글 불러오기
-//		List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
-//		if(item != null) {
-//			model.addAttribute("item", item);
-//			model.addAttribute("commentList", commentList);
-//			return "reviewView";
-//		} else {
-//			return "redirect:/reviewNotExist";
-//		}
-//	}
-	
-	@GetMapping("/reviewModify") //글 수정 페이지 요청
+	@GetMapping("/reviewModify") //글수정 페이지 요청
 	public String reviewModify(Model model, @RequestParam int reviewId) {
 		
 		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
 		
 		ReviewDto item = reviewService.findReview(reviewId); //수정할 글 찾기
 		String userId = item.getUserId();
+		int planId = item.getPlanId();
+		
+		JoinDto beforeJoin = reviewService.findJoinInfo(planId);//수정전 여행 정보
+		
+		List<JoinDto> joinList = reviewService.findJoinList(sessionId);	//여행목록 불러오기
+		joinList.add(beforeJoin); //여행목록에 수정전 여행도 추가
+		model.addAttribute("joinList", joinList);
 		
 		if(sessionId.equals(userId)) { //글 작성자id 로그인id 일치
 			model.addAttribute("item", item);

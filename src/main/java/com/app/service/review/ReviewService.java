@@ -3,6 +3,7 @@ package com.app.service.review;
 import java.util.List;
 import java.util.Map;
 
+import com.app.dto.join.JoinDto;
 import com.app.dto.review.CommentDto;
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
@@ -48,7 +49,9 @@ public interface ReviewService {
 	
 	public int modifyComment(CommentDto CommentDto); //댓글 수정
 	
-	public int returnCommentCount(int reviewId); //댓글수 불러오기
-	
 	public List<CommentDto> findCommentList(int reviewId); //댓글목록 불러오기
+	
+	public List<JoinDto> findJoinList(String userId); //여행목록 불러오기
+	
+	public JoinDto findJoinInfo(int planId); //여행정보 찾기
 }

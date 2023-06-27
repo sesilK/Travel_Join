@@ -8,219 +8,215 @@
 
 	<!-- 글 작성 -->
 	<insert id="insert_review" parameterType="ReviewDto">
-		insert into review_bbs (review_id, user_id, plan_id, title, content, stars)
-		values ( review_id_seq.NEXTVAL, #{userId} , #{planId}, #{title}, #{content},  #{stars})
+		INSERT INTO review_bbs (review_id, user_id, plan_id, title, content, stars)
+		VALUES ( review_id_seq.NEXTVAL, #{userId} , #{planId}, #{title}, #{content},  #{stars})
 	</insert>
 	
 	<!-- 작성한 글번호 반환 -->
 	<select id="select_review_id" resultType="ReviewDto">
-		select review_id
-		from review_bbs
-		where user_id = #{userId}
-		and plan_id = #{planId}
-		and delete_at = 'N'
+		SELECT review_id
+		FROM review_bbs
+		WHERE user_id = #{userId}
+		AND plan_id = #{planId}
+		AND delete_at = 'N'
 	</select>
 	
 	<!-- 글 임시저장 -->
 	<insert id="insert_review_temp" parameterType="ReviewDto">
-		insert into review_temp (user_id, plan_id, stars, title, content)
-		values ( #{userId}, #{planId}, #{stars}, #{title}, #{content} )
+		INSERT INTO review_temp (user_id, plan_id, stars, title, content)
+		VALUES ( #{userId}, #{planId}, #{stars}, #{title}, #{content} )
 	</insert>
 	
 	<!-- 임시저장 불러오기 -->
 	<select id="select_review_temp" resultType="ReviewDto">
-		select user_id, plan_id, stars, title, content
-		from review_temp
-		where user_id = #{userId}
+		SELECT user_id, plan_id, stars, title, content
+		FROM review_temp
+		WHERE user_id = #{userId}
 	</select>
 	
 	<!-- 글 임시저장 변경 -->
 	<update id="update_review_temp">
-		update review_temp
-		set title = #{title}, content = #{content}, stars = #{stars}, plan_id = #{planId}
-		where user_id = #{userId}
+		UPDATE review_temp
+		SET title = #{title}, content = #{content}, stars = #{stars}, plan_id = #{planId}
+		WHERE user_id = #{userId}
 	</update>
 	
 	<!-- 임시저장 삭제 -->
 	<delete id="delete_review_temp">
-		delete from review_temp
-		where user_id = #{userId}
+		DELETE FROM review_temp
+		WHERE user_id = #{userId}
 	</delete>
 	
 	<!-- 글목록 불러오기 (+검색기능) -->
 	<select id="select_review_list" resultType="ReviewDto" parameterType="hashMap">
-		select review_id, user_id, title, SUBSTR(create_date,1,10) create_date,
-				views, like_count, comment_count
-		from review_bbs
- 		where 1=1
+		SELECT rb.review_id, rb.user_id, rb.title, SUBSTR(rb.create_date,1,10) create_date,
+				rb.views, rb.like_count, rb.comment_count, rb.stars, us.nick
+		FROM review_bbs rb
+		JOIN users us ON rb.user_id = us.user_id
+ 		WHERE 1=1
 		<if test="searchCondition == 'title'">
-			and title like '%'||#{keyword}||'%'
+			AND rb.title LIKE '%'||#{keyword}||'%'
 		</if>
 		<if test="searchCondition == 'content'">
-			and content like '%'||#{keyword}||'%'
+			AND rb.content LIKE '%'||#{keyword}||'%'
 		</if>
 		<if test="searchCondition == 'ticon'">
-			and (title like '%'||#{keyword}||'%') or (content like '%'||#{keyword}||'%')
+			AND (rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%')
 		</if>
 		<if test="searchCondition == 'user'">
-			and user_id like '%'||#{keyword}||'%'
+			AND rb.user_id LIKE '%'||#{keyword}||'%'
 		</if>
-		and delete_at = 'N'
-		order by review_id desc
+		AND rb.delete_at = 'N'
+		ORDER BY rb.review_id DESC
 	</select>
 	
 	<!-- 글상세 불러오기 -->
 	<select id="select_review_view" resultType="ReviewDto">
-		select review_id, plan_id, user_id, title, content, create_date, views, like_count, stars, comment_count, update_date
-		from review_bbs
- 		where review_id = #{reviewId}
- 		and delete_at = 'N'
+		SELECT rb.review_id, rb.plan_id, rb.user_id, rb.title, rb.content, rb.create_date, 
+			   rb.views, rb.like_count, rb.stars, rb.comment_count, rb.update_date, us.nick, 
+			   jb.title||'('||TO_CHAR(jb.startday, 'YY-MM-DD')||'~'||TO_CHAR(jb.endday, 'YY-MM-DD')||')' AS planInfo
+		FROM review_bbs rb
+		JOIN join_board jb ON rb.plan_id = jb.no
+		JOIN users us ON rb.user_id = us.user_id
+ 		WHERE review_id = #{reviewId}
+ 		AND delete_at = 'N'
 	</select>
 	
 	<!-- 조회수 증가 -->
 	<update id="update_review_views_increase">
-		update review_bbs
-		set views =  views + 1
-		where review_id = #{reviewId}
-		and user_id != #{userId}
+		UPDATE review_bbs
+		SET views =  views + 1
+		WHERE review_id = #{reviewId}
+		AND user_id != #{userId}
 	</update>
 	
 	<!-- 추천여부 확인 -->
 	<select id="select_review_like" resultType="LikeDto">
-	    select *
-	    from review_like
-	    where review_id = #{reviewId}
-	    and user_id = #{userId}
+	    SELECT *
+	    FROM review_like
+	    WHERE review_id = #{reviewId}
+	    AND user_id = #{userId}
 	</select>
 	
 	<!-- 추천하기 -->
 	<insert id="insert_review_like" parameterType="LikeDto">
-	    insert into review_like
-	    values ( #{reviewId}, #{userId} )
+	    INSERT INTO review_like
+	    VALUES ( #{reviewId}, #{userId} )
 	</insert>
 	
 	<!-- 추천수 증가 -->
 	<update id="update_review_like_count">
-		update review_bbs
-		set like_count = (select count(*) from review_like where review_id = #{reviewId})
-		where review_id = #{reviewId}
+		UPDATE review_bbs
+		SET like_count = (SELECT count(*) FROM review_like WHERE review_id = #{reviewId})
+		WHERE review_id = #{reviewId}
 	</update>
 	
 	<!-- 추천수 조회 -->
 	<select id="select_review_like_count" resultType="ReviewDto">
-		select count(*) like_count from review_like
-		where review_id = #{reviewId}
+		SELECT count(*) like_count FROM review_like
+		WHERE review_id = #{reviewId}
 	</select>
 	
 	<!-- 이미지파일명 저장 -->
 	<insert id="insert_review_image" parameterType="ReviewImgDto">
-		insert into review_image (review_id, file_name)
-		values ( #{reviewId}, #{fileName} )
+		INSERT INTO review_image (review_id, file_name)
+		VALUES ( #{reviewId}, #{fileName} )
 	</insert>
 	
 	<!-- 이미지파일명 조회 -->
 	<select id="select_review_image" resultType="ReviewImgDto">
-		select review_id, file_name
-		from review_image
- 		where file_name = #{fileName}
+		SELECT review_id, file_name
+		FROM review_image
+ 		WHERE file_name = #{fileName}
 	</select>
 	
 	<!-- 이미지파일명 전부 삭제 -->
 	<delete id="delete_review_image">
-		delete from review_image
-		where review_id = #{reviewId}
+		DELETE FROM review_image
+		WHERE review_id = #{reviewId}
 	</delete>
 	
 	<!-- 글 삭제 -->
 	<update id="update_review_delete_at">
-		update review_bbs
-		set delete_at = 'Y', delete_date = SYSDATE
-		where review_id = #{reviewId}
+		UPDATE review_bbs
+		SET delete_at = 'Y', delete_date = SYSDATE
+		WHERE review_id = #{reviewId}
 	</update>
 	
 	<!-- 글 수정 -->
 	<update id="update_review_modify">
-		update review_bbs
-		set title = #{title}, content = #{content}, stars = #{stars}, plan_id = #{planId}, update_date = SYSDATE
-		where review_id = #{reviewId}
+		UPDATE review_bbs
+		SET title = #{title}, content = #{content}, stars = #{stars}, plan_id = #{planId}, update_date = SYSDATE
+		WHERE review_id = #{reviewId}
 	</update>
 	
 	<!-- 댓글 작성 -->
 	<insert id="insert_comment" parameterType="CommentDto">
-		insert into review_comment (comment_id, comment_lv, review_id, user_id, content, parent_comment_id)
-		values ( comment_id_seq.NEXTVAL, #{commentLv}, #{reviewId}, #{userId}, #{content}, #{parentCommentId})
+		INSERT INTO review_comment (comment_id, comment_lv, review_id, user_id, content, parent_comment_id)
+		VALUES ( comment_id_seq.NEXTVAL, #{commentLv}, #{reviewId}, #{userId}, #{content}, #{parentCommentId})
 	</insert>
 	
 	<!-- 댓글 삭제 -->
 	<update id="update_comment_delete_at">
-		update review_comment
-		set delete_at = 'Y', delete_date = SYSDATE
-		where comment_id = #{commentId}
+		UPDATE review_comment
+		SET delete_at = 'Y', delete_date = SYSDATE
+		WHERE comment_id = #{commentId}
 	</update>
 	
 	<!-- 댓글 수정 -->
 	<update id="update_comment_modify">
-		update review_comment
-		set content = #{content}, update_date = SYSDATE
-		where comment_id = #{commentId}
+		UPDATE review_comment
+		SET content = #{content}, update_date = SYSDATE
+		WHERE comment_id = #{commentId}
 	</update>
 	
 	<!-- 댓글수 수정 -->
 	<update id="update_review_comment_count">
-		update review_bbs
-		set comment_count = (select count(*) from review_comment
-							 where review_id = #{reviewId}
-							 and delete_at = 'N')
-		where review_id = #{reviewId}
+		UPDATE review_bbs
+		SET comment_count = (SELECT count(*) FROM review_comment
+							 WHERE review_id = #{reviewId}
+							 AND delete_at = 'N')
+		WHERE review_id = #{reviewId}
 	</update>
-	
-	<!-- 댓글수 불러오기 -->
-<!-- 	<select id="select_review_comment_count" resultType="ReviewDto">
-		select count(*) comment_count from review_comment
-		where review_id = #{reviewId}
-		and delete_at = 'N'
-	</select> -->
 	
 	<!-- 댓글목록 불러오기 -->
 	<select id="select_comment_list" resultType="CommentDto">
-		select LEVEL COMMENTLEVEL, comment_lv, comment_id, parent_comment_id, 
-			   user_id, create_date, update_date, delete_at, content	
-		from review_comment
- 		where review_id = #{reviewId}
- 		and <!-- 삭제되지 않은 하위계층을 가진 댓글이거나 -->
- 			(comment_id IN (select parent_comment_id from review_comment where delete_at = 'N')
+		SELECT LEVEL COMMENTLEVEL, rc.comment_lv, rc.comment_id, rc.parent_comment_id, 
+			   rc.user_id, rc.create_date, rc.update_date, rc.delete_at, rc.content, us.nick
+		FROM review_comment rc
+		JOIN users us ON rc.user_id = us.user_id
+ 		WHERE rc.review_id = #{reviewId}
+ 		AND <!-- 삭제되지 않은 하위계층을 가진 댓글이거나 -->
+ 			(rc.comment_id IN (SELECT parent_comment_id FROM review_comment WHERE delete_at = 'N')
  			<!-- 삭제되지 않은 하위계층을 가진 댓글의 부모댓글이거나 -->
- 			or comment_id IN (select parent_comment_id from review_comment
- 							  where comment_id IN (select parent_comment_id from review_comment where delete_at = 'N' ))
+ 			OR rc.comment_id IN (SELECT parent_comment_id FROM review_comment
+ 							  WHERE comment_id IN (SELECT parent_comment_id FROM review_comment WHERE delete_at = 'N' ))
 			<!-- 삭제되지 않은 댓글 -->  
-        	or delete_at = 'N')
+        	OR rc.delete_at = 'N')
 		<!-- 계층구조 시작조건 : parent_comment_id가 0인 댓글부터 시작하여 계층형성 -->
-		start with parent_comment_id = 0
+		START WITH rc.parent_comment_id = 0
 		<!-- 계층구조 연결조건 : 이전 댓글의 id가 현재 댓글의 parent_comment_id와 일치하는 경우 계층형성 -->
-		connect by prior comment_id = parent_comment_id
+		CONNECT BY PRIOR rc.comment_id = rc.parent_comment_id
 		<!-- 같은 부모를 가지는 댓글들 중에서 댓글id로 정렬 -->
-		order siblings by comment_id
+		ORDER SIBLINGS BY rc.comment_id
 	</select>
 	
-	<!-- 댓글목록 불러오기 -->
-	<select id="select_comment_list2" resultType="CommentDto">
-		select LEVEL COMMENTLEVEL, comment_lv, comment_id, parent_comment_id, 
-			   user_id, create_date, update_date, delete_at, content	
-		from review_comment
- 		where review_id = #{reviewId}
- 		<!-- 삭제된 댓글은 조회하지 않음. 단, 삭제되지 않은 자식계층이 남아있으면 '삭제된 댓글입니다'라고 표시함 -->
- 		and (comment_id in (
-                        	select parent_comment_id from review_comment
-                        	where review_id = #{reviewId} and delete_at = 'N'
-                        	)
-             or comment_lv = 3 <!-- 3계층의 댓글은 항상 조회 --> 
-             or delete_at = 'N')
-		<!-- 계층구조 시작조건 : parent_comment_id가 0인 댓글부터 시작하여 계층형성 -->
-		start with parent_comment_id = 0
-		<!-- 계층구조 연결조건 : 이전 댓글의 id가 현재 댓글의 parent_comment_id와 일치하는 경우 계층형성 -->
-		connect by prior comment_id = parent_comment_id
-		<!-- 같은 부모를 가지는 댓글들 중에서 댓글id로 정렬 -->
-		order siblings by comment_id
+	<!-- 여행 목록 불러오기 (리뷰 작성 가능한 것만) -->
+	<select id="select_review_join_list" resultType="JoinDto">
+		SELECT no, title, TO_CHAR(endDay, 'YY-MM-DD') endDay, TO_CHAR(startDay, 'YY-MM-DD') startDay
+		FROM join_board
+ 		WHERE SYSDATE > endDay <!-- 여행종료일 기준 -->
+ 		AND no IN (SELECT no FROM party WHERE user_id = #{userId}) <!-- 로그인한 아이디로 참여한 여행 -->
+ 		AND no NOT IN (SELECT plan_id no FROM review_bbs
+ 					   WHERE user_id = #{userId} AND delete_at = 'N' ) <!-- 리뷰 작성한 것 제외 -->
+		ORDER BY endDay
+	</select>
+	
+	<!-- 여행 찾기 -->
+	<select id="select_review_join" resultType="JoinDto">
+		SELECT no, title, TO_CHAR(endDay, 'YY-MM-DD') endDay, TO_CHAR(startDay, 'YY-MM-DD') startDay
+		FROM join_board
+		WHERE no = #{planId}
 	</select>
 	
 </mapper>

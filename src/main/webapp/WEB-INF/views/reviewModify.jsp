@@ -13,10 +13,10 @@
 	<h1>reviewModify</h1>
 
 		여행 <select name="planId">
-			<option selected value="">선택해주세요.</option>
-			<option value="여행1">여행1</option>
-			<option value="여행2">여행2</option>
-			<option value="여행3">여행3</option>
+			<option selected value="0">선택해주세요.</option>
+			<c:forEach var="join" items="${joinList}">
+				<option value="${join.no}">${join.title}(${join.startday}~${join.endday})</option>
+			</c:forEach>
 		</select><br />
 		별점 <select name="stars">
 			<c:forEach var="i" begin="0" end="10" step="1">
@@ -114,7 +114,7 @@
 			let title = $('input[name="title"]').val();
 			let content = $('div[role="textbox"]')[0].innerHTML;
 			
-			if (planId === "") {
+			if (planId === "0") {
 				alert("여행을 선택해주세요.");
 				return false;
 			//} else if (stars === "") {

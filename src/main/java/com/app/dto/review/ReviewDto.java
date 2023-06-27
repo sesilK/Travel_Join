@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 public class ReviewDto {
 	
 	int reviewId;		//글번호
+	int planId;			//여행
 	String userId;		//작성자
-	String planId;		//여행
 	String title;		//제목
 	String content;		//내용
 	float stars;		//별점
@@ -23,6 +23,9 @@ public class ReviewDto {
 	String deleteAt;	//삭제여부
 	String deleteDate;	//삭제일
 	int commentCount;	//댓글수
+	
+	String planInfo;	//여행정보
+	String nick;		//작성자닉네임
 	List<String> imageFileNameList; //파일명 리스트
 	
 }

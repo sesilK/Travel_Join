@@ -13,10 +13,9 @@
 	
 	<a href="reviewBbs"><button>글목록</button></a>
 	
+	<p>${item.stars} | ${item.planInfo}</p>
 	<p id="num" data-reviewId="${item.reviewId}">제목 ${item.title}</p>
-	<p>여행 ${item.planId}</p>
-	<p>별점 ${item.stars}</p>
-	<p>${item.userId} | ${item.createDate} | 조회 ${item.views} | 
+	<p>${item.nick} | ${item.createDate} | 조회 ${item.views} | 
 		추천 <span id="likeCount">${item.likeCount}</span> | 
 		댓글 <span class="commentCount">${item.commentCount}</span></p>
 	<c:if test="${item.updateDate != null}">
@@ -50,8 +49,8 @@
 	            	<td data-content="${comment.content}"
 	            		data-createdate="${comment.createDate}"
 	            		data-updatedate="${comment.updateDate}">
-	            		<c:if test="${comment.commentLv > 1}"><c:forEach var="i" begin="1" end="${comment.commentLv-1}">&emsp;</c:forEach></c:if>${comment.userId}
-	            		<c:if test="${comment.userId == item.userId}">(글쓴이)</c:if> | 
+	            		<c:if test="${comment.commentLv > 1}"><c:forEach var="i" begin="1" end="${comment.commentLv-1}">&emsp;</c:forEach>
+	            		</c:if>${comment.nick}<c:if test="${comment.userId == item.userId}">(글쓴이)</c:if> | 
 						<span><span>${comment.content}</span>
 		            		<c:if test="${comment.updateDate == null}">
 								(${comment.createDate})
@@ -368,7 +367,7 @@
 		    		  html += '&emsp;';
 		    	  }
 		      }
-		      html += comment.userId;
+		      html += comment.nick;
 		      if (comment.userId === userId) {
 		        html += ' (글쓴이)';
 		      }

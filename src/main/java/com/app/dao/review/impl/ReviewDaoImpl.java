@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.app.dao.review.ReviewDao;
+import com.app.dto.join.JoinDto;
 import com.app.dto.review.CommentDto;
 import com.app.dto.review.LikeDto;
 import com.app.dto.review.ReviewDto;
@@ -194,21 +195,29 @@ public class ReviewDaoImpl implements ReviewDao{
 	}
 
 	@Override
-	public int selectCommentCount(int reviewId) {
-		
-		ReviewDto reviewDto = sqlsessionTemplate.selectOne("review_mapper.select_review_comment_count", reviewId);
-		int commentCount = reviewDto.getCommentCount();
-		
-		return commentCount;
-	}
-	
-	@Override
 	public List<CommentDto> selectCommentList(int reviewId) {
 		
 		List<CommentDto> list = 
 				sqlsessionTemplate.selectList("review_mapper.select_comment_list", reviewId);
 		
 		return list;
+	}
+
+	@Override
+	public List<JoinDto> selectJoinList(String userId) {
+
+		List<JoinDto> list = 
+				sqlsessionTemplate.selectList("review_mapper.select_review_join_list", userId);
+		
+		return list;
+	}
+
+	@Override
+	public JoinDto selectJoinInfo(int planId) {
+		
+		JoinDto joinDto = sqlsessionTemplate.selectOne("review_mapper.select_review_join", planId);
+		
+		return joinDto;
 	}
 	
 }

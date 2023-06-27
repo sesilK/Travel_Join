@@ -13,10 +13,10 @@
 	<h1>reviewWrite</h1>
 
 		여행 <select name="planId">
-			<option selected value="">선택해주세요.</option>
-			<option value="여행1">여행1</option>
-			<option value="여행2">여행2</option>
-			<option value="여행3">여행3</option>
+			<option selected value="0">선택해주세요.</option>
+			<c:forEach var="join" items="${joinList}">
+				<option value="${join.no}">${join.title}(${join.startday}~${join.endday})</option>
+			</c:forEach>
 		</select><br />
 		별점 <select name="stars">
 			<c:forEach var="i" begin="0" end="10" step="1">
@@ -73,6 +73,72 @@
 			$('#summernote').summernote('code', content);
 			/* $('div[role="textbox"]').append(content); */ // <- <p><br></p> 삽입되는 문제
 			
+			  $('input[name="title"]').on('input', function() {
+    var title = $(this).val();
+    var byteLength = getByteLength(title);
+    if (byteLength > 30) {
+      var truncatedTitle = truncateString(title, 300);
+      $(this).val(truncatedTitle);
+    }
+  });
+
+  $('#summernote').on('summernote.change', function() {
+    var content = $(this).summernote('code');
+    var byteLength = getByteLength(content);
+    if (byteLength > 4000) {
+      var truncatedContent = truncateString(content, 4000);
+      $(this).summernote('code', truncatedContent);
+    }
+  });
+
+  function getByteLength(str) {
+    var byteLength = 0;
+    for (var i = 0; i < str.length; i++) {
+      var charCode = str.charCodeAt(i);
+      if (charCode <= 0x7f) {
+        byteLength += 1;
+      } else if (charCode <= 0x7ff) {
+        byteLength += 2;
+      } else if (charCode <= 0xffff) {
+        byteLength += 3;
+      } else {
+        byteLength += 4;
+      }
+    }
+    return byteLength;
+  }
+
+  function truncateString(str, maxLength) {
+    var truncatedStr = '';
+    var byteLength = 0;
+    for (var i = 0; i < str.length; i++) {
+      var charCode = str.charCodeAt(i);
+      if (charCode <= 0x7f) {
+        byteLength += 1;
+      } else if (charCode <= 0x7ff) {
+        byteLength += 2;
+      } else if (charCode <= 0xffff) {
+        byteLength += 3;
+      } else {
+        byteLength += 4;
+      }
+
+      if (byteLength > maxLength) {
+        break;
+      }
+      truncatedStr += str.charAt(i);
+    }
+    return truncatedStr;
+  }
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		});
 		
 		//파일 업로드 함수
@@ -118,7 +184,7 @@
 			let title = $('input[name="title"]').val();
 			let content = $('div[role="textbox"]')[0].innerHTML;
 			
-			if (planId === "") {
+			if (planId === "0") {
 				alert("여행을 선택해주세요.");
 				return false;
 			//} else if (stars === "") {
