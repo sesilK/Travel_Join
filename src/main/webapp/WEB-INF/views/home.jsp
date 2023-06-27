@@ -111,7 +111,7 @@
             </div>
         </div>
         <div class="main-container">
-            <div class="main-header anim" style="--delay: 0s">관심 급상승</div>
+            <div class="main-header anim" style="--delay: 0s">인기 급상승</div>
             <div class="main-blogs">
                 <div class="main-blog anim" style="--delay: .1s">
                     <div class="main-blog__title">멕시코 여행팟 모집합니다<br>조건: 신체튼튼</div>
@@ -417,6 +417,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

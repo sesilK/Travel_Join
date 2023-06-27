@@ -109,9 +109,16 @@ body:before {
   height: 70px;
   z-index: -1;
 }
+
+.sidebar-link {
+  transition-property: all;
+  transition-duration: 300ms;
+}
+
 .sidebar-link:hover, .sidebar-link.is-active {
   color: #fff;
   font-weight: 600;
+  scale: 1.05;
 }
 .sidebar-link:hover:nth-child(2n+1) svg, .sidebar-link.is-active:nth-child(2n+1) svg {
   background: #ff7551;
