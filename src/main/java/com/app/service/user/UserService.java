@@ -9,5 +9,8 @@ public interface UserService {
 	int saveUser(UserDto userDto);
 
 	List<UserDto> getUserList(UserDto userDto);
+	
+	boolean login(UserDto userDto);
+	
 
 }

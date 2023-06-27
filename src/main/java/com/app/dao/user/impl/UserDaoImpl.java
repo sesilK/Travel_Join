@@ -12,20 +12,34 @@ import com.app.dto.user.UserDto;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    @Autowired
-    SqlSessionTemplate sqlSessionTemplate;
+	@Autowired
+	SqlSessionTemplate sqlSessionTemplate;
 
-    @Override
-    public int insertUser(UserDto userDto) {
+	// 회원가입
+	@Override
+	public int insertUser(UserDto userDto) {
 
-        int result = sqlSessionTemplate.insert("user_mapper.insert_user", userDto);
-        return result;
-    }
+		int result = sqlSessionTemplate.insert("user_mapper.insert_user", userDto);
+		return result;
+	}
 
-    @Override
-    public List<UserDto> selectUserList(UserDto userDto) {
+	@Override
+	public List<UserDto> selectUserList(UserDto userDto) {
 
-        return null;
-    }
+		return null;
+	}
 
+	@Override
+	public UserDto selectUserById(String user_id) {
+		UserDto userDto = sqlSessionTemplate.selectOne("user_mapper.select_user_by_id", user_id);
+		return userDto;
+	}
+
+	@Override
+	public UserDto insertImage(int imageId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }

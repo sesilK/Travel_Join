@@ -5,19 +5,28 @@
 
 <mapper namespace="user_mapper">
 
-    <!-- 	<insert id="insert_user" parameterType="UserDto">
-            insert into t_user
-            values ( #{id} , #{name}, #{userType} )
-        </insert> -->
+	<!-- 회원가입 -->
+	<insert id="insert_user" parameterType="UserDto">
+		insert into users
+		(user_id, password, email, name, nick, tel, birth, gender)
+		values (
+		#{userId}, #{password}, #{email}, #{name},
+		#{nick}, #{tel},
+		TO_DATE(#{birth}, 'YYMMDD'), #{gender} )
+	</insert>
+	
 
-    <insert id="insert_user" parameterType="UserDto">
-        insert into users (user_id, password, email, name, nick, tel, birth, gender)
-        values ( #{userId}, #{password}, #{email}, #{name},
-                #{nick}, #{tel}, TO_DATE(#{birth}, 'YYMMDD'), #{gender} )
-    </insert>
+	<!-- 아이디로 회원찾기 -->
+	<select id="select_user_by_id" resultType="UserDto" parameterType="String" >
+		select *
+		from users
+		where user_id = #{value}
+	</select>
 
-    <select id="select_user_by_id" parameterType="String">
-        select
-    </select>
+    <!-- 사진업로드하기 -->
+	<insert id="insert_image" parameterType="UserDto">
+	insert into users
+	values #{imageId}
+	</insert>
 
 </mapper>

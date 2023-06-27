@@ -1,0 +1,28 @@
+.container{
+    text-decoration: none;
+    display:grid;
+    grid-template-areas:
+    "sb hd hd hd hd"
+    "sb mn mn mn mn"
+    "sb mn mn mn mn";
+    background-color: rgba(14, 22, 16, 0.274);
+    border-radius:10px;
+    margin-top : 100px;
+}
+.header{
+    grid-area: hd;
+    display: flex;
+    justify-content: flex-end;
+    margin-top : 50px;
+}
+.main{
+	  grid-area: mn;
+	  height:500px;
+}
+.sidebar{
+    grid-area: sb;
+    justify-content: space-between;
+    align-items: center;
+    padding : 8px 12px;
+}
+
