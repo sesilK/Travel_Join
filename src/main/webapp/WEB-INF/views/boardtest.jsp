@@ -4,3 +4,8 @@
 
 
 <%@include file="footer.jsp"%>
+<script>
+    $(function(){
+        $(".trending").addClass("is-active");
+    });
+</script>

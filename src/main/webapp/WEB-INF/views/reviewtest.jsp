@@ -2,4 +2,11 @@
 <%@ include file="header.jsp"%>
 <h1>후기 게시판</h1>
 
+
+
 <%@ include file="footer.jsp"%>
+<script>
+    $(function(){
+        $(".review").addClass("is-active");
+    });
+</script>
