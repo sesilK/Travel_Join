@@ -1,14 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="/css/reviewBbs.css">
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<link href="/css/reviewBbs.css" rel="stylesheet" type="text/css"/>
+<%@ include file="header.jsp" %>
+
+<%
+// 세션 속성 설정
+session.setAttribute("userId", "asdf");
+%>
 
 	<h1>reviewBbs</h1>
 	
@@ -57,7 +54,6 @@
 	</form>
 	
 	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script>
 	$(document).ready(function(){
 
@@ -90,6 +86,11 @@
 	
 	</script>
 	
-	
-</body>
-</html>
+
+<%@ include file="footer.jsp" %>
+<script src="/js/.js"></script>
+<script>
+    $(function(){
+        $(".review").addClass("is-active");
+    });
+</script>

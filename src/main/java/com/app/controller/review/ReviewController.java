@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class ReviewController {
 	@Autowired
 	ReviewService reviewService;
 	
-	@GetMapping("/reviewBbs") //글목록 페이지 요청
+	@GetMapping("/review") //글목록 페이지 요청
 	public String ViewAndSearchReviewBbs(Model model, @RequestParam Map<String, String> map) {
 		
 		List<ReviewDto> reviewList = reviewService.findReviewList(map);
@@ -51,9 +52,9 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/reviewWrite")	//글작성 페이지 요청
-	public String reviewWrite(Model model) {
+	public String reviewWrite(Model model, HttpSession session) {
 		
-		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		String sessionId = (String) session.getAttribute("userId");
 		
 		List<JoinDto> joinList = reviewService.findJoinList(sessionId);	//여행목록 불러오기
 		model.addAttribute("joinList", joinList);
@@ -74,12 +75,12 @@ public class ReviewController {
 	
 	@PostMapping("/reviewWrite") //글 작성 버튼 클릭시 폼 전송 과정
 	@ResponseBody
-	public String reviewWrite_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public String reviewWrite_process(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 		
-		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		String sessionId = (String) session.getAttribute("userId");
 		reviewDto.setUserId(sessionId);
 		reviewDto.setDeleteAt("N");
 		
@@ -105,12 +106,12 @@ public class ReviewController {
 	
 	@PostMapping("/temporarySave") //글 임시저장
 	@ResponseBody
-	public String temporarySave(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public String temporarySave(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 		
-		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		String sessionId = (String) session.getAttribute("userId");
 		reviewDto.setUserId(sessionId);
 
 		int result = 0;
@@ -129,10 +130,10 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/reviewView") //글상세 페이지 요청
-	public String reviewView(Model model, @RequestParam int reviewId) {
+	public String reviewView(Model model, @RequestParam int reviewId, HttpSession session) {
 		
 		ReviewDto reviewDto = new ReviewDto();
-		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		String sessionId = (String) session.getAttribute("userId");
 		
 		reviewDto.setReviewId(reviewId);
 		reviewDto.setUserId(sessionId); //조회수 증가 확인용
@@ -152,9 +153,9 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/reviewModify") //글수정 페이지 요청
-	public String reviewModify(Model model, @RequestParam int reviewId) {
+	public String reviewModify(Model model, @RequestParam int reviewId, HttpSession session) {
 		
-		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		String sessionId = (String) session.getAttribute("userId");
 		
 		ReviewDto item = reviewService.findReview(reviewId); //수정할 글 찾기
 		String userId = item.getUserId();
@@ -177,12 +178,12 @@ public class ReviewController {
 	
 	@PostMapping("/reviewModify") //글 수정 버튼 클릭시 폼 전송 과정
 	@ResponseBody
-	public String reviewModify_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public String reviewModify_process(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 		
-		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		String sessionId = (String) session.getAttribute("userId");
 		String userId = reviewDto.getUserId(); //글 작성자
 		int reviewId = reviewDto.getReviewId(); //글 번호
 
@@ -244,9 +245,9 @@ public class ReviewController {
 	
 	@PostMapping("/deleteReview") //글 삭제
 	@ResponseBody
-	public String deleteReview(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public String deleteReview(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
-		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		String sessionId = (String) session.getAttribute("userId");
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
@@ -263,12 +264,12 @@ public class ReviewController {
 	
 	@PostMapping("/comment") //댓글 등록
 	@ResponseBody
-	public List<CommentDto> comment(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public List<CommentDto> comment(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		CommentDto commentDto = objectMapper.readValue(requestBody, CommentDto.class);
 		
-		String sessionId = "admin";  //   <- id 세션에서 가져오게 수정
+		String sessionId = (String) session.getAttribute("userId");
 		commentDto.setUserId(sessionId);
 		int reviewId = commentDto.getReviewId();
 

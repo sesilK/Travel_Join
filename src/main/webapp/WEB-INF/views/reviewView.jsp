@@ -1,17 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<link href="/css/reviewView.css" rel="stylesheet" type="text/css"/>
+<%@ include file="header.jsp" %>
 
 	<h1>reviewView</h1>
 	
-	<a href="reviewBbs"><button>글목록</button></a>
+	<a href="review"><button>글목록</button></a>
 	
 	<p>${item.stars} | ${item.planInfo}</p>
 	<p id="num" data-reviewId="${item.reviewId}">제목 ${item.title}</p>
@@ -22,7 +15,7 @@
 		<p>${item.updateDate} 수정됨</p>
 	</c:if>
 
-	<c:if test="${item.userId == 'admin'}">
+	<c:if test="${item.userId == sessionScope.userId}">
 	<%-- <c:if test="${item.userId eq sessionScope.userId}"> --%>
 	  <button id="modifyBtn" type="button">수정</button>
 	  <button id="deleteBtn" type="button">삭제</button><br/>
@@ -63,7 +56,7 @@
 	            			</c:if>
 						</span>
 	            	</td>
-	            	<c:if test="${comment.userId == 'admin'}">
+	            	<c:if test="${comment.userId == sessionScope.userId}">
 					<%-- <c:if test="${item.userId eq sessionScope.userId}"> --%>
 	            		<td><button class="modifyBtn" type="button">수정</button></td>
 	            		<td><button class="deleteBtn" type="button">삭제</button></td>
@@ -79,7 +72,6 @@
         </tbody>
 	</table>
 	
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script>
 	
 		let reviewId = $('#num').data('reviewid');	//글 번호
@@ -438,7 +430,7 @@
 		    	  }
 		      }
 		      html += ' '+comment.nick;
-		      if (comment.userId === userId) {
+		      if (comment.userId === '<%= session.getAttribute("userId") %>') {
 		        html += '(글쓴이)';
 		      }
 		      html += ' | <span><span>' + comment.content + '</span>';
@@ -451,7 +443,7 @@
 		      	html += '<button class="replyBtn" type="button">답글</button>';
 		      }
 		      html += '</span></td>';
-		      if (comment.userId === 'admin') {
+		      if (comment.userId === '<%= session.getAttribute("userId") %>') {
 		        html += '<td><button class="modifyBtn" type="button">수정</button></td>';
 		        html += '<td><button class="deleteBtn" type="button">삭제</button></td>';
 		      }
@@ -478,5 +470,11 @@
 		}
 
 	</script>
-</body>
-</html>
+	
+<%@ include file="footer.jsp" %>
+<script src="/js/.js"></script>
+<script>
+    $(function(){
+        $(".review").addClass("is-active");
+    });
+</script>

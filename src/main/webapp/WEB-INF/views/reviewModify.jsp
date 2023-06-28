@@ -1,15 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<!-- include summernote css -->
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<link href="/css/reviewWrite.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
-</head>
-<body>
+<%@ include file="header.jsp" %>
+
 	<h1>reviewModify</h1>
 
 		여행 <select name="planId">
@@ -31,10 +24,7 @@
 		
 		
 		
-	<!-- include jquery, summernote js -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<script src="/js/summernote/summernote-lite.js"></script>
-	<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+
 	<script>
 	
 		let titleMaxByte = 300; //제목 입력제한 300 Byte
@@ -251,5 +241,13 @@
 		});
 		
 	</script>
-</body>
-</html>
+	
+<%@ include file="footer.jsp" %>
+<script src="/js/summernote/summernote-lite.js"></script>
+<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+<script src="/js/.js"></script>
+<script>
+    $(function(){
+        $(".review").addClass("is-active");
+    });
+</script>

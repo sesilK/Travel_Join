@@ -19,5 +19,6 @@ public class CommentDto {
 	String deleteAt;		//삭제여부
 	String deleteDate;		//삭제일
 	
+	// DB에는 없는 항목
 	String nick;		//작성자닉네임
 }
