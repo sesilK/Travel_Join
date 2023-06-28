@@ -11,10 +11,10 @@ public class HomeController {
         return "redirect:/home";
     }
 
-//    @GetMapping("/home")
-//    public String home() {
-//        return "home";
-//    }
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
 
     @GetMapping("/test")
     public String test() {

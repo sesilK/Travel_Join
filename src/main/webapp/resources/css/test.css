@@ -291,6 +291,25 @@ body:before {
   }
 }
 
+.user-login {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--body-color);
+  transition-property: all;
+  transition-duration: 300ms;
+}
+
+.user-login:hover {
+  background-color: rgb(112, 112, 112);
+  scale: 1.05;
+}
+
+
 .main-container {
   display: flex;
   flex-direction: column;
