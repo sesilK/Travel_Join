@@ -6,8 +6,10 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor @NoArgsConstructor
 @Data
-public class LikeDto {
+public class MarkDto {
 
 	int reviewId;		//글번호
-	String userId;		//작성자
+	String userId;		//아이디
+	String sort;		//종류
+	
 }

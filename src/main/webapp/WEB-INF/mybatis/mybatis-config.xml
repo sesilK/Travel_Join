@@ -12,7 +12,7 @@
     <typeAliases>
     	<typeAlias type="com.app.dto.review.ReviewDto" alias="ReviewDto"/>
     	<typeAlias type="com.app.dto.review.ReviewImgDto" alias="ReviewImgDto"/>
-		<typeAlias type="com.app.dto.review.LikeDto" alias="LikeDto"/>
+		<typeAlias type="com.app.dto.review.MarkDto" alias="MarkDto"/>
 		<typeAlias type="com.app.dto.review.CommentDto" alias="CommentDto"/>
     </typeAliases>
 

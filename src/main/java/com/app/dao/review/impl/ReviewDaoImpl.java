@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.app.dao.review.ReviewDao;
 import com.app.dto.join.JoinDto;
 import com.app.dto.review.CommentDto;
-import com.app.dto.review.LikeDto;
+import com.app.dto.review.MarkDto;
 import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
 
@@ -96,29 +96,35 @@ public class ReviewDaoImpl implements ReviewDao{
 	}
 	
 	@Override
-	public LikeDto selectLike(int reviewId, String userId) {
+	public MarkDto selectMark(int reviewId, String userId, String sort) {
 
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("reviewId", reviewId);
 	    map.put("userId", userId);
+	    map.put("sort", sort);
 	    
-		LikeDto likeDto = sqlsessionTemplate.selectOne("review_mapper.select_review_like", map);
+		MarkDto markDto = sqlsessionTemplate.selectOne("review_mapper.select_review_mark", map);
 	    
-		return likeDto;
+		return markDto;
 	}
 	
 	@Override
-	public int insertLike(int reviewId, String userId) {
+	public int insertMark(int reviewId, String userId, String sort) {
 
-		//추천 테이블에 insert
-		LikeDto likeDto = new LikeDto(reviewId, userId);
-		sqlsessionTemplate.insert("review_mapper.insert_review_like", likeDto);
-		//리뷰 테이블에 추천수 증가
-		sqlsessionTemplate.update("review_mapper.update_review_like_count", reviewId);
-		//추천수 반환
-		ReviewDto reviewDto = sqlsessionTemplate.selectOne("review_mapper.select_review_like_count", reviewId);
-		int result = reviewDto.getLikeCount();
-		
+		//추천/신고 테이블에 insert
+		MarkDto markDto = new MarkDto(reviewId, userId, sort);
+		sqlsessionTemplate.insert("review_mapper.insert_review_mark", markDto);
+		//리뷰 테이블에 추천/신고 횟수 증가
+		sqlsessionTemplate.update("review_mapper.update_review_mark_count", reviewId);
+		//추천/신고 횟수 반환
+		ReviewDto reviewDto
+			= sqlsessionTemplate.selectOne("review_mapper.select_review_mark_count", markDto);
+		int result = 0;
+		if(sort == "L") {
+			result = reviewDto.getLikeCount();
+		} else if (sort == "R") {
+			result = reviewDto.getReportCount();
+		}
 		return result;
 	}
 	

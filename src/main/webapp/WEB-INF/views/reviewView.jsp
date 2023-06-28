@@ -31,7 +31,7 @@
 	<p>내용 : ${item.content}</p>
 
 	<button id="like" type="submit">추천</button>
-
+	<button id="report" type="submit">신고</button>
 
 		
 	<hr/>
@@ -88,16 +88,43 @@
 		
 		$(document).ready(function(){			
 			
+			// 신고 버튼 클릭 이벤트 처리
+			$('#report').click(function(){
+
+				$.ajax({
+					type : "POST",	//요청 method
+					contentType : "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
+					url : "/reviewMark",	//어디 경로로 요청할건지 (Restful Api 서버 요청 주소)
+					data : JSON.stringify({	//객체를 -> JSON string 으로 변환
+						userId: userId,
+						reviewId: reviewId,
+						sort: 'R'
+					}),	//파라미터로 같이 담아서 보낼 것들
+					success : (data)=>{
+						if(data == -1){
+							alert('이미 신고한 글입니다.');
+						} else {
+							alert('신고하였습니다.');
+						}
+					},	//요청에 대해 성공한 경우 수행할 내용
+					error :	()=>{
+						alert('실행 오류');
+					}	//요청이 실패,오류난 경우 수행할 내용
+				});
+			
+			});
+			
 			// 추천 버튼 클릭 이벤트 처리
 			$('#like').click(function(){
 
 				$.ajax({
 					type : "POST",	//요청 method
 					contentType : "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
-					url : "/reviewLike",	//어디 경로로 요청할건지 (Restful Api 서버 요청 주소)
+					url : "/reviewMark",	//어디 경로로 요청할건지 (Restful Api 서버 요청 주소)
 					data : JSON.stringify({	//객체를 -> JSON string 으로 변환
 						userId: userId,
-						reviewId: reviewId
+						reviewId: reviewId,
+						sort: 'L'
 					}),	//파라미터로 같이 담아서 보낼 것들
 					success : (data)=>{
 						if(data == -1){
@@ -410,9 +437,9 @@
 		    		  html += '&emsp;';
 		    	  }
 		      }
-		      html += comment.nick;
+		      html += ' '+comment.nick;
 		      if (comment.userId === userId) {
-		        html += ' (글쓴이)';
+		        html += '(글쓴이)';
 		      }
 		      html += ' | <span><span>' + comment.content + '</span>';
 		      if (comment.updateDate == null) {

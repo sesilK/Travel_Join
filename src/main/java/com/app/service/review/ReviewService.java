@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.app.dto.join.JoinDto;
 import com.app.dto.review.CommentDto;
-import com.app.dto.review.LikeDto;
+import com.app.dto.review.MarkDto;
 import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
 
@@ -29,9 +29,9 @@ public interface ReviewService {
 	
 	public int increaseViews(ReviewDto reviewDto);	//조회수 증가
 	
-	public LikeDto CheckIfRecommended(int reviewId, String userId); //추천여부 확인
+	public MarkDto CheckReviewMark(int reviewId, String userId, String sort); //추천/신고 여부 확인
 	
-	public int reviewRecommend(int reviewId, String userId); //추천하기 (증가한 추천수 반환)
+	public int reviewMark(int reviewId, String userId, String sort); //추천/신고하기 (횟수 반환)
 
 	public int uploadReviewImage(ReviewImgDto reviewImgDto); //이미지파일명 저장
 	

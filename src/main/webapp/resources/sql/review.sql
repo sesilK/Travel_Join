@@ -18,13 +18,13 @@ plan_id NUMBER(20) NOT NULL,
 title VARCHAR2(300) NOT NULL,
 content VARCHAR2(4000) NOT NULL,
 stars NUMBER(2,1) NOT NULL,
-views NUMBER DEFAULT 0,
-like_count NUMBER DEFAULT 0,
-comment_count NUMBER DEFAULT 0,
-report_count NUMBER DEFAULT 0,
-create_date DATE DEFAULT SYSDATE,
+views NUMBER DEFAULT 0 NOT NULL,
+like_count NUMBER DEFAULT 0 NOT NULL,
+comment_count NUMBER DEFAULT 0 NOT NULL,
+report_count NUMBER DEFAULT 0 NOT NULL,
+create_date DATE DEFAULT SYSDATE NOT NULL,
 update_date DATE,
-delete_at CHAR(1) DEFAULT 'N',
+delete_at CHAR(1) DEFAULT 'N' NOT NULL,
 delete_date DATE,
 CONSTRAINT fk_review_bbs_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
 CONSTRAINT fk_review_bbs_plan_id FOREIGN KEY (plan_id) REFERENCES join_board(plan_id),
@@ -35,8 +35,8 @@ CONSTRAINT check_review_delete_at CHECK (delete_at IN ('Y', 'N'))
 -- 리뷰 임시저장 테이블
 CREATE TABLE review_temp (
 user_id VARCHAR2(20) NOT NULL PRIMARY KEY,
-plan_id NUMBER DEFAULT 0,
-stars NUMBER(2,1),
+plan_id NUMBER DEFAULT 0 NOT NULL,
+stars NUMBER(2,1) NOT NULL,
 title VARCHAR2(300),
 content VARCHAR2(4000),
 CONSTRAINT fk_review_temp_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
@@ -48,30 +48,32 @@ CREATE TABLE review_comment (
 comment_id NUMBER PRIMARY KEY,
 review_id NUMBER NOT NULL,
 user_id VARCHAR2(20) NOT NULL,
-parent_comment_id NUMBER,
-comment_lv NUMBER DEFAULT 1,
-content VARCHAR2(1000) NOT NULL,
-create_date DATE DEFAULT SYSDATE,
+parent_comment_id NUMBER DEFAULT 0 NOT NULL,
+comment_lv NUMBER DEFAULT 1 NOT NULL,
+content VARCHAR2(300) NOT NULL,
+create_date DATE DEFAULT SYSDATE NOT NULL,
 update_date DATE,
-delete_at CHAR(1) DEFAULT 'N',
+delete_at CHAR(1) DEFAULT 'N' NOT NULL,
 delete_date DATE,
 CONSTRAINT fk_comment_review_id FOREIGN KEY (review_id) REFERENCES review_bbs(review_id),
 CONSTRAINT fk_comment_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
 CONSTRAINT check_comment_delete_at CHECK (delete_at IN ('Y', 'N'))
 );
 
--- 리뷰 추천 테이블 생성
-CREATE TABLE review_like (
+-- 리뷰 추천/신고 테이블 생성
+CREATE TABLE review_mark (
 review_id NUMBER,
 user_id VARCHAR2(20),
-CONSTRAINT pk_review_like PRIMARY KEY(review_id, user_id),
-CONSTRAINT fk_review_like_review_id FOREIGN KEY (review_id) REFERENCES review_bbs(review_id),
-CONSTRAINT fk_review_like_user_id FOREIGN KEY (user_id) REFERENCES users(user_id)
+sort CHAR(1),
+CONSTRAINT pk_review_mark PRIMARY KEY(review_id, user_id, sort),
+CONSTRAINT fk_review_mark_review_id FOREIGN KEY (review_id) REFERENCES review_bbs(review_id),
+CONSTRAINT fk_review_mark_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
+CONSTRAINT check_mark_sort CHECK (sort IN ('L', 'R'))
 );
 
 -- 리뷰 이미지 테이블 생성
 CREATE TABLE review_image (
-review_id NUMBER,
+review_id NUMBER NOT NULL,
 file_name VARCHAR2(300) PRIMARY KEY, -- randomUUID 36Byte + originalFileName 255Byte + ect
 CONSTRAINT fk_review_image_review_id FOREIGN KEY (review_id) REFERENCES review_bbs(review_id)
 );
@@ -82,20 +84,20 @@ CONSTRAINT fk_review_image_review_id FOREIGN KEY (review_id) REFERENCES review_b
 --select * from review_temp;
 --select * from review_image;
 --select * from review_comment;
---select * from review_like;
+--select * from review_mark;
 
 -- 테이블 데이터 삭제
 --truncate table review_bbs;
 --truncate table review_temp;
 --truncate table review_comment;
---truncate table review_like;
+--truncate table review_mark;
 --truncate table review_image;
 
 -- 테이블 삭제
 --drop table review_temp;
 --drop table review_image;
 --drop table review_comment;
---drop table review_like;
+--drop table review_mark;
 --drop table review_bbs;
 
 -- 시퀀스 삭제
@@ -136,9 +138,10 @@ COMMENT ON COLUMN review_comment.create_date IS '작성일';
 COMMENT ON COLUMN review_comment.update_date IS '수정일';
 COMMENT ON COLUMN review_comment.delete_at IS '삭제여부';
 COMMENT ON COLUMN review_comment.delete_date IS '삭제일';
--- 리뷰 추천 테이블 코멘트
-COMMENT ON COLUMN review_like.review_id IS '해당글';
-COMMENT ON COLUMN review_like.user_id IS '추천인';
+-- 리뷰 추천/신고 테이블 코멘트
+COMMENT ON COLUMN review_mark.review_id IS '해당글';
+COMMENT ON COLUMN review_mark.user_id IS '아이디';
+COMMENT ON COLUMN review_mark.sort IS '구분';
 -- 리뷰 이미지 테이블 코멘트
 COMMENT ON COLUMN review_image.review_id IS '해당글';
 COMMENT ON COLUMN review_image.file_name IS '파일명';

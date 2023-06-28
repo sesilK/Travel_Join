@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.app.dao.review.ReviewDao;
 import com.app.dto.join.JoinDto;
 import com.app.dto.review.CommentDto;
-import com.app.dto.review.LikeDto;
+import com.app.dto.review.MarkDto;
 import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
 import com.app.service.review.ReviewService;
@@ -85,19 +85,19 @@ public class ReviewServiceImpl implements ReviewService{
 	}
 	
 	@Override
-	public int reviewRecommend(int reviewId, String userId) {
+	public int reviewMark(int reviewId, String userId, String sort) {
 		
-		int result = reviewDao.insertLike(reviewId, userId);
+		int result = reviewDao.insertMark(reviewId, userId, sort);
 		
 		return result;
 	}
 
 	@Override
-	public LikeDto CheckIfRecommended(int reviewId, String userId) {
+	public MarkDto CheckReviewMark(int reviewId, String userId, String sort) {
 
-		LikeDto likeDto = reviewDao.selectLike(reviewId, userId);
+		MarkDto markDto = reviewDao.selectMark(reviewId, userId, sort);
 		
-		return likeDto;
+		return markDto;
 	}
 
 	@Override

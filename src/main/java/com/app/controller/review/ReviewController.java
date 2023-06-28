@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.join.JoinDto;
 import com.app.dto.review.CommentDto;
-import com.app.dto.review.LikeDto;
+import com.app.dto.review.MarkDto;
 import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
 import com.app.service.review.ReviewService;
@@ -127,7 +128,7 @@ public class ReviewController {
 		return "false";
 	}
 	
-	@GetMapping("/reviewView") //글상세 페이지 요청 (글제목 클릭)
+	@GetMapping("/reviewView") //글상세 페이지 요청
 	public String reviewView(Model model, @RequestParam int reviewId) {
 		
 		ReviewDto reviewDto = new ReviewDto();
@@ -139,8 +140,9 @@ public class ReviewController {
 		reviewService.increaseViews(reviewDto); //조회수 증가
 		
 		ReviewDto item = reviewService.findReview(reviewId); //해당글 불러오기
-		List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
-		if(item != null) {
+		
+		if(!(item.getDeleteAt().equals("Y")) && item.getReportCount() <= 5 ) { //삭제나 신고누적 해당 X
+			List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
 			model.addAttribute("item", item);
 			model.addAttribute("commentList", commentList);
 			return "reviewView";
@@ -163,8 +165,9 @@ public class ReviewController {
 		List<JoinDto> joinList = reviewService.findJoinList(sessionId);	//여행목록 불러오기
 		joinList.add(beforeJoin); //여행목록에 수정전 여행도 추가
 		model.addAttribute("joinList", joinList);
-		
-		if(sessionId.equals(userId)) { //글 작성자id 로그인id 일치
+
+		if(sessionId.equals(userId) &&  //글 작성자id 로그인id 일치
+				!(item.getDeleteAt().equals("Y")) && item.getReportCount() <= 5) { //삭제나 신고누적 해당 X
 			model.addAttribute("item", item);
 			return "reviewModify";
 		} else {
@@ -198,42 +201,44 @@ public class ReviewController {
 		return ""+reviewId;	//글번호 전달
 	}
 	
-	@GetMapping("/reviewNotExist") //존재하지 않거나 삭제된 글 또는 수정권한 없는 페이지 접근 시
+	@GetMapping("/reviewNotExist") //존재하지 않거나 삭제/신고된 글 또는 수정권한 없는 페이지 접근 시
 	public String reviewNotExist() {
 		return "reviewNotExist";
 	}
 	
-	@PostMapping("/reviewViewIsExist") //글 존재 확인
+	@PostMapping("/reviewView") //글 확인 (글제목 클릭)
 	@ResponseBody
-	public String reviewViewIsExist(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public String reviewView_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 		
 		ReviewDto item = reviewService.findReview(reviewDto.getReviewId());
 
-		if(item != null) {
-			return "true";
+		if(item.getDeleteAt().equals("Y")) {	//삭제된 글
+			return "deleted";
+		} else if(item.getReportCount() > 5) {	//신고 누적
+			return "reported";
 		} else {
-			return "false";
-		}			
+			return "view";
+		}
 	}
 	
-	@PostMapping("/reviewLike") //추천 버튼 클릭
+	@PostMapping("/reviewMark") //추천/신고 버튼 클릭
 	@ResponseBody
 	public int reviewLike(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
-		LikeDto likeDto = objectMapper.readValue(requestBody, LikeDto.class);
+		MarkDto markDto = objectMapper.readValue(requestBody, MarkDto.class);
 		
-		LikeDto isNull =	//추천 여부 확인 
-				reviewService.CheckIfRecommended(likeDto.getReviewId(), likeDto.getUserId());
+		MarkDto isNull =	//추천/신고 여부 확인 
+				reviewService.CheckReviewMark(markDto.getReviewId(), markDto.getUserId(), markDto.getSort());
 		
-		if (isNull == null) { //추천한 적 없으면
-			int likeCount = reviewService.reviewRecommend(likeDto.getReviewId(), likeDto.getUserId()); //추천하기
-			return likeCount; //추천 성공 (추천수 반환)
+		if (isNull == null) { //추천/신고한 적 없으면
+			int count = reviewService.reviewMark(markDto.getReviewId(), markDto.getUserId(), markDto.getSort()); //추천하기
+			return count; //추천/신고 성공 (추천/신고 횟수 반환)
 		} else {
-			return -1;	//추천 실패
+			return -1;	//추천/신고 실패
 		}			
 	}
 	
@@ -313,9 +318,11 @@ public class ReviewController {
 											HttpServletRequest request)  {
 		JsonObject jsonObject = new JsonObject();
 		
-		//String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		//String fileRoot = contextRoot+"resources/fileupload/"; // 내부경로 저장을 희망할때.
-		String fileRoot = "C:\\summernote_image\\"; //외부경로로 저장을 희망할때.
+		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
+		String fileRoot = contextRoot+"resources\\image\\review\\"; // 내부경로 저장을 희망할때.
+		//String fileRoot = "C:\\summernote_image\\"; //외부경로로 저장을 희망할때.
+		System.out.println(contextRoot);
+		System.out.println(fileRoot);
 		
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		//String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
@@ -325,9 +332,9 @@ public class ReviewController {
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-			jsonObject.addProperty("url", "/summernote/resources/fileupload/"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", "/resources/image/review/"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
-				
+			
 		} catch (IOException e) {
 			FileUtils.deleteQuietly(targetFile);	//저장된 파일 삭제
 			jsonObject.addProperty("responseCode", "error");
@@ -339,10 +346,12 @@ public class ReviewController {
 
 	@PostMapping(value = "/deleteSummernoteImageFile", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public void deleteSummernoteImageFile(@RequestParam("file") String fileName) {
+	public void deleteSummernoteImageFile(@RequestParam("file") String fileName, 
+										  HttpServletRequest request) {
 	    // 폴더 위치
-	    //String filePath = realPath + "/upload_image/image/fileupload/tmp/";
-		String fileRoot = "C:\\summernote_image\\";
+		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
+		String fileRoot = contextRoot+"resources\\image\\review\\";
+		//String fileRoot = "C:\\summernote_image\\";
 	    
 	    // 해당 파일 삭제
 	    Path path = Paths.get(fileRoot, fileName);
