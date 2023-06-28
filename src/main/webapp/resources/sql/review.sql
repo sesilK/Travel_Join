@@ -21,12 +21,13 @@ stars NUMBER(2,1) NOT NULL,
 views NUMBER DEFAULT 0,
 like_count NUMBER DEFAULT 0,
 comment_count NUMBER DEFAULT 0,
+report_count NUMBER DEFAULT 0,
 create_date DATE DEFAULT SYSDATE,
 update_date DATE,
 delete_at CHAR(1) DEFAULT 'N',
 delete_date DATE,
 CONSTRAINT fk_review_bbs_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
-CONSTRAINT fk_review_bbs_plan_id FOREIGN KEY (plan_id) REFERENCES join_board(no),
+CONSTRAINT fk_review_bbs_plan_id FOREIGN KEY (plan_id) REFERENCES join_board(plan_id),
 CONSTRAINT review_bbs_check_stars CHECK (stars IN (0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5)),
 CONSTRAINT check_review_delete_at CHECK (delete_at IN ('Y', 'N'))
 );
@@ -71,7 +72,7 @@ CONSTRAINT fk_review_like_user_id FOREIGN KEY (user_id) REFERENCES users(user_id
 -- 리뷰 이미지 테이블 생성
 CREATE TABLE review_image (
 review_id NUMBER,
-file_name VARCHAR2(1000) PRIMARY KEY,
+file_name VARCHAR2(300) PRIMARY KEY, -- randomUUID 36Byte + originalFileName 255Byte + ect
 CONSTRAINT fk_review_image_review_id FOREIGN KEY (review_id) REFERENCES review_bbs(review_id)
 );
 
@@ -113,6 +114,7 @@ COMMENT ON COLUMN review_bbs.stars IS '별점';
 COMMENT ON COLUMN review_bbs.views IS '조회수';
 COMMENT ON COLUMN review_bbs.like_count IS '추천수';
 COMMENT ON COLUMN review_bbs.comment_count IS '댓글수';
+COMMENT ON COLUMN review_bbs.report_count IS '신고횟수';
 COMMENT ON COLUMN review_bbs.create_date IS '작성일';
 COMMENT ON COLUMN review_bbs.update_date IS '수정일';
 COMMENT ON COLUMN review_bbs.delete_at IS '삭제여부';

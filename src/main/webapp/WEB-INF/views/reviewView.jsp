@@ -36,7 +36,7 @@
 		
 	<hr/>
 	<p>댓글(<span class="commentCount">${item.commentCount}</span>)</p>
-	<textarea name="comment"></textarea>
+	<input type="text" name="comment">
 	<button id="commentBtn" type="button">등록</button>
 
 	
@@ -84,6 +84,7 @@
 	
 		let reviewId = $('#num').data('reviewid');	//글 번호
 		let userId = '${item.userId}'; //글 작성자
+		let commentMaxByte = 1000; //댓글 입력제한 1000 Byte
 		
 		$(document).ready(function(){			
 			
@@ -149,7 +150,7 @@
 			// 댓글 등록 버튼 클릭 이벤트 처리
 			$('#commentBtn').click(function(){
 				
-				let commentEl = $('textarea[name="comment"]');	//댓글 입력 요소
+				let commentEl = $('input[name="comment"]');	//댓글 입력 요소
 				let content = commentEl.val(); //댓글 내용
 				
 				if(content != ''){
@@ -191,6 +192,12 @@
 			        '</td>' +
 			        '</tr>';
 			    commentRow.after(replyInput);
+			    
+				//답글 글자수 제한
+				$('input[name="replyContent"]').on('input', function() {
+					let content = $(this).val();
+					$(this).val(limitByte(content));
+				});
 			});
 			
 			// 답글 취소버튼 클릭 이벤트 처리
@@ -256,6 +263,12 @@
 			    	</span>
 			    `;
 			    contentDateEl.replaceWith(modifyCommentForm);
+			    
+				//수정 글자수 제한
+				$('input[name="modifiedComment"]').on('input', function() {
+					let content = $(this).val();
+					$(this).val(limitByte(content));
+				});
 			});
 			
 			// 댓글 수정취소 버튼 클릭 이벤트 처리
@@ -342,10 +355,40 @@
 				}
 			});
 			
+			//댓글 글자수 제한
+			$('input[name="comment"]').on('input', function() {
+				let content = $(this).val();
+				$(this).val(limitByte(content));
+			});
+		
 		});
 		
+		//댓글 글자수 제한 함수
+		function limitByte(content) {
+			let charLength = content.length	//글자 길이
+			let byteLength = calculateByteLength(content); //바이트 길이
+			if (byteLength > commentMaxByte) {
+				let trimmedValue = content.substring(0, charLength-1); // 입력값을 현재 글자까지만 잘라냄
+				return trimmedValue; // 입력값을 잘라낸 값으로 설정하여 길이를 제한함
+			}
+			return content;
+		}		
 		
-		// 댓글 리스트를 렌더링하는 함수
+		//글자수 byte 변환 함수
+		function calculateByteLength(str) {
+			let byteLength = 0;
+			for (let i = 0; i < str.length; i++) {
+				let charCode = str.charCodeAt(i);
+			    if (charCode <= 0x007F) { // 영어, 숫자, 특수문자는 1바이트로 처리
+			    	byteLength += 1;
+				} else { // 한글 및 기타 유니코드 문자는 3바이트로 처리
+					byteLength += 3;
+				}
+			}
+				return byteLength;
+		}
+		
+		// 댓글 리스트를 렌더링
 		function renderComments(commentList) {
 		  let commentCount = 0; // 댓글 수 세기
 		  let html = '';
@@ -400,7 +443,7 @@
 
 		  // 생성한 HTML을 특정 요소에 추가
 		  $('#commentList').html(html);
-		  $('textarea[name="comment"]').val('');
+		  $('input[name="comment"]').val('');
 
 		  // 댓글 수 업데이트
 		  let commentCountEl = $('.commentCount'); // 댓글 수 요소

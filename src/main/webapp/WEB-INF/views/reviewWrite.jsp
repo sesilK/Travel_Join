@@ -15,7 +15,7 @@
 		여행 <select name="planId">
 			<option selected value="0">선택해주세요.</option>
 			<c:forEach var="join" items="${joinList}">
-				<option value="${join.no}">${join.title}(${join.startday}~${join.endday})</option>
+				<option value="${join.planId}">${join.destination}(${join.startDay}~${join.endDay})</option>
 			</c:forEach>
 		</select><br />
 		별점 <select name="stars">
@@ -38,6 +38,9 @@
 	<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
 	<script>
 	
+		let titleMaxByte = 300; //제목 입력제한 300 Byte
+		let contentMaxByte = 3000; //내용 입력제한 3000 Byte
+			
 		$(document).ready(function() {
 			
 			//썸머노트 불러오기
@@ -52,15 +55,77 @@
 				callbacks: {
 				    onImageUpload: function(files, editor, welEditable) { //이미지 첨부
 				        for (let i = files.length - 1; i >= 0; i--) { // 다중 업로드
-				            uploadSummernoteImageFile(files[i], this);
+				        	let content = $('div[role="textbox"]')[0].innerHTML;
+				        	let byteLength = calculateByteLength(content); // 바이트 길이 계산
+				        	if (byteLength <= contentMaxByte) { // 바이트 제한 이내인 경우
+				            	uploadSummernoteImageFile(files[i], this); //업로드
+				        	} else { // 바이트 제한 걸리면
+				        		alert("용량을 초과하여 업로드할 수 없습니다.");
+				        		break;
+				        	}	
 				        }
 				    },
 				    onMediaDelete: function ($target, editor, $editable) { //이미지 삭제
 	                	let imageName = $target.attr('src').split('/').pop()
 	                	deleteSummernoteImageFile(imageName)
+	                },
+	                onKeydown: function(e) {
+	                	limitByte(e);
+	                },
+	                onPaste: function(e) {
+	                	e.preventDefault(); // 붙여넣기 막음
+	                	alert('붙여넣기 기능을 지원하지 않습니다.');
+	                	/* let clipboardData = e.originalEvent.clipboardData || window.clipboardData;
+	                    if (!clipboardData) {
+	                        alert('브라우저에서 붙여넣기 기능을 지원하지 않습니다.');
+	                        return;
+	                    }
+	                	let pastedText = clipboardData.getData('text/plain'); // 붙여넣은 텍스트
+	                	let pastedTextByte = calculateByteLength(pastedText); // 붙여넣은 텍스트의 바이트
+	                	let content = $('div[role="textbox"]')[0].innerHTML;  // 붙여넣은 전 전체내용 
+	                	let beforeByte = calculateByteLength(content);// 붙여넣기 전 바이트
+	                	let maxPastedByte = contentMaxByte - beforeByte; // 붙여넣기 허용할 최대 바이트(최대 - 붙여넣기전)
+	                	console.log(maxPastedByte);	 //6
+	                	if (pastedTextByte > maxPastedByte) { // 바이트가 제한을 초과하는 경우
+	                		e.preventDefault(); // 붙여넣기 동작 취소
+	                		
+	                        let limitedText = trimTextToByteLength(pastedText, maxPastedByte); // 텍스트를 제한된 길이로 잘라냄
+	                        
+	                        clipboardData.setData('text/plain', limitedText); // 클립보드에 텍스트 설정
+
+	                        // 붙여넣기 동작 수행
+	                        let editableDiv = $('div[role="textbox"]')[0];
+	                        let selection = window.getSelection();
+	                        let range = selection.getRangeAt(0);
+	                        range.deleteContents();
+	                        range.insertNode(document.createTextNode(limitedText));
+	                        range.collapse(false);
+	                        selection.removeAllRanges();
+	                        selection.addRange(range); 
+	                        
+	                	}*/
 	                }
 				}
 			});
+			
+			//내용 글자수 제한 함수
+			function limitByte(e) {
+            	let content = e.currentTarget.innerHTML;
+				let charLength = content.length	//글자 길이
+				let byteLength = calculateByteLength(content); //바이트 길이
+				
+				console.log(byteLength);
+				
+                if (byteLength >= contentMaxByte) { // 입력된 텍스트의 바이트가 maxByte를 초과할 경우
+    				let keyCode = e.keyCode || e.which;
+                	if (!(keyCode == 8 || keyCode == 37 || keyCode == 38 ||
+                	keyCode == 39 || keyCode == 40 )) { // 백스페이스나 방향키가 아닌 경우에만
+                    	e.preventDefault();	//키 입력 막음
+                    	return false;
+                	}
+                }
+                return true;
+            }			
 			
 			//임시저장된 내용 불러오기
 			let planId = '${temp.planId}';
@@ -73,73 +138,57 @@
 			$('#summernote').summernote('code', content);
 			/* $('div[role="textbox"]').append(content); */ // <- <p><br></p> 삽입되는 문제
 			
-			  $('input[name="title"]').on('input', function() {
-    var title = $(this).val();
-    var byteLength = getByteLength(title);
-    if (byteLength > 30) {
-      var truncatedTitle = truncateString(title, 300);
-      $(this).val(truncatedTitle);
-    }
-  });
+			//제목 글자수 제한 함수
+			$('input[name="title"]').on('input', function() {
+				let title = $(this).val();
+				let charLength = title.length	//글자 길이
+				let byteLength = calculateByteLength(title); //바이트 길이
+				
+				if (byteLength > titleMaxByte) {
+					let trimmedValue = title.substring(0, charLength-1); // 입력값을 현재 글자까지만 잘라냄
+					console.log(trimmedValue);
+				    $(this).val(trimmedValue); // 입력값을 잘라낸 값으로 설정하여 길이를 제한함
+				}
+			});
 
-  $('#summernote').on('summernote.change', function() {
-    var content = $(this).summernote('code');
-    var byteLength = getByteLength(content);
-    if (byteLength > 4000) {
-      var truncatedContent = truncateString(content, 4000);
-      $(this).summernote('code', truncatedContent);
-    }
-  });
-
-  function getByteLength(str) {
-    var byteLength = 0;
-    for (var i = 0; i < str.length; i++) {
-      var charCode = str.charCodeAt(i);
-      if (charCode <= 0x7f) {
-        byteLength += 1;
-      } else if (charCode <= 0x7ff) {
-        byteLength += 2;
-      } else if (charCode <= 0xffff) {
-        byteLength += 3;
-      } else {
-        byteLength += 4;
-      }
-    }
-    return byteLength;
-  }
-
-  function truncateString(str, maxLength) {
-    var truncatedStr = '';
-    var byteLength = 0;
-    for (var i = 0; i < str.length; i++) {
-      var charCode = str.charCodeAt(i);
-      if (charCode <= 0x7f) {
-        byteLength += 1;
-      } else if (charCode <= 0x7ff) {
-        byteLength += 2;
-      } else if (charCode <= 0xffff) {
-        byteLength += 3;
-      } else {
-        byteLength += 4;
-      }
-
-      if (byteLength > maxLength) {
-        break;
-      }
-      truncatedStr += str.charAt(i);
-    }
-    return truncatedStr;
-  }
-			
-			
-			
-			
-			
-			
-			
-			
-			
 		});
+		
+		//글자수 byte 변환 함수
+		function calculateByteLength(str) {
+			let byteLength = 0;
+			for (let i = 0; i < str.length; i++) {
+				let charCode = str.charCodeAt(i);
+			    if (charCode <= 0x007F) { // 영어, 숫자, 특수문자는 1바이트로 처리
+			    	byteLength += 1;
+				} else { // 한글 및 기타 유니코드 문자는 3바이트로 처리
+					byteLength += 3;
+				}
+			}
+				return byteLength;
+		}
+		
+		// 텍스트를 제한된 바이트 수로 자르는 함수
+		function trimTextToByteLength(text, maxBytes) {
+		    let trimmedText = '';
+		    let byteLength = 0;
+
+		    for (let i = 0; i < text.length; i++) {
+		        let charCode = text.charCodeAt(i);
+		        let charByteLength = 0;
+			    if (charCode <= 0x007F) { // 영어, 숫자, 특수문자는 1바이트로 처리
+			    	charByteLength += 1;
+				} else { // 한글 및 기타 유니코드 문자는 3바이트로 처리
+					charByteLength += 3;
+				}
+			    if (byteLength + charByteLength >= maxBytes) {
+			        break;
+			    }
+			    trimmedText += text.charAt(i);
+			    byteLength += charByteLength;
+		    }
+
+		    return trimmedText;
+		}
 		
 		//파일 업로드 함수
 		function uploadSummernoteImageFile(file, el) {
@@ -176,15 +225,20 @@
 		
 		
 		document.getElementById("submitBtn").addEventListener("click", function() { //등록버튼 클릭시
-			
+
 			shouldCallTemporarySave = false;  // 임시저장 실행여부를 false로 변경
 			
 			let planId = $('select[name="planId"]').val();
 			let stars = $('select[name="stars"]').val();
 			let title = $('input[name="title"]').val();
 			let content = $('div[role="textbox"]')[0].innerHTML;
+			let contentByte = calculateByteLength(content);
+			console.log(contentByte);
 			
-			if (planId === "0") {
+			if (contentByte > contentMaxByte) {
+				alert("입력 가능한 글자 수를 초과하였습니다.");
+				return false;
+			} else if (planId === "0") {
 				alert("여행을 선택해주세요.");
 				return false;
 			//} else if (stars === "") {

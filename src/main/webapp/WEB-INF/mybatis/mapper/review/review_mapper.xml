@@ -74,9 +74,9 @@
 	<select id="select_review_view" resultType="ReviewDto">
 		SELECT rb.review_id, rb.plan_id, rb.user_id, rb.title, rb.content, rb.create_date, 
 			   rb.views, rb.like_count, rb.stars, rb.comment_count, rb.update_date, us.nick, 
-			   jb.title||'('||TO_CHAR(jb.startday, 'YY-MM-DD')||'~'||TO_CHAR(jb.endday, 'YY-MM-DD')||')' AS planInfo
+			   jb.title||'('||TO_CHAR(jb.start_day, 'YY-MM-DD')||'~'||TO_CHAR(jb.end_day, 'YY-MM-DD')||')' AS planInfo
 		FROM review_bbs rb
-		JOIN join_board jb ON rb.plan_id = jb.no
+		JOIN join_board jb ON rb.plan_id = jb.plan_id
 		JOIN users us ON rb.user_id = us.user_id
  		WHERE review_id = #{reviewId}
  		AND delete_at = 'N'
@@ -203,20 +203,20 @@
 	
 	<!-- 여행 목록 불러오기 (리뷰 작성 가능한 것만) -->
 	<select id="select_review_join_list" resultType="JoinDto">
-		SELECT no, title, TO_CHAR(endDay, 'YY-MM-DD') endDay, TO_CHAR(startDay, 'YY-MM-DD') startDay
+		SELECT plan_id, destination, title, TO_CHAR(end_day, 'YY-MM-DD') end_day, TO_CHAR(start_day, 'YY-MM-DD') start_day
 		FROM join_board
- 		WHERE SYSDATE > endDay <!-- 여행종료일 기준 -->
- 		AND no IN (SELECT no FROM party WHERE user_id = #{userId}) <!-- 로그인한 아이디로 참여한 여행 -->
- 		AND no NOT IN (SELECT plan_id no FROM review_bbs
+ 		WHERE SYSDATE > end_day <!-- 여행종료일 기준 -->
+ 		AND plan_id IN (SELECT plan_id FROM join_board_party WHERE user_id = #{userId}) <!-- 로그인한 아이디로 참여한 여행 -->
+ 		AND plan_id NOT IN (SELECT plan_id FROM review_bbs
  					   WHERE user_id = #{userId} AND delete_at = 'N' ) <!-- 리뷰 작성한 것 제외 -->
-		ORDER BY endDay
+		ORDER BY end_day
 	</select>
 	
 	<!-- 여행 찾기 -->
 	<select id="select_review_join" resultType="JoinDto">
-		SELECT no, title, TO_CHAR(endDay, 'YY-MM-DD') endDay, TO_CHAR(startDay, 'YY-MM-DD') startDay
+		SELECT plan_id, title, destination, TO_CHAR(end_day, 'YY-MM-DD') end_day, TO_CHAR(start_day, 'YY-MM-DD') start_day
 		FROM join_board
-		WHERE no = #{planId}
+		WHERE plan_id = #{planId}
 	</select>
 	
 </mapper>

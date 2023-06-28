@@ -18,11 +18,12 @@ public class ReviewDto {
 	float stars;		//별점
 	int views;			//조회
 	int likeCount;		//추천
+	int commentCount;	//댓글수
+	int reportCount;	//신고횟수
 	String createDate;	//작성일
 	String updateDate;	//수정일
 	String deleteAt;	//삭제여부
 	String deleteDate;	//삭제일
-	int commentCount;	//댓글수
 	
 	String planInfo;	//여행정보
 	String nick;		//작성자닉네임
