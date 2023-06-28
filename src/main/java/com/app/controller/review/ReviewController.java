@@ -319,20 +319,40 @@ public class ReviewController {
 		JsonObject jsonObject = new JsonObject();
 		
 		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		String fileRoot = contextRoot+"resources\\image\\review\\"; // 내부경로 저장을 희망할때.
-		//String fileRoot = "C:\\summernote_image\\"; //외부경로로 저장을 희망할때.
-		System.out.println(contextRoot);
-		System.out.println(fileRoot);
+		//String fileRoot = contextRoot+"resources\\image\\review\\"; // 내부경로 저장
+		String fileRoot = "C:\\review_image\\"; //외부경로 저장
+		
+		System.out.println(fileRoot); // -> server.xml에 저장경로 추가
 		
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		//String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
 		String savedFileName = UUID.randomUUID() + "_" + originalFileName/* + extension */;	//저장될 파일명
 		
-		File targetFile = new File(fileRoot + savedFileName);	
+		File targetFile = new File(fileRoot + savedFileName);
+		File parentDir = targetFile.getParentFile(); // 부모 디렉토리 경로 추출
+
+		if (!parentDir.exists()) { // 부모 디렉토리가 존재하지 않는 경우 디렉토리 생성
+		    boolean created = parentDir.mkdirs();
+		    if (!created) {
+		        jsonObject.addProperty("responseCode", "error");
+		        jsonObject.addProperty("errorMessage", "디렉토리 생성 실패");
+		        return jsonObject.toString();
+		    }
+		}
+		if (!targetFile.exists()) {
+		    try {
+		        targetFile.createNewFile();
+		    } catch (IOException e) {
+		        jsonObject.addProperty("responseCode", "error");
+		        jsonObject.addProperty("errorMessage", "파일 생성 실패");
+		        e.printStackTrace();
+		        return jsonObject.toString();
+		    }
+		}
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-			jsonObject.addProperty("url", "/resources/image/review/"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", "/resources/image/review/"+savedFileName);
 			jsonObject.addProperty("responseCode", "success");
 			
 		} catch (IOException e) {
@@ -350,8 +370,8 @@ public class ReviewController {
 										  HttpServletRequest request) {
 	    // 폴더 위치
 		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		String fileRoot = contextRoot+"resources\\image\\review\\";
-		//String fileRoot = "C:\\summernote_image\\";
+		//String fileRoot = contextRoot+"resources\\image\\review\\"; //내부 경로
+		String fileRoot = "C:\\review_image\\"; //외부 경로
 	    
 	    // 해당 파일 삭제
 	    Path path = Paths.get(fileRoot, fileName);
