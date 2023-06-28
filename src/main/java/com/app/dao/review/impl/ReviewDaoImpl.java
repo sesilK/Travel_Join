@@ -120,9 +120,9 @@ public class ReviewDaoImpl implements ReviewDao{
 		ReviewDto reviewDto
 			= sqlsessionTemplate.selectOne("review_mapper.select_review_mark_count", markDto);
 		int result = 0;
-		if(sort == "L") {
+		if(sort.equals("L")) {
 			result = reviewDto.getLikeCount();
-		} else if (sort == "R") {
+		} else if (sort.equals("R")) {
 			result = reviewDto.getReportCount();
 		}
 		return result;

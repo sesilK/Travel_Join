@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<link href="/css/reviewView.css" rel="stylesheet" type="text/css"/>
+<!-- <link href="/css/reviewView.css" rel="stylesheet" type="text/css"/> -->
 <%@ include file="header.jsp" %>
 
 	<h4>접근할 수 없는 페이지</h4>
@@ -7,9 +7,4 @@
 
 
 <%@ include file="footer.jsp" %>
-<script src="/js/.js"></script>
-<script>
-    $(function(){
-        $(".review").addClass("is-active");
-    });
-</script>
+<script src="/js/reviewView.js"></script>

@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
@@ -319,7 +318,7 @@ public class ReviewController {
 											HttpServletRequest request)  {
 		JsonObject jsonObject = new JsonObject();
 		
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
+		//String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		//String fileRoot = contextRoot+"resources\\image\\review\\"; // 내부경로 저장
 		String fileRoot = "C:\\review_image\\"; //외부경로 저장
 		
@@ -370,7 +369,7 @@ public class ReviewController {
 	public void deleteSummernoteImageFile(@RequestParam("file") String fileName, 
 										  HttpServletRequest request) {
 	    // 폴더 위치
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
+		//String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		//String fileRoot = contextRoot+"resources\\image\\review\\"; //내부 경로
 		String fileRoot = "C:\\review_image\\"; //외부 경로
 	    
