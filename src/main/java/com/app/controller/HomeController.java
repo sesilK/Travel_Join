@@ -16,11 +16,6 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "hometest";
-    }
-
     @GetMapping("/board")
     public String boardTest() {
         return "boardtest";

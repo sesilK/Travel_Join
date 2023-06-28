@@ -1,8 +1,8 @@
 package com.app.dao.user;
 
-import java.util.List;
-
 import com.app.dto.user.UserDto;
+
+import java.util.List;
 
 public interface UserDao {
 
@@ -11,6 +11,8 @@ public interface UserDao {
 	public List<UserDto> selectUserList(UserDto userDto);
 	
 	public UserDto selectUserById(String user_id);
+
+	public int selectUserCountById(String user_id);
 	
 	public UserDto insertImage(int imageId);
 

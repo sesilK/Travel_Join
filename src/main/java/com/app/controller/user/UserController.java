@@ -2,15 +2,11 @@ package com.app.controller.user;
 
 import com.app.dto.user.UserDto;
 import com.app.service.user.UserService;
-
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
@@ -18,11 +14,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping("/main")
-	public String main() {
-		return "backup/main";
-	}
-	
+
 
 	@GetMapping("/register")
 	public String register() {
@@ -31,9 +23,19 @@ public class UserController {
 
 	@PostMapping("/register")
 	public String register_proc(@ModelAttribute UserDto userDto) {
+		System.out.println(userDto.toString());
 		int result = userService.saveUser(userDto);
 
-		return "backup/main";
+		return "login";
+	}
+
+	/** 아이디 중복체크 rest api */
+	@PostMapping("/api/register")
+	@ResponseBody
+	public boolean register_api(@RequestParam String userId) {
+		boolean result = false;
+		result = userService.idCheck(userId);
+		return result;
 	}
 
 	@GetMapping("/login")
@@ -48,7 +50,7 @@ public class UserController {
 
 		if (result) {
 			session.setAttribute("userId", userDto.getUserId());
-			return "redirect:/main";
+			return "redirect:/home";
 		} else {
 			// alert ~~~
 			return "redirect:/login";
@@ -59,7 +61,7 @@ public class UserController {
 	public String logout(HttpSession session) {
 
 		session.removeAttribute("userId");
-		return "redirect:/main";
+		return "redirect:/home";
 	}
 
 }

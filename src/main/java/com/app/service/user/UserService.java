@@ -1,8 +1,8 @@
 package com.app.service.user;
 
-import java.util.List;
-
 import com.app.dto.user.UserDto;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -11,6 +11,7 @@ public interface UserService {
 	List<UserDto> getUserList(UserDto userDto);
 	
 	boolean login(UserDto userDto);
-	
+
+	boolean idCheck(String userId);
 
 }

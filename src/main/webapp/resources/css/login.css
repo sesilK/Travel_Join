@@ -1,5 +1,5 @@
 body,
-.signin {
+.signin, .signup {
     background-color: #d3d3d3;
     font-family: 'Montserrat', sans-serif;
     color: #fff;
@@ -22,16 +22,19 @@ body,
     box-shadow: 0px 30px 60px -5px #000;
 }
 
-.login, .register {
+.login {
     position: relative;
-    /*height: 560px;*/
-    /*width: 405px;*/
     width: 486px;
     height: 672px;
     padding: 60px 60px;
-    /*border-radius: 20px;*/
-    /*background-color: var(--button-bg);*/
-    /*box-shadow: 0px 30px 60px -5px #000;*/
+}
+
+.register {
+    position: relative;
+    width: 486px;
+    height: 672px;
+    padding: 60px 60px;
+    overflow: scroll;
 }
 
 form {
@@ -147,7 +150,7 @@ label {
     padding-left: 5px;
 }
 
-.signin {
+.signin, .signup {
     background-color: #1161ed;
     color: #FFF;
     width: 100%;
@@ -161,7 +164,7 @@ label {
     text-transform: uppercase;
 }
 
-.signin:hover {
+.signin:hover, .signup:hover {
     background: #4082f5;
     box-shadow: 0px 4px 35px -5px #4082f5;
     cursor: pointer;
@@ -203,4 +206,48 @@ h2 {
 
 h2:hover {
     color: #4082f5;
+}
+
+option {
+    background-color: rgba(21, 20, 26, 0.63);
+}
+
+.sel-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 89%;
+    margin: 0 auto;
+}
+
+.sel-box select {
+    margin: 0 10px;
+}
+
+.sel-text {
+    border: none;
+    display: block;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0);
+    overflow: hidden;
+    margin-top: 15px;
+    transition: all 0.5s ease-in-out;
+    color: white;
+}
+
+.sel-text:focus {
+    outline: 0;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#birth {
+    display: none; !important;
 }
