@@ -49,9 +49,10 @@
 	
 	<!-- 글목록 불러오기 (+검색기능) -->
 	<select id="select_review_list" resultType="ReviewDto" parameterType="hashMap">
-		SELECT rb.review_id, rb.user_id, rb.title, SUBSTR(rb.create_date,1,10) create_date,
-				rb.views, rb.like_count, rb.comment_count, rb.report_count, rb.stars, us.nick
+		SELECT rb.review_id, rb.user_id, rb.title, SUBSTR(rb.create_date,1,10) create_date, rb.views, 
+			   rb.like_count, rb.comment_count, rb.report_count, rb.stars, us.nick, jb.destination AS planInfo
 		FROM review_bbs rb
+		JOIN join_board jb ON rb.plan_id = jb.plan_id
 		JOIN users us ON rb.user_id = us.user_id
  		WHERE 1=1
 		<if test="searchCondition == 'title'">
@@ -66,6 +67,9 @@
 		<if test="searchCondition == 'user'">
 			AND rb.user_id LIKE '%'||#{keyword}||'%'
 		</if>
+		<if test="searchCondition == 'destination'">
+			AND jb.destination LIKE '%'||#{keyword}||'%'
+		</if>
 		AND rb.delete_at = 'N'
 		AND rb.report_count &lt;= 5 <!-- 부등호(<)의 XML 엔티티 &lt; -->
 		ORDER BY rb.review_id DESC
@@ -75,7 +79,7 @@
 	<select id="select_review_view" resultType="ReviewDto">
 		SELECT rb.review_id, rb.plan_id, rb.user_id, rb.title, rb.content, rb.create_date, rb.stars, rb.delete_at, 
 			   rb.views, rb.like_count, rb.comment_count, rb.report_count, rb.update_date, us.nick, 
-			   jb.title||'('||TO_CHAR(jb.start_day, 'YY-MM-DD')||'~'||TO_CHAR(jb.end_day, 'YY-MM-DD')||')' AS planInfo
+			   jb.destination||'('||TO_CHAR(jb.start_day, 'YY-MM-DD')||'~'||TO_CHAR(jb.end_day, 'YY-MM-DD')||')' AS planInfo
 		FROM review_bbs rb
 		JOIN join_board jb ON rb.plan_id = jb.plan_id
 		JOIN users us ON rb.user_id = us.user_id

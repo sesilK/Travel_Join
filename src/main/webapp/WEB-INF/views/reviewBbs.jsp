@@ -18,6 +18,7 @@
         <thead>
         	<tr>
 	            <th>별점</th>
+	            <th>여행지</th>
 	            <th>제목</th>
 	            <th>글쓴이</th>
 	            <th>작성</th>
@@ -29,6 +30,7 @@
         	<c:forEach var="item" items="${reviewList}">
 	            <tr>
 	            	<td>${item.stars}</td>
+	            	<td>${item.planInfo}</td>
 	            	<td class="title" data-reviewId="${item.reviewId}">${item.title}
 	            	    <c:if test="${item.commentCount > 0}">[${item.commentCount}]</c:if></td>
 	            	<td>${item.nick}</td>
@@ -48,6 +50,7 @@
 				<option value="content" ${param.searchCondition eq 'content' ? 'selected' : ''}>내용</option>
 				<option value="ticon" ${param.searchCondition eq 'ticon' ? 'selected' : ''}>제목+내용</option>
 				<option value="user" ${param.searchCondition eq 'user' ? 'selected' : ''}>글쓴이</option>
+				<option value="destination" ${param.searchCondition eq 'destination' ? 'selected' : ''}>여행지</option>
 		</select>
 		<input type="text" name="keyword" value="${param.keyword}"/>
 		<button type="submit">검색</button>
