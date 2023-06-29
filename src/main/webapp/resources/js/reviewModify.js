@@ -14,7 +14,7 @@ $(document).ready(function() {
 		lang: 'ko-KR', // 기본 메뉴언어 US->KR로 변경
 		placeholder: '', //placeholder 설정
 		callbacks: {
-			onImageUpload: function(files, editor, welEditable) { //이미지 첨부
+			onImageUpload: function(files) { //이미지 첨부
 				for (let i = files.length - 1; i >= 0; i--) { // 다중 업로드
 					let content = $('div[role="textbox"]')[0].innerHTML;
 					let byteLength = calculateByteLength(content); // 바이트 길이 계산
@@ -26,7 +26,7 @@ $(document).ready(function() {
 					}
 				}
 			},
-			onMediaDelete: function($target, editor, $editable) { //이미지 삭제
+			onMediaDelete: function($target) { //이미지 삭제
 				let imageName = $target.attr('src').split('/').pop()
 				deleteSummernoteImageFile(imageName)
 			},
@@ -43,7 +43,6 @@ $(document).ready(function() {
 	//내용 글자수 제한 함수
 	function limitByte(e) {
 		let content = e.currentTarget.innerHTML;
-		let charLength = content.length	//글자 길이
 		let byteLength = calculateByteLength(content); //바이트 길이
 
 		console.log(byteLength);
@@ -60,8 +59,10 @@ $(document).ready(function() {
 	}
 
 	//수정할 글 내용 불러오기
+	let reviewId = $('#submitBtn').data('reviewid');
+	console.log(reviewId);
 	$.ajax({
-		url: 'reviewLoad', // 서버 엔드포인트 URL을 지정해야 합니다.
+		url: 'reviewLoad?reviewId=' + reviewId , // 서버 엔드포인트 URL을 지정해야 합니다.
 		method: 'GET',
 		success: function(response) {
 			console.log(response);
@@ -164,12 +165,12 @@ function deleteSummernoteImageFile(imageName) {
 
 document.getElementById("submitBtn").addEventListener("click", function() { //수정버튼 클릭시
 
-	let reviewId = $('#reviewId').data('reviewid');
-	let userId = $('#userId').data('userid');
+	let reviewId = $('#submitBtn').data('reviewid');
 	let planId = $('select[name="planId"]').val();
 	let stars = $('select[name="stars"]').val();
 	let title = $('input[name="title"]').val();
 	let content = $('div[role="textbox"]')[0].innerHTML;
+	let contentByte = calculateByteLength(content);
 
 	if (contentByte > contentMaxByte) {
 		alert("입력 가능한 글자 수를 초과하였습니다.");
@@ -200,7 +201,6 @@ document.getElementById("submitBtn").addEventListener("click", function() { //�
 			url: "/reviewModify", //어디 경로로 요청할건지
 			data: JSON.stringify({	//객체를 -> JSON string 으로 변환
 				reviewId: reviewId,
-				userId: userId,
 				planId: planId,
 				stars: stars,
 				title: title,

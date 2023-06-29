@@ -14,7 +14,7 @@ $(document).ready(function() {
 		lang: 'ko-KR', // 기본 메뉴언어 US->KR로 변경
 		placeholder: '자동으로 임시저장 됩니다.', //placeholder 설정
 		callbacks: {
-			onImageUpload: function(files, editor, welEditable) { //이미지 첨부
+			onImageUpload: function(files) { //이미지 첨부
 				for (let i = files.length - 1; i >= 0; i--) { // 다중 업로드
 					let content = $('div[role="textbox"]')[0].innerHTML;
 					let byteLength = calculateByteLength(content); // 바이트 길이 계산
@@ -26,7 +26,7 @@ $(document).ready(function() {
 					}
 				}
 			},
-			onMediaDelete: function($target, editor, $editable) { //이미지 삭제
+			onMediaDelete: function($target) { //이미지 삭제
 				let imageName = $target.attr('src').split('/').pop()
 				deleteSummernoteImageFile(imageName)
 			},
@@ -205,7 +205,6 @@ document.getElementById("submitBtn").addEventListener("click", function() { //�
 	let title = $('input[name="title"]').val();
 	let content = $('div[role="textbox"]')[0].innerHTML;
 	let contentByte = calculateByteLength(content);
-	console.log(contentByte);
 
 	if (contentByte > contentMaxByte) {
 		alert("입력 가능한 글자 수를 초과하였습니다.");

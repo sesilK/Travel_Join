@@ -58,18 +58,18 @@ public class ReviewController {
 		List<JoinDto> joinList = reviewService.findJoinList(sessionId);	//여행목록 불러오기
 		model.addAttribute("joinList", joinList);
 		
-		ReviewDto temp = reviewService.CheckIfTemporarySaved(sessionId); //임시저장된 글이 있는지 확인
-		if(temp != null) { //있으면
-			model.addAttribute("temp", temp); //model에 담아서 전달
-		} else { //없으면
-			ReviewDto nullDto = new ReviewDto(); //null 전달
-			nullDto.setStars(5.0f);
-			//nullDto.setTitle(null);
-			//nullDto.setContent(null);
-			model.addAttribute("temp", nullDto);
-		}
-		
 		return "reviewWrite";
+	}
+	
+	@GetMapping("/reviewWriteTemp")	//글작성 페이지 임시저장 불러오기
+	@ResponseBody
+	public ReviewDto reviewWriteTemp(HttpSession session) {
+		
+		String sessionId = (String) session.getAttribute("userId");
+		
+		ReviewDto temp = reviewService.CheckIfTemporarySaved(sessionId); //임시저장된 글 반환
+
+		return temp;
 	}
 	
 	@PostMapping("/reviewWrite") //글 작성 버튼 클릭시 폼 전송 과정
@@ -161,43 +161,47 @@ public class ReviewController {
 		int planId = item.getPlanId();
 		
 		JoinDto beforeJoin = reviewService.findJoinInfo(planId);//수정전 여행 정보
-		
-		List<JoinDto> joinList = reviewService.findJoinList(sessionId);	//여행목록 불러오기
-		joinList.add(beforeJoin); //여행목록에 수정전 여행도 추가
-		model.addAttribute("joinList", joinList);
 
 		if(sessionId.equals(userId) &&  //글 작성자id 로그인id 일치
-				!(item.getDeleteAt().equals("Y")) && item.getReportCount() <= 5) { //삭제나 신고누적 해당 X
-			model.addAttribute("item", item);
+			!(item.getDeleteAt().equals("Y")) && item.getReportCount() <= 5) { //삭제나 신고누적 해당 X
+			List<JoinDto> joinList = reviewService.findJoinList(sessionId);	//여행목록 불러오기
+			joinList.add(beforeJoin); //여행목록에 수정전 여행도 추가
+			model.addAttribute("joinList", joinList);
+			model.addAttribute("reviewId", reviewId);
 			return "reviewModify";
 		} else {
 			return "redirect:/reviewNotExist";
 		}
 	}
 	
+	@GetMapping("/reviewLoad") //글수정 페이지 요청
+	@ResponseBody
+	public ReviewDto reviewLoad(@RequestParam int reviewId) {
+
+		ReviewDto item = reviewService.findReview(reviewId); //수정할 글 찾기
+		System.out.println(item);
+		
+		return item;
+	}
+	
 	@PostMapping("/reviewModify") //글 수정 버튼 클릭시 폼 전송 과정
 	@ResponseBody
-	public String reviewModify_process(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
+	public String reviewModify_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
-		
-		String sessionId = (String) session.getAttribute("userId");
-		String userId = reviewDto.getUserId(); //글 작성자
 		int reviewId = reviewDto.getReviewId(); //글 번호
-
-		if(sessionId.equals(userId)) { //글 작성자id 로그인id 일치
-			reviewService.modifyReview(reviewDto); //글 수정
-			reviewService.removeReviewImage(reviewId); //이미지파일명 삭제
-			List<String> imageFileNameList = reviewDto.getImageFileNameList(); //이미지파일명 리스트
-			ReviewImgDto reviewImgDto = new ReviewImgDto();	//이미지정보 객체 생성
-			reviewImgDto.setReviewId(reviewId); //글번호 set
-			for(int i=0; i<imageFileNameList.size(); i++) {
-				reviewImgDto.setFileName(imageFileNameList.get(i)); //파일명 set
-				reviewService.uploadReviewImage(reviewImgDto); //이미지파일명 저장
-			}
-		}
 		
+		reviewService.modifyReview(reviewDto); //글 수정
+		reviewService.removeReviewImage(reviewId); //이미지파일명 삭제
+		List<String> imageFileNameList = reviewDto.getImageFileNameList(); //이미지파일명 리스트
+		ReviewImgDto reviewImgDto = new ReviewImgDto();	//이미지정보 객체 생성
+		reviewImgDto.setReviewId(reviewId); //글번호 set
+		for(int i=0; i<imageFileNameList.size(); i++) {
+			reviewImgDto.setFileName(imageFileNameList.get(i)); //파일명 set
+			reviewService.uploadReviewImage(reviewImgDto); //이미지파일명 저장
+		}
+				
 		return ""+reviewId;	//글번호 전달
 	}
 	

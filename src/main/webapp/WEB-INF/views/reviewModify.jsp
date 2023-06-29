@@ -19,7 +19,7 @@
 		<input type="text" name="title" id="title" placeholder="제목을 입력해주세요"/><br />
 		<textarea id="summernote" name="content"></textarea>
 		<br />
-		<button type="submit" id="submitBtn">수정하기</button>
+		<button data-reviewid="${reviewId}" type="submit" id="submitBtn">수정하기</button>
 		<a href="javascript:history.back()"><button type="button">돌아가기</button></a>
 		
 
