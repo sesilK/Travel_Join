@@ -4,6 +4,7 @@ import com.app.dto.user.UserDto;
 import com.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
 	
 
 
@@ -21,12 +23,15 @@ public class UserController {
 		return "register";
 	}
 
+	/** 회원가입 처리 */
 	@PostMapping("/register")
-	public String register_proc(@ModelAttribute UserDto userDto) {
-		System.out.println(userDto.toString());
-		int result = userService.saveUser(userDto);
+	public String register_proc(@ModelAttribute UserDto userDto, BindingResult bindingResult) {
+		// 회원가입 성공하면 로그인 페이지로 이동
+		if(userService.registerUser(userDto, bindingResult)) {
+			return "redirect:/login";
+		}
 
-		return "login";
+		return "register";
 	}
 
 	/** 아이디 중복체크 rest api */
