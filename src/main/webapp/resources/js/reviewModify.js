@@ -59,17 +59,25 @@ $(document).ready(function() {
 		return true;
 	}
 
-	//내용 불러오기
-	let planId = $('#planId').data('planid');
-	let stars = $('#stars').data('stars');
-	let title = $('#title').data('title');
-	let content = $('#summernote').data('content');
-	console.log(content);
-	$('select[name="planId"]').val(planId);
-	$('select[name="stars"]').val(stars);
-	$('input[name="title"]').val(title);
-	$('#summernote').summernote('code', content);
-
+	//수정할 글 내용 불러오기
+	$.ajax({
+		url: 'reviewLoad', // 서버 엔드포인트 URL을 지정해야 합니다.
+		method: 'GET',
+		success: function(response) {
+			console.log(response);
+			let planId = response.planId;
+			let stars = response.stars.toFixed(1);
+			let title = response.title;
+			let content = response.content;
+			$('select[name="planId"]').val(planId);
+			$('select[name="stars"]').val(stars);
+			$('input[name="title"]').val(title);
+			$('#summernote').summernote('code', content);
+		},
+		error: function() {
+			alert("내용을 불러오지 못했습니다.");
+		}
+	});
 
 	//제목 글자수 제한 함수
 	$('input[name="title"]').on('input', function() {

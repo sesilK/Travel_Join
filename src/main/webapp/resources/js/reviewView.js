@@ -1,7 +1,7 @@
 let reviewId = $('#reviewId').data('reviewid'); // 글 번호
 let userId = $('#userId').data('userid'); // 글 작성자
 let sessionId = $('#sessionId').data('sessionid'); // 로그인 아이디
-let commentMaxByte = 1000; //댓글 입력제한 1000 Byte
+let commentMaxByte = 300; //댓글 입력제한 300 Byte
 
 console.log(reviewId);
 console.log(userId);

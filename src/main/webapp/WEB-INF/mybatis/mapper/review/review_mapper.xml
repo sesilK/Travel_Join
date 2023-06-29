@@ -29,7 +29,7 @@
 	
 	<!-- 임시저장 불러오기 -->
 	<select id="select_review_temp" resultType="ReviewDto">
-		SELECT user_id, plan_id, stars, title, content
+		SELECT user_id, plan_id, ROUND(stars, 1) AS stars, title, content
 		FROM review_temp
 		WHERE user_id = #{userId}
 	</select>

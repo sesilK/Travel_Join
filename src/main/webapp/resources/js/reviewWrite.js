@@ -88,23 +88,34 @@ $(document).ready(function() {
 	}
 
 	//임시저장된 내용 불러오기
-	let planId = $('#planId').data('planid');
-	let stars = $('#stars').data('stars');
-	let title = $('#title').data('title');
-	let content = $('#summernote').data('content');
-	console.log(content);
-	$('select[name="planId"]').val(planId);
-	$('select[name="stars"]').val(stars);
-	$('input[name="title"]').val(title);
-	$('#summernote').summernote('code', content);
-	/* $('div[role="textbox"]').append(content); */ // <- <p><br></p> 삽입되는 문제
+	$.ajax({
+		url: 'reviewWriteTemp', // 서버 엔드포인트 URL을 지정해야 합니다.
+		method: 'GET',
+		success: function(response) {
+			if(response != ''){	//임시저장된 값이 있으면
+				let planId = response.planId;
+				let stars = response.stars.toFixed(1);
+				let title = response.title;
+				let content = response.content; // 서버로부터 받은 ${temp.content}의 값
+				$('select[name="planId"]').val(planId);
+				$('select[name="stars"]').val(stars);
+				$('input[name="title"]').val(title);
+				$('#summernote').summernote('code', content);
+			} else {			//임시저장된 값이 없으면
+				$('select[name="stars"]').val('5.0');
+			}
+		},
+		error: function(error) {
+			console.error(error);
+			alert("임시저장된 내용을 불러오지 못했습니다.");
+		}
+	});
 
 	//제목 글자수 제한 함수
 	$('input[name="title"]').on('input', function() {
 		let title = $(this).val();
 		let charLength = title.length	//글자 길이
 		let byteLength = calculateByteLength(title); //바이트 길이
-
 		if (byteLength > titleMaxByte) {
 			let trimmedValue = title.substring(0, charLength - 1); // 입력값을 현재 글자까지만 잘라냄
 			console.log(trimmedValue);
