@@ -2,12 +2,42 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-						
+
 <mapper namespace="join_mapper">
 
-	<select id="select_GroupBuying" resultType="JoinDto">
-		select  NO, ID, TITLE, CONTENT, TO_CHAR(reg_date, 'YYYY/MM/DD') REG_DATE
-		from join_board order by no
+	<!-- 모집글 작성 -->
+	<insert id="insert_join" parameterType="JoinDto">
+		insert into "SCOTT"."JOIN_BOARD" (PLAN_ID, USER_ID, TITLE,CONTENT, PERSONNEL ,START_DAY , END_DAY, DESTINATION ,FINISH_DATE)
+		values (
+		JOIN_BOARD_PLANID_SEQ.NEXTVAL, #{userId} , #{title}, #{content} ,#{personnel} ,#{startDay}, #{endDay} ,#{destination},#{finishDate})
+	</insert>
+
+	<!-- 이미지파일명 저장 -->
+	<insert id="insert_join_imageFileName" parameterType="JoinDto">
+		insert into "SCOTT"."JOIN_BOARD_IMGS" (PLAN_ID,IMG_FILE_NAME,IMG_FILE_SQC)
+		values ( #{planId},
+		#{imgFileName},
+		(SELECT NVL(MAX(IMG_FILE_SQC),0)+1 FROM "SCOTT"."JOIN_BOARD_IMGS" WHERE PLAN_ID = #{planId})
+		)
+	</insert>
+
+	<!-- 여행정보 조회 -->
+	<select id="select_all_JoinDto_info" resultType="JoinDto">
+		select plan_id, user_id, title, content, destination, personnel, start_day, end_day, reg_date, finish_date, plan_state,	REGEXP_SUBSTR(content, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image
+		from join_board
+	</select>
+
+	<!-- 모집글 조회 -->
+	<select id="select_JoinDto_id" resultType="Integer">
+		select PLAN_ID
+		from "SCOTT"."JOIN_BOARD" where USER_ID = #{userId} AND TITLE = #{title} AND CONTENT = #{content}
+	</select>
+
+	<!-- 대표이미지 조회 -->
+	<select id="select_JoinDto_imageFileName" resultType="JoinDto">
+		select IMG_FILE_NAME
+		from "SCOTT"."JOIN_BOARD_IMGS"
+		where IMG_FILE_SQC = 1
 	</select>
 
 </mapper>
