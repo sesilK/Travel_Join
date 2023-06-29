@@ -263,6 +263,7 @@ document.getElementById("submitBtn").addEventListener("click", function() { //�
 window.onbeforeunload = function() { //페이지를 떠날때 (창 닫기, 새로고침, 뒤로가기 등)
 	if (shouldCallTemporarySave) {	//임시저장 함수를 부를지 확인하기
 		temporarySave();
+		return "";
 	}
 };
 
@@ -286,7 +287,7 @@ function temporarySave() {
 		}),	//파라미터로 같이 담아서 보낼 것들
 		success: (data) => {
 			if (data === 'true') {
-				//alert('임시저장되었습니다.');
+				alert('임시저장되었습니다.');
 			}
 			if (data === 'false') {
 				alert('임시저장 실패');
