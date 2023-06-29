@@ -14,6 +14,7 @@
     	<typeAlias type="com.app.dto.board.BoardDto" alias="BoardDto"/>
     	<typeAlias type="com.app.dto.party.PartyDto" alias="PartyDto"/>
     	<typeAlias type="com.app.dto.user.UserDto" alias="UserDto"/>
+		<typeAlias type="com.app.dto.join.JoinDto" alias="JoinDto"/>
     </typeAliases>
     
 </configuration>
