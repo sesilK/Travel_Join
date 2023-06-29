@@ -24,6 +24,8 @@ public interface UserService {
 	//구분없이 전체 사용자 리스트
 	//관리자 리스트  public List<UserDto> getAdminUserList();
 	//고객 리스트    public List<UserDto> getCustomerUserList();
+
+	List<UserDto> getUserList(String userId);
 	
 	//public List<UserDto> getUserList(String typeCode);  //"USR", "ADM", null
 	

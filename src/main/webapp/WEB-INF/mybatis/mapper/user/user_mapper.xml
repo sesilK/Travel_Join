@@ -6,9 +6,26 @@
 <mapper namespace="user_mapper">
 	
 	
-<!-- 	<insert id="insert_user" parameterType="UserDto">
-		insert into t_user
-		values ( #{id} , #{name}, #{userType} )
-	</insert> -->
+<!-- 회원테이블에 필요한 컬럼 넣기 -->	
+	<insert id="insert_user" parameterType="UserDto">
+		insert into users
+		values (user_id , tel)
+	</insert> 
+	
+<!-- 회원정보 조회하기 -->
+	<select id="select_UserList" resultType="UserDto">
+		SELECT *
+		FROM users
+	<!-- 	JOIN users ON join_board.user_id = users.user_id; -->
+ 		WHERE user_id = #{userId}
+	</select>
+
+<!-- 회원테이블 컬럼에 회원정보 넣기 -->
+	<insert id="insert_UserInfo" parameterType="UserDto">
+		insert into users (user_id, tel)
+		values ('a','0')	
+	</insert>
+
+
 
 </mapper>

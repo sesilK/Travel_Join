@@ -26,11 +26,18 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public List<UserDto> getUserList(UserDto userDto) {
+	public List<UserDto> getUserList(String userId) {
 		// TODO Auto-generated method stub
 		
-		List<UserDto> userList = userDao.selectUserList(userDto);
+		List<UserDto> userList = userDao.selectUserList(userId);
 		
 		return userList;
 	}
+
+	@Override
+	public List<UserDto> getUserList(UserDto userDto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

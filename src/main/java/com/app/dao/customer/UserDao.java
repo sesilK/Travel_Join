@@ -8,5 +8,5 @@ public interface UserDao {
 
 	public int insertUser(UserDto userDto);
 	
-	public List<UserDto> selectUserList(UserDto userDto);
+	public List<UserDto> selectUserList(String userId);
 }

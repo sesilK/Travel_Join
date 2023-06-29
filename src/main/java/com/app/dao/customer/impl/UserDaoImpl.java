@@ -25,9 +25,12 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	@Override
-	public List<UserDto> selectUserList(UserDto userDto) {
+	public List<UserDto> selectUserList(String userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+
 	
 }
