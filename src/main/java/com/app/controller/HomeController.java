@@ -16,14 +16,15 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/board")
-    public String boardTest() {
-        return "boardtest";
-    }
-
     @GetMapping("/review")
     public String reviewTest() {
         return "reviewtest";
+    }
+
+
+    @GetMapping("/board")
+    public String board() {
+        return "board";
     }
 
 

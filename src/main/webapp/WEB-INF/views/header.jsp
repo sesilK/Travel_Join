@@ -5,9 +5,11 @@
 <head>
     <meta charset="UTF-8">
     <title>여행마늘</title>
-    <link href="/css/test.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/css/header.css" type="text/css"/>
+    <link rel="stylesheet" href="/css/join.css" type="text/css">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://code.jquery.com/jquery-3.7.0.js"
             integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="/js/header.js"></script>

@@ -36,19 +36,19 @@
                 <input type="text" id="input_id" class="text input-f" name="userId">
                 <span>아이디</span><br><br>
 
-                <input type="password" class="text input-f" name="password">
+                <input type="password" id="input_pw" class="text input-f" name="password">
                 <span>비밀번호</span><br><br>
 
-                <input type="text" class="text input-f" name="email">
+                <input type="text" id="input_email" class="text input-f" name="email">
                 <span>이메일</span><br><br>
 
-                <input type="text" class="text input-f" name="name">
+                <input type="text" id="input_name" class="text input-f" name="name">
                 <span>이름</span><br><br>
 
-                <input type="text" class="text input-f" name="nick">
+                <input type="text" id="input_nick" class="text input-f" name="nick">
                 <span>닉네임</span><br><br>
 
-                <input type="text" class="text input-f" name="tel">
+                <input type="text" id="input_tel" id="input_tel" class="text input-f" name="tel">
                 <span>전화번호</span><br><br>
 
                 <input type="text" id="birth" name="birth" hidden>
@@ -96,6 +96,12 @@
 <script src="/js/login.js"></script>
 <script>
     $(function () {
+        <c:if test="${not empty success}">
+        alert("${success}");
+        </c:if>
+
         $(".user-login").addClass("is-active");
     });
+
+
 </script>

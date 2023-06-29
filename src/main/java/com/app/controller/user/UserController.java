@@ -4,6 +4,7 @@ import com.app.dto.user.UserDto;
 import com.app.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +26,11 @@ public class UserController {
 
 	/** 회원가입 처리 */
 	@PostMapping("/register")
-	public String register_proc(@ModelAttribute UserDto userDto, BindingResult bindingResult) {
+	public String register_proc(Model model, @ModelAttribute UserDto userDto, BindingResult bindingResult) {
 		// 회원가입 성공하면 로그인 페이지로 이동
 		if(userService.registerUser(userDto, bindingResult)) {
-			return "redirect:/login";
+			model.addAttribute("success", "회원가입 완료!");
+			return "login";
 		}
 
 		return "register";
@@ -44,7 +46,7 @@ public class UserController {
 	}
 
 	@GetMapping("/login")
-	public String login() {
+	public String login(Model model) {
 		return "login";
 	}
 
