@@ -37,9 +37,7 @@
             <div class="shippinginfo">
                 <p>${item.content} </p>
                 
-            </div>
 
- 
             </div>
 
         </section>
@@ -52,7 +50,6 @@
 
         <h4>필수 정보</h4>
 
-        <div>
             <div class="productinfo_01">
                 <ul>
                     <li>여행기간</li>

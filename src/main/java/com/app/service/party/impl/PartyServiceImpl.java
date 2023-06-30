@@ -57,13 +57,21 @@ public class PartyServiceImpl implements PartyService{
 
 
 
-	/*
-	 * @Override public PartyDto joinParty(String userId) { // TODO Auto-generated
-	 * method stub PartyDto item = partyDao.joinParty(userId);
-	 * 
-	 * return item; }
-	 */
 
+    @Override
+    public PartyDto joinParty(BoardDto boardDto) {
+
+        int planId = boardDto.getPlanId();
+        String userId = boardDto.getUserId();
+		return null;       
+       
+    }
+
+//    @Override
+//    public List<PartyDto> myTeamDetail(int planId) {
+//    	// TODO Auto-generated method stub
+//    	return null;
+//    }
 
 	
 

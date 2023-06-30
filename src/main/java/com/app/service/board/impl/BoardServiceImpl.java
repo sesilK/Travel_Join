@@ -31,11 +31,20 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<PartyDto> getPartyMembersByPlanId(int planId) {
+	public List<BoardDto> myTeamDetail(String userId) {
 		// TODO Auto-generated method stub
-		List<PartyDto> member = boardDao.getPartyMembersByPlanId(planId);
-		return member;
+		List<BoardDto> partyMembers = boardDao.myTeamDetail(userId);
+		return partyMembers;
+	}
+
+
+	@Override
+	public void joinParty(PartyDto partyDto) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
+	
+
 }

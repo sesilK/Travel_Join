@@ -34,11 +34,10 @@ public class BoardController {
 	@Autowired
 	UserService userService;
 
-	
-	
+
 	@GetMapping("/detail") // 글상세 페이지 요청 
-	public String detail(@RequestParam("planId") int planId,
-							Model model	) {
+	public String detail(@RequestParam("planId") int planId, 
+							Model model) {
 		
 //		String nowId = request.getSession().getId(); // 세션 ID 값으로 설정
 //		String nowId = "ab"; // 테스트용 		
@@ -53,7 +52,6 @@ public class BoardController {
 		
 		return "post_detail";
 	}
-		
 
 	  @PostMapping("/joinParty") // 동행신청하기 	plan_id 에 user_id insert\
 	  @ResponseBody
@@ -133,18 +131,20 @@ public class BoardController {
  */
 	
 	
+/*
+ * @GetMapping("/partyMembers") //plan_id에 동행신청한 user_id 조회 public String
+ * partyMembers(@RequestParam("planId") int planId, Model model) {
+ * List<PartyDto> partyMembers = boardService.getPartyMembersByPlanId(planId);
+ * model.addAttribute("partyMembers", partyMembers); return "post_detail"; }
+ */
 	  
-	  @GetMapping("/partyMembers")  //plan_id에 동행신청한 user_id 조회 
-	  public String partyMembers(@RequestParam("planId") int planId, Model model) {
-	      List<PartyDto> partyMembers = boardService.getPartyMembersByPlanId(planId);
-	      model.addAttribute("partyMembers", partyMembers);
-	      return "post_detail";
-	  }
-	  
 	
 	
 	
 	
 	
 	
+
+
+
 }

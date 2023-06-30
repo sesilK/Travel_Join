@@ -17,7 +17,7 @@
 	
 	
 <!-- 모집인원 업데이트 --> 
-	<update id="addMember" parameterType="PartyDto">
+	<update id="update_addMember" parameterType="PartyDto">
 		UPDATE join_board
 		SET PERSONNEL = PERSONNEL +1
 		WHERE plan_id = #{planId}
@@ -37,13 +37,13 @@
 		WHERE plan_id = #{planId}
 	</update>	  
  
-<!-- 여행팀 멤버 조회 -->
+<!-- 여행팀 멤버 조회 --> 
 	<select	id="myTeamDetail" resultType="PartyDto">
 		  SELECT plan_id, user_id
 		  FROM JOIN_BOARD_MEMBER
 		  WHERE plan_id = #{planId}
 	</select>
-	
+
 <!-- 여행 참가 여부 -->
  	<select id="checkStatus" parameterType="PartyDto" resultType="Integer">
 		select COUNT(*) as here
