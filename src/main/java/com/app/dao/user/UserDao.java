@@ -15,7 +15,5 @@ public interface UserDao {
 	public int update_user_info(UserDto userDto);
 	
 	public int selectUserCountById(String user_id);
-	
-	public UserDto insertImage(int imageId);
 
 }

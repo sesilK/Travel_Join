@@ -56,10 +56,7 @@ public class UserDaoImpl implements UserDao {
             e.printStackTrace();
         }
 
-		int result = sqlSessionTemplate.update("user_mapper.update_user_info", userDto);
+        int result = sqlSessionTemplate.update("user_mapper.update_user_info", userDto);
         return result;
     }
-
-
-
 }
