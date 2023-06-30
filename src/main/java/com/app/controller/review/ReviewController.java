@@ -159,7 +159,7 @@ public class ReviewController {
 			model.addAttribute("commentList", commentList);
 			return "reviewView";
 		} else {
-			return "redirect:/reviewNotExist";
+			return "redirect:/notExist";
 		}	
 	}
 	
@@ -182,7 +182,7 @@ public class ReviewController {
 			model.addAttribute("reviewId", reviewId);
 			return "reviewModify";
 		} else {
-			return "redirect:/reviewNotExist";
+			return "redirect:/notExist";
 		}
 	}
 	
@@ -223,12 +223,12 @@ public class ReviewController {
 		return ""+reviewId;	//글번호 전달
 	}
 	
-	@GetMapping("/reviewNotExist") //존재하지 않거나 삭제/신고된 글 또는 수정권한 없는 페이지 접근 시
-	public String reviewNotExist() {
-		return "reviewNotExist";
+	@GetMapping("/notExist") //존재하지 않거나 삭제/신고된 글 또는 수정권한 없는 페이지 접근 시
+	public String notExist() {
+		return "notExist";
 	}
 	
-	@PostMapping("/reviewView") //글 확인 (글제목 클릭)
+	@GetMapping("/reviewViewTitle") //글 확인 (글제목 클릭)
 	@ResponseBody
 	public String reviewView_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		

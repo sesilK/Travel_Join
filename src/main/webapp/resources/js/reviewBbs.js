@@ -4,9 +4,9 @@ $(document).ready(function() {
 	$('body').on('click', 'td.title', function() {
 		let reviewId = $(this).data('reviewid');
 		$.ajax({
-			type: "POST",	//요청 method
+			type: "GET",	//요청 method
 			contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
-			url: "/reviewView",	//어디 경로로 요청할건지 (Restful Api 서버 요청 주소)
+			url: "/reviewViewTitle",
 			data: JSON.stringify({	//객체를 -> JSON string 으로 변환
 				reviewId: reviewId
 			}),	//파라미터로 같이 담아서 보낼 것들
@@ -20,8 +20,8 @@ $(document).ready(function() {
 				}
 			},	//요청에 대해 성공한 경우 수행할 내용
 			error: () => {
-				alert('실행 오류');
-			}	//요청이 실패,오류난 경우 수행할 내용
+				window.location.href = "/login";
+			}	//요청이 실패,오류난 경우 수행할 내용 + interceptor에 걸린 경우
 		});
 	});
 

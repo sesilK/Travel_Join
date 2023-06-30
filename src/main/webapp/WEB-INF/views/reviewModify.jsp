@@ -8,7 +8,7 @@
 		여행 <select id="planId" name="planId">
 			<option selected value="0">선택해주세요.</option>
 			<c:forEach var="join" items="${joinList}">
-				<option value="${join.planId}">${join.destination}(${join.startDay}~${join.endDay})</option>
+				<option value="${join.planId}">${join.area}(${join.startDay}~${join.endDay})</option>
 			</c:forEach>
 		</select><br />
 		별점 <select id="stars" name="stars">
