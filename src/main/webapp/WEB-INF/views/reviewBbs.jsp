@@ -3,11 +3,20 @@
 <%@ include file="header.jsp" %>
 
 
-	<h1>reviewBbs</h1>
+	<div class="main-header anim" style="--delay: 0s">Reviews
+		<a href="reviewWrite"><button id="write">write</button></a>
+	</div>
 	
-	<a href="reviewWrite"><button>글쓰기</button></a>
-	
-	<table>
+	<table style="width:100%">
+		<colgroup>
+			<col style="width: 11%;">
+			<col style="width: 10%;">
+			<col style="width: 41%;">
+			<col style="width: 14%;">
+			<col style="width: 14%;">
+			<col style="width: 5%;">
+			<col style="width: 5%;">
+		  </colgroup>
         <thead>
         	<tr>
 	            <th>별점</th>
@@ -23,7 +32,7 @@
         	<c:forEach var="item" items="${reviewList}">
 	            <tr>
 	            	<td>${item.stars}</td>
-	            	<td>${item.planInfo}</td>
+	            	<td>${item.area}</td>
 	            	<td class="title" data-reviewid="${item.reviewId}">${item.title}
 	            	    <c:if test="${item.commentCount > 0}">[${item.commentCount}]</c:if></td>
 	            	<td>${item.nick}</td>
@@ -37,13 +46,18 @@
 	
 	
 	<form action="" method="GET">
+		<select name="searchType">
+				<option value="all" ${param.searchType eq 'all' ? 'selected' : ''}>전체</option>
+				<option value="domestic" ${param.searchType eq 'domestic' ? 'selected' : ''}>국내</option>
+				<option value="overseas" ${param.searchType eq 'overseas' ? 'selected' : ''}>해외</option>
+		</select>
 		<select name="searchCondition">
 				<option>검색조건</option>
 				<option value="title" ${param.searchCondition eq 'title' ? 'selected' : ''}>제목</option>
 				<option value="content" ${param.searchCondition eq 'content' ? 'selected' : ''}>내용</option>
 				<option value="ticon" ${param.searchCondition eq 'ticon' ? 'selected' : ''}>제목+내용</option>
 				<option value="user" ${param.searchCondition eq 'user' ? 'selected' : ''}>글쓴이</option>
-				<option value="destination" ${param.searchCondition eq 'destination' ? 'selected' : ''}>여행지</option>
+				<option value="area" ${param.searchCondition eq 'area' ? 'selected' : ''}>여행지</option>
 		</select>
 		<input type="text" name="keyword" value="${param.keyword}"/>
 		<button type="submit">검색</button>
