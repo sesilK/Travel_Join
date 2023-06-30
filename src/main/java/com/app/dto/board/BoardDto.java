@@ -1,5 +1,7 @@
 package com.app.dto.board;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,7 @@ public class BoardDto {
 	String userId;			// 아이디
 	String title;			// 글 제목
 	String content;			// 글 내용
-	String destination;		// 도착지
+	String destination;		// 목적지
 	int personnel;			// 모집인원
 	
 	String startDay; 		// 여행 시작일
@@ -21,8 +23,11 @@ public class BoardDto {
 	String regDate; 		// 게시글 작성일
 	String finishDate; 		// 게시글 마감일 
 	String planState;		// 여행계획여부
-	
 
+	String firstImage;
+	
+	String imgFileName;
+	List<String> imageFileNameList; //이미파일명 리스트 ??
 	
 	
 }
