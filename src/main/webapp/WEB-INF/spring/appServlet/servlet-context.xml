@@ -13,6 +13,7 @@
 			 					 http://www.springframework.org/schema/context/spring-context.xsd">
     <annotation-driven/>
 
+
 	<annotation-driven>
 			<message-converters>
 			<!-- @ResponseBody로 String 처리할때 한글처리 -->
@@ -37,6 +38,10 @@
         <beans:property name="prefix" value="/WEB-INF/views/"></beans:property>
         <beans:property name="suffix" value=".jsp"></beans:property>
     </beans:bean>
+
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="100000000"></beans:property>
+	</beans:bean>
 
     <resources location="/resources/" mapping="/**"></resources>
 

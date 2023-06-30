@@ -6,8 +6,6 @@
 	  				      http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean class="org.apache.commons.dbcp2.BasicDataSource" id="data_source">
-<!-- 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" /> -->
-<!-- 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" /> -->
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
 		<property name="url" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:orcl" />
 		<property name="username" value="scott" />
@@ -25,22 +23,7 @@
 	</bean>
 	
 	
-<!-- 	BasicDataSource data_source = new BasicDataSource(); -->
-<!-- 	data_source.setDriverClassName("oracle.jdbc.OracleDriver"); -->
-<!-- 	data_source.setUrl("jdbc:oracle:this:@localhost:1521:orcl"); -->
-<!-- 	data_source.setUsername("scott"); -->
-<!-- 	data_source.setPassword("tiger"); -->
-	
-<!-- 	SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean(); -->
-<!-- 	sqlSessionFactory.setDataSource(data_source); -->
-<!-- 	sqlSessionFactory.setMapperLocations("/WEB-INF/mapper/**/*_mapper.xml"); -->
-	
-<!-- 	SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory); -->
-	
-<!-- 	sqlSessionTemplate 이거를 사용함. -->
-		
 </beans>
-
 
 
 

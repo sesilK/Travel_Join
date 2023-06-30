@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="board_mapper">
+
+
+	<!-- 글상세 불러오기 -->
+	<select id="select_findPostById" parameterType="String" resultType="BoardDto">
+		SELECT * 
+		FROM join_board
+ 		WHERE USER_ID = #{userId}
+ 	</select>
+ 	
+ 
+ 
+ 	
+ 	<!--  게시판 상세보기시 조회수 증가 -->
+	<!--	<update id="update_joinBoardViewIncrease" parameterType="BoardDto">  
+			UPDATE join_board
+			SET views = views +1 
+			WHERE plan_id= #{planId} 
+	</update> -->	
+	
+</mapper>	

@@ -91,5 +91,4 @@ public class UserServiceImpl implements UserService {
 
 		return userInfo;
 	}
-
 }

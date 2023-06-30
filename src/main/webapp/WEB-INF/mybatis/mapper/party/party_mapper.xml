@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+						"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="party_mapper">
+
+
+
+ <!-- 여행팀 신청하기 -->
+	<insert	id="joinParty" parameterType="PartyDto"> 
+		INSERT INTO join_board_party (plan_id, user_id)
+		VALUES (#{planId}, #{userId})  
+		<!-- 모집인원 테이블에 받아온 게시글 번호(plan_id)와 회원아이디(user_id) 입력-->
+	 </insert>	
+	
+	
+<!-- 모집인원 업데이트 --> 
+	<update id="addMember" parameterType="PartyDto">
+		UPDATE join_board
+		SET PERSONNEL = PERSONNEL +1
+		WHERE plan_id = #{planId}
+	</update>	 
+	 
+	 
+ 
+<!-- 여행팀 멤버 조회 -->
+	<select	id="myTeamDetail" resultType="PartyDto">
+		  SELECT p.plan_id, p.user_id, u.tel
+		  FROM join_board_party p, users u
+		  WHERE p.plan_id = #{planId}
+		  GROUP BY p.plan_id, p.user_id, u.tel
+		  ORDER BY plan_id, user_id
+	</select>
+	
+<!-- 여행 참가 여부 -->
+ 	<select id="checkStatus" parameterType="String" resultType="Integer">
+		select COUNT(*) as here
+		from join_board_party
+		where user_id = #{value}
+	</select>
+	
+
+</mapper>
