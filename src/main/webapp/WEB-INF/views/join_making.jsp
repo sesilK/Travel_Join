@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,8 +15,11 @@
 <title>Insert title here</title>
 </head>
 <body>
+		
+		
 		제 목 <input type="text" name="title"><br/>
-		여 행 지 <input type="radio" checked="checked" value="국내" name="destination"> 국내 <input type="radio" value="해외" name="destination"> 해외<br/>
+		구분 <input type="radio" checked="checked" value="0" name="planType"> 국내 <input type="radio" value="1" name="planType"> 해외
+		여 행 지<input type="text" name="destination"></br>
 		여행 기간 <input type="date" name="startDay"> ~ <input type="date" name="endDay"><br/>
 		인 원 수 <input type="number" min="1" max="100" name="personnel">
 		마 감 일 <input type="date" name="finishDate">
@@ -63,12 +67,13 @@
 			}
 			document.getElementById("submitBtn").addEventListener("click", function() {
 				// 글작성올리기전 검증(빈칸)후에 비동기로 db에 전송
-				let titlt = $('input[name="title"]').val();
-				let destination = $('input[name="destination"]').val();
-				let startDay = $('input[name="startDay"]').val();
-				let endDay = $('input[name="endDay"]').val();
-				let personnel = $('input[name="personnel"]').val();
-				let finishDate = $('input[name="finishDate"]').val();
+				let titlt = $('input[name="title"]').val(); // 제목
+				let destination = $('input[name="destination"]').val(); // 여행 구분
+				let planType = $('input[name="planType"]').val(); // 여행 목적지
+				let startDay = $('input[name="startDay"]').val(); //여행시작
+				let endDay = $('input[name="endDay"]').val(); 	  //여행끝
+				let personnel = $('input[name="personnel"]').val(); //인원
+				let finishDate = $('input[name="finishDate"]').val(); //여행모집 마감
 				let content = $('textarea[name="content"]').innerHTML;
 					
 					if(titlt===""){
@@ -111,6 +116,7 @@
 								title: titlt,
 								destination: destination,
 								startDay: startDay,
+								planType: planType,
 								endDay: endDay,
 								personnel: personnel,
 								content: content,

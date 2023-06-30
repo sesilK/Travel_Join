@@ -7,7 +7,9 @@ import com.app.dto.party.PartyDto;
 
 public interface BoardService {
 		
-	public BoardDto findPostById(String userId); //글상세 불러오기
+	public BoardDto findPostById(int planId); //글상세 불러오기
+	
+	public void plusView(int planId);
 
 	public List<PartyDto> getPartyMembersByPlanId(int planId); //plan 에 참가한 user들 조회
 

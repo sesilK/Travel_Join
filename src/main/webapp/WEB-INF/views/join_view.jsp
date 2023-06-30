@@ -9,6 +9,7 @@
 </head>
 <body>
 	<c:forEach var="item" items="${items}">
+	<a href="detail?planId=${item.planId}">
 		<div class="card">
 
 
@@ -69,8 +70,8 @@
 
 
 		</div>
-	</c:forEach>
 	</a>
+	</c:forEach>
 
 </body>
 </html>

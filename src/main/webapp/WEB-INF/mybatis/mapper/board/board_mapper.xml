@@ -6,14 +6,20 @@
 
 <mapper namespace="board_mapper">
 
-
+	<!-- 게시글 상세페이지 호출과 조회수 업데이트 -->
 	<!-- 글상세 불러오기 -->
-	<select id="select_findPostById" parameterType="String" resultType="BoardDto">
+	<select id="select_findPostById" parameterType="int" resultType="BoardDto">
 		SELECT * 
-		FROM join_board
- 		WHERE USER_ID = #{userId}
+			FROM join_board
+ 			WHERE PLAN_ID = #{planId} 
  	</select>
- 	
+ 	<!-- 조회수 업데이트  -->
+ 	<update id="">
+ 		UPDATE join_board
+ 			SET VIEWS = NVL(VIEWS,0) + 1
+ 		WHERE PLAN_ID = #{planId} 
+ 	</update>
+ 	<!-- 게시글 상세페이지 호출과 조회수 업데이트 -->
  
  
  	
