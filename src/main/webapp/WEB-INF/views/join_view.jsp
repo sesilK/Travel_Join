@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="../css/join.css">
 </head>
 <body>
+<a href="detail">
 	<c:forEach var="item" items="${items}">
 	<a href="detail?planId=${item.planId}">
 		<div class="card">

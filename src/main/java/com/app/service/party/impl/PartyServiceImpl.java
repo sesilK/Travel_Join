@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dao.party.PartyDao;
+import com.app.dto.board.BoardDto;
 import com.app.dto.party.PartyDto;
 import com.app.service.party.PartyService;
 
@@ -30,7 +31,7 @@ public class PartyServiceImpl implements PartyService{
 
 
 	@Override
-	public PartyDto joinParty(PartyDto partyDto) {
+	public PartyDto joinParty(BoardDto boardDto) {
 		// TODO Auto-generated method stub
 		return null;
 	}

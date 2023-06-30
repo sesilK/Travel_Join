@@ -1,5 +1,7 @@
 package com.app.dto.board;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +29,10 @@ public class BoardDto {
 	int likes; 	// 좋아요
 	
 
+	String firstImage;
+	
+	String imgFileName;
+	List<String> imageFileNameList; //이미파일명 리스트 ??
 	
 	
 }
