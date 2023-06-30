@@ -1,12 +1,13 @@
 package com.app.service.user;
 
-import java.util.List;
-
 import com.app.dto.user.UserDto;
+import org.springframework.validation.BindingResult;
+
+import java.util.List;
 
 public interface UserService {
 
-	int saveUser(UserDto userDto);
+	boolean registerUser(UserDto userDto, BindingResult bindingResult);
 
 	List<UserDto> getUserList(UserDto userDto);
 	
@@ -16,4 +17,5 @@ public interface UserService {
 	
 	UserDto getUserInfo(String userId);
 
+	boolean idCheck(String userId);
 }

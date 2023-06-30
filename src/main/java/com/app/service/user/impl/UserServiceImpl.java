@@ -1,70 +1,78 @@
 package com.app.service.user.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.app.dao.user.UserDao;
 import com.app.dto.user.UserDto;
 import com.app.service.user.UserService;
+import com.app.validator.UserValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Autowired
-	UserDao userDao;
+    @Autowired
+    UserDao userDao;
+    private ObjectError error;
 
-	@Override
-	public int saveUser(UserDto userDto) {
-		String birth = userDto.getBirth();
-		userDto.setGender(parseGender(birth)); // gender 채우기
-		userDto.setBirth(parseBirth(birth)); // 뒷자리 버리기
-		int result = userDao.insertUser(userDto);
+    @Override
+    public boolean registerUser(UserDto userDto, BindingResult bindingResult) {
+        boolean result = false;
 
-		return result;
-	}
+        // 유효성검사 실패하면 false
+        UserValidator.registerValidate(userDto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            result = false;
+        } else { // 유효성검사 성공 + insert 결과 0보다 크면 true
+            if (userDao.insertUser(userDto) > 0) {
+                result = true;
+            }
+        }
 
-	@Override
-	public List<UserDto> getUserList(UserDto userDto) {
-		return null;
-	}
+        return result;
+    }
 
-	/** 주민번호 뒷자리로 성별 구분하는 메소드 */
-	public String parseGender(String birth) {
-		int length = birth.length();
-		String birth_back = birth.substring(length - 1, length); // 주민 뒷자리 1개 가져오기
-		int birth_back_int = Integer.parseInt(birth_back) % 2; // 뒷자리가 짝수면 0, 홀수면 1
+    @Override
+    public List<UserDto> getUserList(UserDto userDto) {
+        return null;
+    }
 
-		return birth_back_int == 1 ? "M" : "F";
-	}
 
-	/** 주민번호 앞자리만 뽑아내는 메소드 */
-	public String parseBirth(String birth) {
-		int length = birth.length();
-		String birth_after = birth.substring(0, length - 1); // 뒷자리 1개 날리기
+    @Override
+    public boolean login(UserDto userDto) {
 
-		return birth_after;
-	}
+        // 입력받은 아이디를 기준으로 DB에서 회원정보 조회
+        UserDto findUser = userDao.selectUserById(userDto.getUserId());
 
-	@Override
-	public boolean login(UserDto userDto) {
+        String input_pw = userDto.getPassword(); // form 에서 입력한 pw
+        String db_pw = findUser.getPassword();    // db에서 찾은 pw
 
-		// 입력받은 아이디를 기준으로 DB에서 회원정보 조회
-		UserDto findUser = userDao.selectUserById(userDto.getUserId());
+        if (findUser != null) { // 찾은 회원정보가 null 이 아니면
+            if (input_pw.equals(db_pw)) { // 입력한 pw와 회원정보의 pw가 일치하면
+                return true;
+            }
+        }
 
-		String input_pw = userDto.getPassword(); // form 에서 입력한 pw
-		String db_pw = findUser.getPassword();	// db에서 찾은 pw
+        return false;
+    }
 
-		if (findUser != null) { // 찾은 회원정보가 null 이 아니면
-			if (input_pw.equals(db_pw)) { // 입력한 pw와 회원정보의 pw가 일치하면
-				return true;
-			}
-		}
+    /**
+     * 아이디 중복체크
+     */
+    @Override
+    public boolean idCheck(String userId) {
 
-		return false;
-	}
+        int result = userDao.selectUserCountById(userId);
+        // 조회되는 아이디가 없으면 0임
+        if (result == 0) {
+            return true;
+        }
 
+        return false;
+    }
 	//회원정보수정
 	@Override
 	public int updateUser(UserDto userDto) {
