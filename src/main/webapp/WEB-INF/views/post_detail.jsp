@@ -36,9 +36,7 @@
             <div class="shippinginfo">
                 <p>${item.content} </p>
                 
-            </div>
 
- 
             </div>
 
         </section>
@@ -51,7 +49,6 @@
 
         <h4>필수 정보</h4>
 
-        <div>
             <div class="productinfo_01">
                 <ul>
                     <li>여행기간</li>
@@ -74,33 +71,18 @@
 						<input type="hidden" name="planId" value="${item.planId}" /> 
 						<input type="hidden" name="userId" value="현재 접속 중인 아이디" /> 
 						<input type="submit" value="동행 신청하기" />
-					</form>
-<!-- 
-<script type="text/javascript">
-    
-    document.getElementById("joinButton").addEventListener("click", function() {
-        $.ajax({
-            type: "POST",	// 요청 method
-            contentType: "application/json; charset=utf-8",	
-            url: "/joinParty_process",	// 요청을 보낼 경로
-            data: JSON.stringify({	// 전송할 데이터를 JSON 형식으로 변환
-                title: title,
-            
-            }),	// 전송할 데이터
-            success: (data) => {	// 요청이 성공한 경우 수행할 내용
-                window.location.href = "/detail";	// detail 페이지로 리다이렉트
-                return true;
-            },
-            error: () => {	// 요청이 실패한 경우 수행할 내용
-                alert('실행 오류');
-            }
-        });
-    });
-</script> -->
-	
-
-
-
+				</form>
+				
+				
+				
+				
+	<!-- 동행신청한 멤버 목록 -->
+    <h2>모집 인원</h2>
+    <ul>
+        <c:forEach var="member" items="${partyMembers}">
+            <li>${member.userId}</li>
+        </c:forEach>
+    </ul>
 
 
 </body>

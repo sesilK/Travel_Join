@@ -1,5 +1,7 @@
 package com.app.service.party.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +17,21 @@ public class PartyServiceImpl implements PartyService{
 	PartyDao partyDao;
 
 
-	/*
-	 * @Override public PartyDto joinParty(String userId) { // TODO Auto-generated
-	 * method stub PartyDto item = partyDao.joinParty(userId);
-	 * 
-	 * return item; }
-	 */
 
+    @Override
+    public PartyDto joinParty(BoardDto boardDto) {
+
+        int planId = boardDto.getPlanId();
+        String userId = boardDto.getUserId();
+		return null;       
+       
+    }
+
+//    @Override
+//    public List<PartyDto> myTeamDetail(int planId) {
+//    	// TODO Auto-generated method stub
+//    	return null;
+//    }
 
 	@Override
 	public PartyDto addMember(int no) {
@@ -30,18 +40,8 @@ public class PartyServiceImpl implements PartyService{
 	}
 
 
-	@Override
-	public PartyDto joinParty(BoardDto boardDto) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
-
-	@Override
-	public PartyDto myTeamDetail() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	
 
