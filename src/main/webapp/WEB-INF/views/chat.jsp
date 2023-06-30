@@ -12,11 +12,11 @@
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
     <link href="/css/chat.css" rel="stylesheet" type="text/css">
 </head>
-<body data-username="${sessionScope.username}">
+<body data-username="${sessionScope.userId}">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 
 
-<div id="chatbox" class="animate" data-roomid="${room.roomId}">
+<div id="chatbox" class="animate" data-roomid="${roomId}">
     <%--    <div id="friendslist">--%>
 
     <%--        <div id="topmenu">--%>
@@ -64,7 +64,7 @@
 
 
 
-                    <c:if test="${chat.sender eq sessionScope.username}">
+                    <c:if test="${chat.sender eq sessionScope.userId}">
                         <div class="message right">
                             <img src="/profile/default_profile.png"/>
                             <div class="bubble">
@@ -75,7 +75,7 @@
                         </div>
                     </c:if>
 
-                    <c:if test="${chat.sender!= sessionScope.username}">
+                    <c:if test="${chat.sender!= sessionScope.userId}">
                         <div class="message">
                             <span class="nick">${chat.sender}</span>
                             <span class="timestamp">${chat.timeStamp}</span>

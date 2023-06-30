@@ -3,6 +3,10 @@ $(function () {
     var sockJs = new SockJS('/ws');
     var stomp = Stomp.over(sockJs);
 
+    console.log(sockJs);
+    console.log(stomp);
+    console.log('-----------------------------------------------------');
+
     var roomId = '';
     var username = $("body").data("username");
 
@@ -30,7 +34,7 @@ $(function () {
 
             $.ajax({
                 type: 'post',   //get방식으로 명시
-                url: '/api/chat/read?roomId=' + roomId,  //이동할 jsp 파일 주소
+                url: '/api/chat/update?roomId=' + roomId,  //이동할 jsp 파일 주소
                 dataType: 'json',   //문자형식으로 받기
                 success: function (data) {   //데이터 주고받기 성공했을 경우 실행할 결과
                     //function(data)를 쓰게 되면 전달받은 데이터가 data안에 담아서 들어오게 된다.

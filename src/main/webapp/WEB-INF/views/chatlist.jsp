@@ -27,8 +27,8 @@
                 <div class="friend" data-roomId="${room.roomId}">
                     <img src="/profile/default_profile.png"/>
                     <p>
-                        <strong>채팅방${room.roomId}</strong><br>
-                        <span>마지막 채팅</span>
+                        <strong class="room-title" data-roomid="${room.roomId}">${room.title}</strong><br>
+                        <span class="last-chat">${room.sender}: ${room.content}</span>
                     </p>
                     <div class="status available"></div>
                 </div>

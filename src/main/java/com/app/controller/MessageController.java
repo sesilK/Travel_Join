@@ -26,7 +26,9 @@ public class MessageController {
     */
 
 
-    /** 모든 타입 메세지 핸들러 */
+    /**
+     * 모든 타입 메세지 핸들러
+     */
     @MessageMapping("/send")
     public void message(ChatDto message) {
         message.setTimeStamp(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기
@@ -34,26 +36,31 @@ public class MessageController {
         simpMessageSendingOperations.convertAndSend(subScribeURL + message.getRoomId(), message); // 가공된 메세지 다시 구독자들에게 메세지 보냄 (채팅방 멤버들)
     }
 
-    /** 채팅방 신규가입 핸들러 */
+    /**
+     * 채팅방 신규가입 핸들러
+     */
     @MessageMapping("/join")
     public void chatJoin(ChatDto message) {
         // chatroom_d 테이블에 새로운 유저 추가하는 로직 구현예정 06.26
         message.setContent(message.getSender() + " 님이 입장 했습니다.");
     }
 
-    /** 채팅방 탈퇴 핸들러 */
+    /**
+     * 채팅방 탈퇴 핸들러
+     */
     @MessageMapping("/drop")
     public void chatDrop(ChatDto message) {
         // chatroom_d 테이블에 탈퇴한 유저 삭제하는 로직 구현예정 06.26
         message.setContent(message.getSender() + " 님이 퇴장 했습니다.");
     }
 
-    /** 채팅방 입장 핸들러 */
+    /**
+     * 채팅방 입장 핸들러
+     */
     @MessageMapping("/in")
     public void chatIn(ChatDto message) {
         message.setTimeStamp(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기
-
-        int readUpdate = chatService.insert_all_chat_r_read_up_to_recent_by_user_id(message.getSender()); // db에 읽음처리
+        int readUpdate = chatService.update_chat_to_read_by_chatdto(message); // db에 읽음처리
 
         // ( 서버쪽에서 처리하는게 보안이 더 좋을거라고 판단 )
         message.setContent(null); // 채팅내용 null 로 설정
@@ -63,7 +70,9 @@ public class MessageController {
         simpMessageSendingOperations.convertAndSend(subScribeURL + message.getRoomId(), message); // 가공된 메세지 다시 구독자들에게 메세지 보냄 (채팅방 멤버들)
     }
 
-    /** 채팅방 퇴장 핸들러 */
+    /**
+     * 채팅방 퇴장 핸들러
+     */
     @MessageMapping("/out")
     public void chatOut(ChatDto message) {
         message.setTimeStamp(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기

@@ -18,5 +18,6 @@ public class ChatDto {
     private String type;
     private String timeStamp;
     private int unRead;
+    private String title;
 
 }

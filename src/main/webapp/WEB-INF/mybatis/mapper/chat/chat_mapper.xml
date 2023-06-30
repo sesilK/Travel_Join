@@ -5,18 +5,6 @@
 
 <mapper namespace="chat_mapper">
 
-<!--    insert to chatroom_m 테이블-->
-    <insert id="insert_chatroom_m" parameterType="ChatDto">
-        insert into chatroom_m (room_id, master, status)
-        values (room_id_seq.NEXTVAL, #{sender}, 0)
-    </insert>
-
-<!--    insert to chatroom_d 테이블-->
-    <insert id="insert_chatroom_d" parameterType="ChatDto">
-        insert into chatroom_d (room_id, member)
-        values (#{roomId}, #{sender})
-    </insert>
-
     <!--    insert to chat 테이블-->
     <insert id="insert_chat" parameterType="ChatDto">
         <selectKey resultType="Integer" keyProperty="chatId" order="BEFORE">
@@ -36,47 +24,46 @@
         values (#{roomId}, #{chatId}, #{sender})
     </insert>
 
-<!--    내가 속해있는 채팅방 정보와 마지막 채팅내용 가져오기-->
-    <select id="select_all_my_chatroom" resultType="ChatRoomDto">
-        SELECT m.room_id, m.master, m.status, NVL(c.content, '새로운 채팅방') AS content
-        FROM chatroom_m m
-                 LEFT JOIN (
-            SELECT room_id, content
-            FROM chat
-            WHERE (room_id, chat_id) IN (
-                SELECT room_id, MAX(chat_id)
-                FROM chat
-                WHERE type = 'text'
-                GROUP BY room_id)
-        ) c ON m.room_id = c.room_id
-        ORDER BY m.room_id
+<!--    plan_id로 모든 채팅내역 가져오기-->
+    <select id="select_all_chat_by_plan_id" resultType="ChatDto" parameterType="int">
+        select * from chat where room_id = #{value}
     </select>
 
-<!--    chatroom_m 테이블에서 room_id 로 채팅방정보 불러오기 -->
-    <select id="select_chatroom_by_id" resultType="ChatRoomDto" parameterType="Integer">
-        select *
-        from chatroom_m
-        where room_id = #{value}
+<!-- userId가 참여중인 모든 모집방 id로 마지막 채팅정보 가져오기-->
+    <select id="select_all_last_chats_by_user_id" resultType="ChatDto" parameterType="String">
+        SELECT c.chat_id, c.room_id, c.sender, c.content, c.type, c.time_stamp, j.title
+        FROM chat c
+                 JOIN join_board_member jbm ON c.room_id = jbm.plan_id
+                 JOIN (SELECT room_id, MAX(chat_id) AS max_chat_id
+                       FROM chat
+                       WHERE type = 'text'
+                       GROUP BY room_id) subq ON c.room_id = subq.room_id AND c.chat_id = subq.max_chat_id
+                 JOIN join_board j ON j.plan_id = jbm.plan_id
+        WHERE jbm.user_id = #{value}
+        ORDER BY c.room_id
     </select>
 
-<!--    chat 테이블에서 room_id 로 모든 채팅정보 불러오기-->
-    <select id="select_all_chat_by_roomid" resultType="ChatDto" parameterType="Integer">
-        select c.chat_id, c.room_id, c.sender, c.content, c.type, TO_CHAR(c.time_stamp, 'YYYY-MM-DD HH24:MI:SS') as time_stamp,
-               COUNT(cd.member)-(select COUNT(member) from chat_r where chat_id = c.chat_id) as un_read
-        from chat c, chatroom_d cd
-        where c.room_id = #{value}
-        GROUP BY c.chat_id, c.room_id, c.sender, c.content, c.type, time_stamp
-        ORDER BY c.room_id, c.chat_id
+<!--    채팅방 id로 채팅별로 안 읽은 갯수가져오기-->
+    <select id="select_unread_chat_by_plan_id" parameterType="int" resultType="ChatDto">
+        select chat_id, (select COUNT(*)
+                         from join_board_member
+                         where plan_id = #{roomId})-COUNT(member) as un_read
+        from chat_r
+        where room_id = #{roomId}
+        GROUP BY chat_id
+        ORDER BY chat_id
     </select>
 
-<!--    마지막 확인 채팅부터 최신 채팅까지 읽음처리 (채팅방 입장시)-->
-    <insert id="insert_all_chat_r_read_up_to_recent_by_user_id" parameterType="String">
+
+<!--    내 아이디, 채팅방id로 모든채팅 읽음처리 (특정 채팅방 입장시)-->
+    <insert id="update_chat_to_read_by_chatdto" parameterType="ChatDto">
         insert into chat_r
-        select room_id, chat_id, #{value} as member
+        select room_id, chat_id, #{sender} as member
         from chat
-        where chat_id not in (select chat_id
+        where room_id = #{roomId}
+        and chat_id not in (select chat_id
                          from chat_r
-                         where member = #{value})
+                         where member = #{sender})
     </insert>
 
 </mapper>
