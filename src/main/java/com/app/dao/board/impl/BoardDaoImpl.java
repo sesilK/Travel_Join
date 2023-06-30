@@ -27,8 +27,16 @@ public class BoardDaoImpl implements BoardDao{
 		return boardDto;
 	}
 
+<<<<<<< HEAD
 	
 
+=======
+	@Override
+	public void plusView(int planId) {
+		// TODO Auto-generated method stub
+		sqlsessionTemplate.update("board_mapper.",planId);
+	}
+>>>>>>> dcb72b8b0c0a421d62435665e8382dc0b8dd380b
 
 	@Override
 	public List<BoardDto> myTeamDetail(String userId) {		
@@ -39,6 +47,7 @@ public class BoardDaoImpl implements BoardDao{
 
 
 
+<<<<<<< HEAD
 
 	@Override
 	public void joinParty(PartyDto partyDto) {
@@ -47,5 +56,7 @@ public class BoardDaoImpl implements BoardDao{
 	}
 
 
+=======
+>>>>>>> dcb72b8b0c0a421d62435665e8382dc0b8dd380b
 		
 }

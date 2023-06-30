@@ -4,13 +4,17 @@ import java.io.File;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.core.script.Script;
+import org.junit.runner.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.join.JoinDto;
@@ -29,6 +34,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+
+import oracle.jdbc.driver.Message;
 
 
 @Controller
@@ -43,12 +50,16 @@ public class JoinController {
 		List<JoinDto> list = joinService.JoinViews();
 		model.addAttribute("items", list);
 		
+		
+		
 		return "join_view";
 	}
 	
 	@GetMapping("/join_making") //여행게시글 생성페이지 요청 
-	public String join_making() {
-		return "join_making";
+	public String join_making(HttpServletRequest request) {
+		
+		return "join_making";			
+		
 	}
 	
 	@ResponseBody //이미지 에디터에 업로드시 저장요청
@@ -100,7 +111,7 @@ public class JoinController {
 		
 		joinDto.setPlanId(getBoardNum);
 		for(String IMG : joinDto.getImageFileNameList()) {
-			joinDto.setImgFileName(IMG);
+			joinDto.setFileName(IMG);
 			joinService.boardImgList(joinDto);
 		}
 		

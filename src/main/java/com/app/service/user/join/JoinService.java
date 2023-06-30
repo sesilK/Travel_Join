@@ -14,7 +14,7 @@ public interface JoinService {
 
 	List<JoinDto> JoinViews();
 	
-	List<JoinDto> imageFileName();
+//	List<JoinDto> imageFileName();
 	
 	int boardMaking(JoinDto joinDto);
 	

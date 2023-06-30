@@ -25,11 +25,11 @@ public class JoinServeicImpl implements JoinService{
 		
 		return joinviews;
 	}
-	@Override
-	public List<JoinDto> imageFileName() {
-		List<JoinDto> imageFileName = joinDao.imageFileName();
-		return imageFileName;
-	}
+//	@Override
+//	public List<JoinDto> imageFileName() {
+//		List<JoinDto> imageFileName = joinDao.imageFileName();
+//		return imageFileName;
+//	}
 	
 //////////////////////////////////////////////////////////////
 	@Override

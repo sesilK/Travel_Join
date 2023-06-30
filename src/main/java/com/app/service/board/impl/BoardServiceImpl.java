@@ -25,11 +25,22 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
+<<<<<<< HEAD
 	public List<BoardDto> myTeamDetail(String userId) {
+=======
+	public void plusView(int planId) {
+		// TODO Auto-generated method stub
+		boardDao.plusView(planId);
+	}
+
+	@Override
+	public List<PartyDto> getPartyMembersByPlanId(int planId) {
+>>>>>>> dcb72b8b0c0a421d62435665e8382dc0b8dd380b
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+<<<<<<< HEAD
 	@Override
 	public void joinParty(PartyDto partyDto) {
 		// TODO Auto-generated method stub
@@ -44,5 +55,7 @@ public class BoardServiceImpl implements BoardService{
 //		List<BoardDto> partyMembers = boardDao.myTeamDetail(userId);
 //		return partyMembers;
 //	}
+=======
+>>>>>>> dcb72b8b0c0a421d62435665e8382dc0b8dd380b
 	
 }

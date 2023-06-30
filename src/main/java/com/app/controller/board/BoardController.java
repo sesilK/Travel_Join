@@ -32,6 +32,7 @@ public class BoardController {
 	@Autowired
 	UserService userService;
 
+<<<<<<< HEAD
 
 	@GetMapping("/detail") // 글상세 페이지 요청 
 	public String detail(//@RequestParam("planId") int planId, 
@@ -70,6 +71,23 @@ public class BoardController {
 	public String partyMembers(@RequestParam("planId") int planId, Model model) {
 		List<PartyDto> partyMembers = boardService.getPartyMembersByPlanId(planId);
 		model.addAttribute("partyMembers", partyMembers);
+=======
+	
+	
+	@GetMapping("/detail") // 글상세 페이지 요청 
+	public String detail(@RequestParam("planId") int planId,
+							Model model	) {
+		
+//		String nowId = request.getSession().getId(); // 세션 ID 값으로 설정
+//		String nowId = "ab"; // 테스트용 		
+		
+		boardService.plusView(planId);
+		BoardDto item = boardService.findPostById(planId);		
+		model.addAttribute("item", item);		
+
+		//조회수 올리기 
+		
+>>>>>>> dcb72b8b0c0a421d62435665e8382dc0b8dd380b
 		return "post_detail";
 	}
 */

@@ -6,14 +6,25 @@
 
 <mapper namespace="board_mapper">
 
-
+	<!-- 게시글 상세페이지 호출과 조회수 업데이트 -->
 	<!-- 글상세 불러오기 -->
 	<select id="select_findPostById" parameterType="int" resultType="BoardDto">
 		SELECT * 
+<<<<<<< HEAD
 		FROM join_board
  		WHERE plan_id = #{planId}
+=======
+			FROM join_board
+ 			WHERE PLAN_ID = #{planId} 
+>>>>>>> dcb72b8b0c0a421d62435665e8382dc0b8dd380b
  	</select>
- 	
+ 	<!-- 조회수 업데이트  -->
+ 	<update id="">
+ 		UPDATE join_board
+ 			SET VIEWS = NVL(VIEWS,0) + 1
+ 		WHERE PLAN_ID = #{planId} 
+ 	</update>
+ 	<!-- 게시글 상세페이지 호출과 조회수 업데이트 -->
  
  	<!-- 여행팀 신청하기 -->
 		<!-- 모집인원 테이블에 받아온 게시글 번호(plan_id)와 회원아이디(user_id) 입력-->
