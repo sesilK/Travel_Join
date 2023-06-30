@@ -36,10 +36,12 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public UserDto insertImage(int imageId) {
+	public int update_user_info(UserDto userDto) {
 		// TODO Auto-generated method stub
-		return null;
+		int result = sqlSessionTemplate.update("user_mapper.update_user_info", userDto);
+		return result;
 	}
+
 
 	
 }

@@ -12,5 +12,8 @@ public interface UserService {
 	
 	boolean login(UserDto userDto);
 	
+	int updateUser(UserDto userDto);
+	
+	UserDto getUserInfo(String userId);
 
 }

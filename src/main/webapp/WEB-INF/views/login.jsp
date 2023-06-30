@@ -26,7 +26,9 @@
                 <a class="forgot" href="#">Forgot Password?</a>
             </form>
         </div>
-
+        
+        <!-- 회원가입-->
+        
         <div class="register" style="display: none">
             <h2 class="nonactive sign-in"> sign in </h2>
 
@@ -42,12 +44,16 @@
                 <br>
                 <br>
 
-                <input type="text" class="text input-f" name="userId">
+                <input type="text" class="text input-f" name="name">
                 <span>name</span>
+                <br>
+                <br>
+
 
                 <button class="signin" type="submit">가입</button>
-                <hr>
-                <a class="forgot" href="#">Forgot Password?</a>
+                
+        
+            
             </form>
         </div>
     </div>

@@ -11,7 +11,7 @@ public interface UserDao {
 	public List<UserDto> selectUserList(UserDto userDto);
 	
 	public UserDto selectUserById(String user_id);
-	
-	public UserDto insertImage(int imageId);
+
+	public int update_user_info(UserDto userDto);
 
 }

@@ -65,4 +65,23 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
+	//회원정보수정
+	@Override
+	public int updateUser(UserDto userDto) {
+		// TODO Auto-generated method stub
+	
+		int result= userDao.update_user_info(userDto);
+		
+		return result;
+	}
+
+	//id로 회원정보 조회
+	@Override
+	public UserDto getUserInfo(String userId) {
+		
+		UserDto userInfo = userDao.selectUserById(userId);
+
+		return userInfo;
+	}
+
 }
