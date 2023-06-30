@@ -56,10 +56,10 @@
 		JOIN users us ON rb.user_id = us.user_id
  		WHERE 1=1
  		<if test="searchType == 'domestic'">
-			AND jb.plan_type = '국내'
+			AND jb.plan_type = 0
 		</if>
 		 <if test="searchType == 'overseas'">
-			AND jb.plan_type = '해외'
+			AND jb.plan_type = 1
 		</if>
 		<if test="searchCondition == 'title'">
 			AND rb.title LIKE '%'||#{keyword}||'%'
@@ -219,7 +219,7 @@
 		SELECT plan_id, area, title, TO_CHAR(end_day, 'YY-MM-DD') end_day, TO_CHAR(start_day, 'YY-MM-DD') start_day
 		FROM join_board
  		WHERE SYSDATE > end_day <!-- 여행종료일 기준 -->
- 		AND plan_id IN (SELECT plan_id FROM join_board_party WHERE user_id = #{userId}) <!-- 로그인한 아이디로 참여한 여행 -->
+ 		AND plan_id IN (SELECT plan_id FROM join_party_member WHERE user_id = #{userId}) <!-- 로그인한 아이디로 참여한 여행 -->
  		AND plan_id NOT IN (SELECT plan_id FROM review_bbs
  					   WHERE user_id = #{userId} AND delete_at = 'N' ) <!-- 리뷰 작성한 것 제외 -->
 		ORDER BY end_day

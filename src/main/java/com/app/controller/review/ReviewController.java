@@ -228,7 +228,7 @@ public class ReviewController {
 		return "notExist";
 	}
 	
-	@GetMapping("/reviewViewTitle") //글 확인 (글제목 클릭)
+	@PostMapping("/reviewViewTitle") //글 확인 (글제목 클릭)
 	@ResponseBody
 	public String reviewView_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 		
@@ -237,7 +237,9 @@ public class ReviewController {
 		
 		ReviewDto item = reviewService.findReview(reviewDto.getReviewId());
 
-		if(item.getDeleteAt().equals("Y")) {	//삭제된 글
+		if(item == null) {	//존재하지 않는 글
+			return "not";
+		} else if(item.getDeleteAt().equals("Y")) {	//삭제된 글
 			return "deleted";
 		} else if(item.getReportCount() > 5) {	//신고 누적
 			return "reported";

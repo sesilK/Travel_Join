@@ -4,7 +4,7 @@ $(document).ready(function() {
 	$('body').on('click', 'td.title', function() {
 		let reviewId = $(this).data('reviewid');
 		$.ajax({
-			type: "GET",	//요청 method
+			type: "POST",	//요청 method
 			contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
 			url: "/reviewViewTitle",
 			data: JSON.stringify({	//객체를 -> JSON string 으로 변환
@@ -17,11 +17,13 @@ $(document).ready(function() {
 					alert("삭제된 글입니다.");
 				} else if (data === 'reported') {
 					alert("검토 중인 글입니다.");
+				} else if (data === 'not') {
+					alert("존재하지 않는 글입니다.");
 				}
 			},	//요청에 대해 성공한 경우 수행할 내용
 			error: () => {
-				window.location.href = "/login";
-			}	//요청이 실패,오류난 경우 수행할 내용 + interceptor에 걸린 경우
+				alert("실행 오류");
+			}	//요청이 실패,오류난 경우 수행할 내용
 		});
 	});
 
