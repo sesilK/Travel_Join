@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="../../resources/css/post_detail.css" />
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 <title>Insert title here</title>
 </head>
@@ -70,11 +71,114 @@
 
     </article>
 
-				<form action="/joinParty" method="post">
+<%
+session.setAttribute("userId", "admin");
+%>
+
+				<%-- <form action="/joinParty" method="post">
 						<input type="hidden" name="planId" value="${item.planId}" /> 
 						<input type="hidden" name="userId" value="현재 접속 중인 아이디" /> 
 						<input type="submit" value="동행 신청하기" />
-					</form>
+					</form> --%>
+					<%-- <input type="hidden" name="planId" value="${item.planId}" />  --%> 
+					
+					<c:if test="${CurrPersonnel < item.personnel && item.planState == 0}">
+						<button type="button" id="submitBtn">신청하기</button>
+						<c:if test="${sessionScope.userId == item.userId}">
+							<button type="button" id="deadBtn">모집마감</button>
+						</c:if>
+					</c:if>
+					<c:if test="${CurrPersonnel >= item.personnel || item.planState == 1}">
+						<c:if test="${sessionScope.userId == item.userId}">
+							<button type="button" id="deleteBtn">삭제하기</button>
+							<button type="button" id="Btn">그냥누름</button>
+						</c:if>
+						<span>모집 종료 되었습니다.</span>
+					</c:if>
+					
+					<script type="text/javascript">
+
+						let planId = ${item.planId};
+					
+					document.getElementById("submitBtn").addEventListener("click", function() {
+						$.ajax({
+							url : "/joinParty",	//Controller 요청 주소
+							type: "POST",	//요청 method
+							contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
+							data : JSON.stringify({	//JSON string 으로 변환
+								planId:planId
+							}),	//파라미터로 같이 담아서 보낼 것들
+							success : (data)=>{
+								if(data === 'true'){
+									alert('신청 완료');
+								}
+								if(data === 'false'){
+									alert('신청할 수 없습니다.');
+								}
+							},	//요청에 대해 성공한 경우 수행할 내용
+							error :	()=>{
+								alert('참가 실행 오류');
+							}	//요청이 실패,오류난 경우 수행할 내용
+
+						});
+					});
+					
+					document.getElementById("deadBtn").addEventListener("click", function() {
+						
+						$.ajax({
+							url : "/joinDead",	//Controller 요청 주소
+							type: "POST",	//요청 method
+							contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
+							data : JSON.stringify({	//JSON string 으로 변환
+								planId:planId
+							}),	//파라미터로 같이 담아서 보낼 것들
+							success : (data)=>{
+								if(data === 'true'){
+									alert('마감 완료');
+									window.location.href = "/join_view";
+								}
+								if(data === 'false'){
+									alert('마감 실패');
+								}
+							},	//요청에 대해 성공한 경우 수행할 내용
+							error :	()=>{
+								alert('마감 실행 오류');
+							}	//요청이 실패,오류난 경우 수행할 내용
+							
+						});
+						
+					});
+					
+					document.getElementById("Btn").addEventListener("click", function() {
+						console.log('버튼누름');
+					});
+					document.getElementById("deleteBtn").addEventListener("click", function() {
+						console.log('삭제버튼누름');
+						$.ajax({
+							url : "/joinDelete",	//Controller 요청 주소
+							type: "POST",	//요청 method
+							contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
+							data : JSON.stringify({	//JSON string 으로 변환
+								planId:planId
+							}),	//파라미터로 같이 담아서 보낼 것들
+							success : (data)=>{
+								if(data === 'true'){
+									alert('삭제 완료');
+									window.location.href = "/join_view";
+								}
+								if(data === 'false'){
+									alert('삭제 실패');
+								}
+							},	//요청에 대해 성공한 경우 수행할 내용
+							error :	()=>{
+								alert('삭제 실행 오류');
+							}	//요청이 실패,오류난 경우 수행할 내용
+							
+						});
+						
+					});
+					
+					</script>
 <!-- 
 <script type="text/javascript">
     

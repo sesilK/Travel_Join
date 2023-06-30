@@ -21,7 +21,7 @@ public class JoinDto {
 	String endDay; 			// 여행 종료일
 	String regDate; 		// 모집 시작일
 	String finishDate; 		// 모집 마감일 
-	int planState;		// 글 상태
+	int planState;			// 글 상태 (모집중0,모집마감1,삭제함2)
 	
 	
 	int views; 	// 조회수

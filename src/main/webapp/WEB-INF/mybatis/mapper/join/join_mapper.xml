@@ -23,6 +23,7 @@
 	<select id="select_all_JoinDto_info" resultType="JoinDto">
 		select plan_id, user_id, title, content, destination, personnel, start_day, end_day, reg_date, finish_date, plan_state,	REGEXP_SUBSTR(content, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image
 		from "SCOTT"."JOIN_BOARD"
+		where plan_state != 2
 	</select>
 
 	<!-- 모집글 조회 -->

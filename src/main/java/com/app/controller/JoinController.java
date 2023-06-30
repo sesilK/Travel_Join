@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.app.dto.join.JoinDto;
+import com.app.dto.party.PartyDto;
+import com.app.service.party.PartyService;
 import com.app.service.user.join.JoinService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -43,6 +45,9 @@ public class JoinController {
 
 	@Autowired
 	JoinService joinService;
+	
+	@Autowired
+	PartyService partyService;
 	
 	@GetMapping("/join_view") // 여행게시판목록 요청
 	public String Join_View(Model model) {
@@ -108,6 +113,9 @@ public class JoinController {
 		int makingResult = joinService.boardMaking(joinDto); // 게시글 DB저
 		
 		int getBoardNum = joinService.getBoardNum(joinDto);
+		
+		PartyDto partyDto = new PartyDto(getBoardNum, sessionId);
+		int result = partyService.joinParty(partyDto);
 		
 		joinDto.setPlanId(getBoardNum);
 		for(String IMG : joinDto.getImageFileNameList()) {
