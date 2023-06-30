@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -80,6 +81,12 @@ public class ReviewController {
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 		
 		String sessionId = (String) session.getAttribute("userId");
+		
+		if(sessionId == null) {	//로그인 안 되어있으면
+			System.out.println("sessionId Null");
+			return "idNull";
+		}
+		
 		reviewDto.setUserId(sessionId);
 		reviewDto.setDeleteAt("N");
 		
@@ -111,6 +118,11 @@ public class ReviewController {
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 		
 		String sessionId = (String) session.getAttribute("userId");
+		
+		if(sessionId == null) {	//로그인 안 되어있으면
+			System.out.println("sessionId Null");
+			return "idNull";
+		}
 		reviewDto.setUserId(sessionId);
 
 		int result = 0;
@@ -125,7 +137,7 @@ public class ReviewController {
 		if(result == 1) { //임시저장 성공
 			return "true";
 		}
-		return "false";
+		return "false"; //임시저장 실패
 	}
 	
 	@GetMapping("/reviewView") //글상세 페이지 요청
@@ -186,11 +198,17 @@ public class ReviewController {
 	
 	@PostMapping("/reviewModify") //글 수정 버튼 클릭시 폼 전송 과정
 	@ResponseBody
-	public String reviewModify_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public String reviewModify_process(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 		int reviewId = reviewDto.getReviewId(); //글 번호
+		
+		String sessionId = (String) session.getAttribute("userId");
+		if(sessionId == null) {	//로그인 안 되어있으면
+			System.out.println("sessionId Null");
+			return "idNull";
+		}
 		
 		reviewService.modifyReview(reviewDto); //글 수정
 		reviewService.removeReviewImage(reviewId); //이미지파일명 삭제
@@ -230,10 +248,16 @@ public class ReviewController {
 	
 	@PostMapping("/reviewMark") //추천/신고 버튼 클릭
 	@ResponseBody
-	public int reviewLike(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public int reviewLike(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		MarkDto markDto = objectMapper.readValue(requestBody, MarkDto.class);
+		
+		String sessionId = (String) session.getAttribute("userId");
+		if(sessionId == null) {	//로그인 안 되어있으면 idNull
+			System.out.println("sessionId Null");
+			return -2;
+		}
 		
 		MarkDto isNull =	//추천/신고 여부 확인 
 				reviewService.CheckReviewMark(markDto.getReviewId(), markDto.getUserId(), markDto.getSort());
@@ -243,7 +267,7 @@ public class ReviewController {
 			return count; //추천/신고 성공 (추천/신고 횟수 반환)
 		} else {
 			return -1;	//추천/신고 실패
-		}			
+		}
 	}
 	
 	@PostMapping("/deleteReview") //글 삭제
@@ -251,6 +275,11 @@ public class ReviewController {
 	public String deleteReview(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		String sessionId = (String) session.getAttribute("userId");
+
+		if(sessionId == null) {	//로그인 안 되어있으면
+			System.out.println("sessionId Null");
+			return "idNull";
+		}
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
@@ -262,7 +291,7 @@ public class ReviewController {
 			return "true";	//성공
 		} else {
 			return "false";	//실패
-		}			
+		}
 	}
 	
 	@PostMapping("/comment") //댓글 등록
@@ -273,6 +302,11 @@ public class ReviewController {
 		CommentDto commentDto = objectMapper.readValue(requestBody, CommentDto.class);
 		
 		String sessionId = (String) session.getAttribute("userId");
+
+		if(sessionId == null) {	//로그인 안 되어있으면 idNull
+			System.out.println("sessionId Null");
+			return null;
+		}
 		commentDto.setUserId(sessionId);
 		int reviewId = commentDto.getReviewId();
 
@@ -285,10 +319,16 @@ public class ReviewController {
 	
 	@PostMapping("/updateComment") //댓글 수정
 	@ResponseBody
-	public List<CommentDto> updateComment(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public List<CommentDto> updateComment(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		CommentDto commentDto = objectMapper.readValue(requestBody, CommentDto.class);
+		
+		String sessionId = (String) session.getAttribute("userId");
+		if(sessionId == null) {	//로그인 안 되어있으면 idNull
+			System.out.println("sessionId Null");
+			return null;
+		}
 		
 		reviewService.modifyComment(commentDto); //댓글 수정
 		
@@ -300,33 +340,54 @@ public class ReviewController {
 	
 	@PostMapping("/deleteComment") //댓글 삭제
 	@ResponseBody
-	public List<CommentDto> deleteComment(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	public Map<String, List<CommentDto>> deleteComment(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		CommentDto commentDto = objectMapper.readValue(requestBody, CommentDto.class);
+		Map<String, List<CommentDto>> map = new HashMap<String, List<CommentDto>>();
+		String key = null; 
 		
+		String sessionId = (String) session.getAttribute("userId");
 		int commentId = commentDto.getCommentId();
 		int reviewId = commentDto.getReviewId();
+		String userId = commentDto.getUserId();
 
-		reviewService.blindComment(commentId, reviewId); //댓글 삭제
-		
+		if(sessionId == null) {	//로그인 안 되어있으면 idNull
+			System.out.println("sessionId Null");
+			key = "idNull";
+		} else if(sessionId.equals(userId)) { //로그인된 아이디가 댓글작성자와 같으면
+			reviewService.blindComment(commentId, reviewId); //댓글 삭제
+			key = "true";
+		} else {
+			key = "false";
+		}
+
 		List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
+		map.put(key, commentList);
 
-		return commentList;	//성공
+		return map;	//성공
 	}
 	
 	//리뷰 작성시 첨부한 이미지 파일을 경로에 저장하기
 	@PostMapping(value="/uploadSummernoteImageFile", produces = "application/json; charset=utf8")
 	@ResponseBody
 	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, 
-											HttpServletRequest request)  {
+											HttpServletRequest request, HttpSession session)  {
+		
+		
+		String sessionId = (String) session.getAttribute("userId");
+		if(sessionId == null) {	//로그인 안 되어있으면
+			System.out.println("sessionId Null");
+			return "idNull";
+		}
+		
 		JsonObject jsonObject = new JsonObject();
 		
 		//String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		//String fileRoot = contextRoot+"resources\\image\\review\\"; // 내부경로 저장
 		String fileRoot = "C:\\review_image\\"; //외부경로 저장
 		
-		System.out.println(fileRoot); // -> server.xml에 저장경로 추가
+		System.out.println(fileRoot); // -> server.xml에 저장경로 추가해야함
 		
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		//String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
@@ -370,8 +431,15 @@ public class ReviewController {
 
 	@PostMapping(value = "/deleteSummernoteImageFile", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public void deleteSummernoteImageFile(@RequestParam("file") String fileName, 
-										  HttpServletRequest request) {
+	public String deleteSummernoteImageFile(@RequestParam("file") String fileName, 
+										  HttpServletRequest request, HttpSession session) {
+		
+		String sessionId = (String) session.getAttribute("userId");
+		if(sessionId == null) {	//로그인 안 되어있으면
+			System.out.println("sessionId Null");
+			return "idNull";
+		}
+		
 	    // 폴더 위치
 		//String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		//String fileRoot = contextRoot+"resources\\image\\review\\"; //내부 경로
@@ -384,6 +452,7 @@ public class ReviewController {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+	    return "true";
 	}
 
 	

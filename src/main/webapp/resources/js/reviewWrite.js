@@ -174,7 +174,11 @@ function uploadSummernoteImageFile(file, el) {
 		enctype: 'multipart/form-data',
 		processData: false,
 		success: (data) => {
-			$(el).summernote('editor.insertImage', data.url);
+			if(data == 'idNull'){ //등록 실패
+
+			} else {
+				$(el).summernote('editor.insertImage', data.url);
+			}
 		}
 	});
 }
@@ -190,6 +194,16 @@ function deleteSummernoteImageFile(imageName) {
 		contentType: false,
 		enctype: 'multipart/form-data',
 		processData: false,
+		success: (data) => {
+			if(data == 'idNull'){ //등록 실패
+
+			} else {
+				
+			}
+		},	//요청에 대해 성공한 경우 수행할 내용
+		error: () => {
+			alert('실행 오류');
+		}	//요청이 실패,오류난 경우 수행할 내용
 	})
 }
 
@@ -247,7 +261,12 @@ document.getElementById("submitBtn").addEventListener("click", function() { //�
 				imageFileNameList: imageFileNameList
 			}),	//파라미터로 같이 담아서 보낼 것들
 			success: (data) => {
-				window.location.href = "/reviewView?reviewId=" + data;
+				if(data == 'idNull'){ //등록 실패
+					alert('로그인 아이디가 없습니다.');
+					window.location.href = "/login";
+				} else {
+					window.location.href = "/reviewView?reviewId=" + data;
+				}
 				//return true;
 			},	//요청에 대해 성공한 경우 수행할 내용
 			error: () => {
@@ -291,6 +310,9 @@ function temporarySave() {
 			}
 			if (data === 'false') {
 				alert('임시저장 실패');
+			}
+			if (data === 'idNull') {
+				alert('임시저장 실패(로그인 아이디 없음)');
 			}
 		},	//요청에 대해 성공한 경우 수행할 내용
 		error: () => {

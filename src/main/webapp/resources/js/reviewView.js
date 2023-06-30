@@ -24,7 +24,10 @@ $(document).ready(function() {
 			success: (data) => {
 				if (data == -1) {
 					alert('이미 신고한 글입니다.');
-				} else {
+				} else if (data == -2){
+					alert('로그인 아이디가 없습니다.');
+					window.location.href = "/login";
+				} else if (data > 0){
 					alert('신고하였습니다.');
 				}
 			},	//요청에 대해 성공한 경우 수행할 내용
@@ -50,7 +53,10 @@ $(document).ready(function() {
 			success: (data) => {
 				if (data == -1) {
 					alert('이미 추천한 글입니다.');
-				} else {
+				} else if (data == -2){
+					alert('로그인 아이디가 없습니다.');
+					window.location.href = "/login";
+				} else if (data > 0){
 					let likeCount = $('#likeCount'); //추천수 요소
 					likeCount.text(data); // 추천 수 업데이트
 					alert('추천하였습니다.');
@@ -84,6 +90,9 @@ $(document).ready(function() {
 					if (data === 'true') {
 						alert('게시물이 삭제되었습니다.');
 						window.location.href = "/review";
+					} else if (data === 'idNull') {
+						alert('삭제 권한이 없습니다.(로그인 아이디 없음)');
+						window.location.href = "/login";
 					} else {
 						alert('삭제 권한이 없습니다.');
 					}
@@ -112,7 +121,15 @@ $(document).ready(function() {
 					commentLv: 1,
 					parentCommentId: 0
 				}),
-				success: renderComments,
+				success: function(data) {
+					console.log(data);
+					if (data === '') {
+						alert('로그인 아이디가 없습니다.');
+						window.location.href = "/login";
+					} else {
+						renderComments(data);
+					}
+				},
 				error: function() {
 					alert('댓글 등록 실행 오류');
 				}
@@ -179,7 +196,14 @@ $(document).ready(function() {
 					commentLv: parentLv + 1,
 					parentCommentId: parentId
 				}),
-				success: renderComments,
+				success: function(data) {
+					if (data === '') {
+						alert('로그인 아이디가 없습니다.');
+						window.location.href = "/login";
+					} else {
+						renderComments(data);
+					}
+				},
 				error: function() {
 					alert('답글글 등록 실행 오류');
 				}
@@ -266,7 +290,14 @@ $(document).ready(function() {
 						commentId: commentId,
 						content: content
 					}),
-					success: renderComments,
+					success: function(data) {
+					if (data === '') {
+						alert('로그인 아이디가 없습니다.');
+						window.location.href = "/login";
+					} else {
+						renderComments(data);
+					}
+				},
 					error: function() {
 						alert('댓글 수정 실행 오류');
 					}
@@ -293,7 +324,16 @@ $(document).ready(function() {
 					commentId: commentId,
 					reviewId: reviewId
 				}),
-				success: renderComments,
+				success: function(data) {
+			        if (data.true) {
+						renderComments(data.commentList);
+			        } else if (data.idNull) {
+						alert('삭제 권한이 없습니다.(로그인 아이디 없음)');
+						window.location.href = "/login";
+			        } else if (data.false) {
+						alert('삭제 권한이 없습니다.');
+			        }
+				},
 				error: function() {
 					alert('댓글 삭제 실행 오류');
 				}
@@ -386,7 +426,7 @@ function renderComments(commentList) {
 
 		html += '</tr>';
 	}
-
+	
 	// 생성한 HTML을 특정 요소에 추가
 	$('#commentList').html(html);
 	$('input[name="comment"]').val('');
@@ -394,7 +434,10 @@ function renderComments(commentList) {
 	// 댓글 수 업데이트
 	let commentCountEl = $('.commentCount'); // 댓글 수 요소
 	commentCountEl.text(commentCount); // 댓글 수 업데이트
+	
+	
 }
+
 $(function() {
 	$(".review").addClass("is-active");
 });
