@@ -1,5 +1,10 @@
 $(document).ready(function() {
 
+	// write 버튼 클릭 이벤트 처리
+	$('body').on('click', 'button#write', function() {
+		window.location.href = "/reviewWrite";
+	});
+
 	// ${item.title} 클릭 이벤트 처리
 	$('body').on('click', 'td.title', function() {
 		let reviewId = $(this).data('reviewid');

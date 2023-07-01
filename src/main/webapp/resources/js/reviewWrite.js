@@ -6,10 +6,10 @@ $(document).ready(function() {
 
 	//썸머노트 불러오기
 	$('#summernote').summernote({
-		width: 800, // set editor width
-		height: 400, // set editor height
-		minHeight: null, // set minimum height of editor
-		maxHeight: null, // set maximum height of editor
+		//width: 900, // set editor width
+		//height: 900, // set editor height
+		minHeight: 450, // set minimum height of editor
+		//maxHeight: null, // set maximum height of editor
 		focus: false, // focus  여부 설정 (false -> focus)
 		lang: 'ko-KR', // 기본 메뉴언어 US->KR로 변경
 		placeholder: '자동으로 임시저장 됩니다.', //placeholder 설정
@@ -68,6 +68,10 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	$('.note-editor').width($(window).width()*0.6);
+	//$('.note-editor').height($(window).height()* 0.6);
+	
 
 	//내용 글자수 제한 함수
 	function limitByte(e) {
@@ -210,7 +214,7 @@ function deleteSummernoteImageFile(imageName) {
 let shouldCallTemporarySave = true;  //임시저장을 해야하는 경우 true
 
 
-document.getElementById("submitBtn").addEventListener("click", function() { //등록버튼 클릭시
+document.getElementById("write").addEventListener("click", function() { //등록버튼 클릭시
 
 	shouldCallTemporarySave = false;  // 임시저장 실행여부를 false로 변경
 

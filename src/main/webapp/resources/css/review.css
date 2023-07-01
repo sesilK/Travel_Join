@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+div.main-header {
+	width: 97%;
+	display: flex; /* Flexbox 컨테이너로 설정 */
+	justify-content: space-between; /* 아이템들을 양끝으로 배치 */
+	align-items: center; /* 아이템들을 수직 가운데 정렬 */
+	padding: 0;
+	margin-bottom: 10px;
+}
+
+span#headline {
+	padding-bottom: 20px;
+}
+
+button#write, button#modifyBtn, button#deleteBtn, button#like, button#report {
+	margin-left: auto; /* 오른쪽으로 이동하여 버튼을 오른쪽 끝에 배치 */
+	font-family: var(--body-font);
+	border: 1px solid slategrey;
+	border-radius: 3px;
+	padding: 9px 15px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+div.center {
+	width: 97%;
+	display: flex;
+	justify-content: center; /* 수평 방향으로 가운데 정렬 */
+	align-items: center; /* 수직 방향으로 가운데 정렬 */
+}

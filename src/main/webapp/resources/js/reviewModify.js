@@ -1,6 +1,7 @@
 
 let titleMaxByte = 300; //제목 입력제한 300 Byte
 let contentMaxByte = 3000; //내용 입력제한 3000 Byte
+let reviewId = $('#planId').data('reviewid');
 
 $(document).ready(function() {
 
@@ -59,13 +60,14 @@ $(document).ready(function() {
 	}
 
 	//수정할 글 내용 불러오기
-	let reviewId = $('#submitBtn').data('reviewid');
-	console.log(reviewId);
 	$.ajax({
-		url: 'reviewLoad?reviewId=' + reviewId , // 서버 엔드포인트 URL을 지정해야 합니다.
-		method: 'GET',
+		url: 'reviewLoad', // 서버 엔드포인트 URL을 지정해야 합니다.
+		method: 'POST',
+		contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
+		data: JSON.stringify({	//객체를 -> JSON string 으로 변환
+			reviewId: reviewId
+		}),	//파라미터로 같이 담아서 보낼 것들
 		success: function(response) {
-			console.log(response);
 			let planId = response.planId;
 			let stars = response.stars.toFixed(1);
 			let title = response.title;
@@ -177,7 +179,7 @@ function deleteSummernoteImageFile(imageName) {
 	})
 }
 
-document.getElementById("submitBtn").addEventListener("click", function() { //수정버튼 클릭시
+document.getElementById("write").addEventListener("click", function() { //수정버튼 클릭시
 
 	let reviewId = $('#submitBtn').data('reviewid');
 	let planId = $('select[name="planId"]').val();

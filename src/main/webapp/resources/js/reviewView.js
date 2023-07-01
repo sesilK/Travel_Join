@@ -3,10 +3,6 @@ let userId = $('#userId').data('userid'); // 글 작성자
 let sessionId = $('#sessionId').data('sessionid'); // 로그인 아이디
 let commentMaxByte = 300; //댓글 입력제한 300 Byte
 
-console.log(reviewId);
-console.log(userId);
-console.log(sessionId);
-
 $(document).ready(function() {
 
 	// 신고 버튼 클릭 이벤트 처리
@@ -122,7 +118,6 @@ $(document).ready(function() {
 					parentCommentId: 0
 				}),
 				success: function(data) {
-					console.log(data);
 					if (data === '') {
 						alert('로그인 아이디가 없습니다.');
 						window.location.href = "/login";
@@ -314,6 +309,7 @@ $(document).ready(function() {
 	$('#commentList').on('click', '.deleteBtn', function() {
 		let commentRow = $(this).closest('tr');
 		let commentId = commentRow.attr('data-comment-id');
+		let userId = commentRow.attr('data-userid');
 
 		if (confirm('삭제하시겠습니까?')) {
 			$.ajax({
@@ -322,11 +318,12 @@ $(document).ready(function() {
 				url: '/deleteComment',
 				data: JSON.stringify({
 					commentId: commentId,
-					reviewId: reviewId
+					reviewId: reviewId,
+					userId: userId
 				}),
 				success: function(data) {
 			        if (data.true) {
-						renderComments(data.commentList);
+						renderComments(data.true); //data['commentList'] 아님
 			        } else if (data.idNull) {
 						alert('삭제 권한이 없습니다.(로그인 아이디 없음)');
 						window.location.href = "/login";
@@ -383,7 +380,8 @@ function renderComments(commentList) {
 		let comment = commentList[i];
 
 		html += '<tr data-comment-id="' + comment.commentId
-			+ '" data-comment-lv="' + comment.commentLv + '">';
+			+ '" data-comment-lv="' + comment.commentLv
+			+ '" data-userid="' + comment.userId + '">';
 
 		if (comment.deleteAt == 'N') {// 삭제되지 않은 댓글
 			commentCount += 1; // 댓글 수에 포함

@@ -1,9 +1,58 @@
 @charset "UTF-8";
 
-td.title {
-	cursor: pointer;
+table {
+	font-family: var(--body-font);
+	width: 100%; /* 전체 너비 설정 */
+	/* border: 1px solid #ccc; */ /* 테두리 선 스타일 설정 */
+	/* border-collapse: collapse; */ /* 셀들의 테두리를 합치도록 설정 */
+	table-layout: fixed; /* 테이블 너비를 고정으로 설정 */
+}
+
+th, td {
+	text-align: center; /* 글자 가운데 정렬 */
+	padding: 1% 8px;
+	white-space: nowrap; /* 글자를 한 줄에 표시 */
+	overflow: hidden; /* 넘치는 내용 숨기기 */
+	text-overflow: ellipsis; /* 말줄임표로 표시 */
+}
+
+td.title, td.stars {
+	text-align: left; /* 글자 왼쪽 정렬 */
 }
 
 td.title:hover {
+	cursor: pointer;
 	text-decoration: underline;
+}
+
+select::-ms-expand {
+	display: none;
+}
+
+.select {
+	-o-appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	width: 50px;
+	height: 30px;
+	/* border-radius: 3px; */
+	border: 0px;
+	outline: 0 none;
+	background: transparent;
+	text-align: center;
+	cursor: pointer;
+	font-size: medium;
+}
+
+.selectCon {
+	width: 90px;
+	padding: 0px 4px;
+}
+
+.select option {
+	cursor: pointer;
+	text-align: center;
+	background: transparent;
+	padding: 3px;
 }

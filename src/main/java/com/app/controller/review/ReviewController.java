@@ -186,12 +186,13 @@ public class ReviewController {
 		}
 	}
 	
-	@GetMapping("/reviewLoad") //글수정 페이지 요청
+	@PostMapping("/reviewLoad") //글수정 페이지 요청
 	@ResponseBody
-	public ReviewDto reviewLoad(@RequestParam int reviewId) {
-
-		ReviewDto item = reviewService.findReview(reviewId); //수정할 글 찾기
-		System.out.println(item);
+	public ReviewDto reviewLoad(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
+		ReviewDto item = reviewService.findReview(reviewDto.getReviewId()); //수정할 글 찾기
 		
 		return item;
 	}
