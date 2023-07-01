@@ -31,7 +31,7 @@
     <!-- 회원정보 수정 -->
     <update id ="update_user_info" parameterType="UserDto">
     	update users
-    	set  password = #{password}, email = #{email}, name = #{name}
+    	set  password = #{password}, email = #{email}
     		, nick = #{nick}, tel = #{tel}
     	 <!-- ,gender = #{gender}, birth = #{birth} -->
     	where user_id = #{userId}

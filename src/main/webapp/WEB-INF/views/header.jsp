@@ -13,6 +13,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"
             integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="/js/header.js"></script>
+    <link href="/images/linkicon.png" rel="shortcut icon" type="image/x-icon">
 </head>
 
 <body>

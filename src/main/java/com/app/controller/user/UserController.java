@@ -84,7 +84,6 @@ public class UserController {
         String userId = (String) session.getAttribute("userId");
         UserDto userInfo = userService.getUserInfo(userId);
         session.setAttribute("userDto", userInfo);
-        System.out.println("ddd");
 
         return "myinfo";
     }

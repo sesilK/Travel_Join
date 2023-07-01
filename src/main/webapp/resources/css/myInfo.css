@@ -12,7 +12,6 @@ body,
     display: flex;
     align-items: center;
     justify-content: center;
-    /*background-color: white;*/
     width: 100%;
     height: 100%;
 }
@@ -34,7 +33,7 @@ div.infoEdit i{
     position: absolute;
     color: orange;
     right: 100px;
-    top: 23%;
+    top: 24%;
     transform: translateY(-50%);
 }
 
@@ -99,7 +98,7 @@ form span {
 input[type="text"],
 input[type="password"] {
     font-family: 'Montserrat', sans-serif;
-    color: #fff;
+    color: black;
 }
 
 
@@ -181,6 +180,14 @@ label {
 .input-f {
     margin: 0 auto;
     height: 40px;
+}
+
+.genderbox{
+	display: flex;
+}
+.genderbox>.input-f{
+	justify-content: space-end;
+	width: 50%;
 }
 
 .hide {
