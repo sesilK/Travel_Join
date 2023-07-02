@@ -60,8 +60,9 @@ button.emojiBtn {
 
 button#commentBtn {
 	margin-top: 8px;
-	position: relative;
-	right: 40px;
+	height: 30px;
+	border: none;
+	cursor: pointer;
 }
 
 input#comment, input#replyContent, input#modifiedComment {
@@ -75,8 +76,15 @@ input#comment, input#replyContent, input#modifiedComment {
 }
 
 input#comment {
-	width: 70%;
-	margin-left: 30px;
+	height: 30px;
+	width: 60%;
+	margin-left: 5%;
 	margin-top: 8px;
-	border-radius: 3px;
+	border: none;
+    border-bottom: 1px solid #00000032; /* 1픽셀 너비의 회색 테두리 */
+}
+
+
+.commentSpan{
+	width: 17%;
 }

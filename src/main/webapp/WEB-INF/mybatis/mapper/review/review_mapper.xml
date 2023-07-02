@@ -63,7 +63,7 @@
 		</if>
 		<if test="searchCondition == 'all'">
 			AND ( (rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%')
-			   or (rb.user_id LIKE '%'||#{keyword}||'%') or (jb.area LIKE '%'||#{keyword}||'%') )
+			   or (us.nick LIKE '%'||#{keyword}||'%') or (jb.area LIKE '%'||#{keyword}||'%') )
 		</if>
 		<!-- <if test="searchCondition == 'title'">
 			AND rb.title LIKE '%'||#{keyword}||'%'
@@ -75,7 +75,7 @@
 			AND ((rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%'))
 		</if>
 		<if test="searchCondition == 'user'">
-			AND rb.user_id LIKE '%'||#{keyword}||'%'
+			AND us.nick LIKE '%'||#{keyword}||'%'
 		</if>
 		<if test="searchCondition == 'area'">
 			AND jb.area LIKE '%'||#{keyword}||'%'

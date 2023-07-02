@@ -32,6 +32,7 @@ import com.app.dto.review.ReviewDto;
 import com.app.dto.review.ReviewImgDto;
 import com.app.service.review.ReviewService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
@@ -43,12 +44,33 @@ public class ReviewController {
 	ReviewService reviewService;
 	
 	@GetMapping("/review") //글목록 페이지 요청
-	public String ViewAndSearchReviewBbs(Model model, @RequestParam Map<String, String> map) {
-		
-		List<ReviewDto> reviewList = reviewService.findReviewList(map);
-		model.addAttribute("reviewList", reviewList);
+	public String reviewBbs() {
 		
 		return "reviewBbs";
+	}
+	
+	@PostMapping("/review") //글목록 데이터 요청
+	@ResponseBody
+	public List<ReviewDto> reviewBbs_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
+
+		String searchType = reviewDto.getArea();
+	    String searchCondition = reviewDto.getPlanInfo();
+	    String keyword = reviewDto.getContent();
+	    if(reviewDto.getContent() == null || reviewDto.getContent().equals("")) {
+	    	keyword ="";
+	    }
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("searchType", searchType);
+		map.put("searchCondition", searchCondition);
+		map.put("keyword", keyword);
+		
+		List<ReviewDto> reviewList = reviewService.findReviewList(map);
+		
+		return reviewList;
+
 	}
 	
 	@GetMapping("/reviewWrite")	//글작성 페이지 요청

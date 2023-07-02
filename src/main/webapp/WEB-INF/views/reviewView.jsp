@@ -45,7 +45,7 @@
 		<div>${item.content}</div>
 	</div><br/><br/><hr class="anim"/><br/>
 	<div class="planRrating anim">
-		<span>댓글(<span class="commentCount">${item.commentCount}</span>)</span>
+		<span class="commentSpan">댓글(<span class="commentCount">${item.commentCount}</span>)</span>
 		<input type="text" name="comment" id="comment">
 		<button id="commentBtn" type="button">&emsp;✔&emsp;</button>
 	</div><br/>
