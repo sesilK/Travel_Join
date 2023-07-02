@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dao.board.BoardDao;
-import com.app.dto.board.BoardDto;
-import com.app.dto.party.PartyDto;
+import com.app.dto.BoardDto;
+import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
 
 @Service

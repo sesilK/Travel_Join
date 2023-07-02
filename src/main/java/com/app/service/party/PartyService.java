@@ -1,7 +1,7 @@
 package com.app.service.party;
 
-import com.app.dto.board.BoardDto;
-import com.app.dto.party.PartyDto;
+import com.app.dto.BoardDto;
+import com.app.dto.PartyDto;
 
 public interface PartyService {
 	

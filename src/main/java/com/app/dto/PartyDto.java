@@ -1,4 +1,4 @@
-package com.app.dto.party;
+package com.app.dto;
 
 
 import lombok.AllArgsConstructor;

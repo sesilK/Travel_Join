@@ -1,7 +1,7 @@
 package com.app.dao.join;
 
 import java.util.List;
-import com.app.dto.join.JoinDto;
+import com.app.dto.JoinDto;
 
 
 public interface JoinDao {

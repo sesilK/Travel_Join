@@ -1,4 +1,4 @@
-package com.app.controller.notice;
+package com.app.controller;
 
 public class noticeController {
 

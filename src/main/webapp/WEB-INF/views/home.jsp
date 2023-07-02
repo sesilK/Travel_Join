@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ include file="header.jsp"%>
+<%@ include file="header.jsp" %>
 
 <div class="main-header anim" style="--delay: 0s">인기 급상승</div>
 <div class="main-blogs">
@@ -155,7 +155,8 @@
         <div class="card-header">
             <div class="left">
                 <div class="profile-image">
-                    <img src="https://tripsoda.s3.ap-northeast-2.amazonaws.com/prod/member/1687943059957-2" alt="avatar">
+                    <img src="https://tripsoda.s3.ap-northeast-2.amazonaws.com/prod/member/1687943059957-2"
+                         alt="avatar">
                 </div>
                 <div class="profile-info">
                     <span>하늘하늘</span>
@@ -306,7 +307,8 @@
         <div class="card-header">
             <div class="left">
                 <div class="profile-image">
-                    <img src="https://tripsoda.s3.ap-northeast-2.amazonaws.com/prod/member/1687943059957-2" alt="avatar">
+                    <img src="https://tripsoda.s3.ap-northeast-2.amazonaws.com/prod/member/1687943059957-2"
+                         alt="avatar">
                 </div>
                 <div class="profile-info">
                     <span>하늘하늘</span>
@@ -454,9 +456,9 @@
     </div>
 
 </div>
-<%@ include file="footer.jsp"%>
+<%@ include file="footer.jsp" %>
 <script>
-    $(function(){
+    $(function () {
         $(".discover").addClass("is-active");
     });
 </script>

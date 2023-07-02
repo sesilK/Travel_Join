@@ -1,4 +1,4 @@
-package com.app.controller.board;
+package com.app.controller;
 
 
 import java.util.List;
@@ -11,17 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.app.dto.board.BoardDto;
-import com.app.dto.party.PartyDto;
+import com.app.dto.BoardDto;
+import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
 import com.app.service.party.PartyService;
 import com.app.service.user.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Controller
 public class BoardController {

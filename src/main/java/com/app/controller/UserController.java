@@ -1,4 +1,4 @@
-package com.app.controller.user;
+package com.app.controller;
 
 import com.app.dto.UserDto;
 import com.app.service.user.UserService;

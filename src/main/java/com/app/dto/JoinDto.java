@@ -1,4 +1,4 @@
-package com.app.dto.join;
+package com.app.dto;
 
 import java.util.List; 
 

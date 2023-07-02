@@ -1,6 +1,6 @@
 package com.app.dao.party;
 
-import com.app.dto.party.PartyDto;
+import com.app.dto.PartyDto;
 
 public interface PartyDao {
 

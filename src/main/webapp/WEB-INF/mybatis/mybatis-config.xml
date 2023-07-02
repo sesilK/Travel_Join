@@ -11,10 +11,11 @@
     </settings>
 
     <typeAliases>
-    	<typeAlias type="com.app.dto.board.BoardDto" alias="BoardDto"/>
-    	<typeAlias type="com.app.dto.party.PartyDto" alias="PartyDto"/>
-    	<typeAlias type="com.app.dto.user.UserDto" alias="UserDto"/>
-		<typeAlias type="com.app.dto.join.JoinDto" alias="JoinDto"/>
+    	<typeAlias type="com.app.dto.BoardDto" alias="BoardDto"/>
+    	<typeAlias type="com.app.dto.PartyDto" alias="PartyDto"/>
+    	<typeAlias type="com.app.dto.UserDto" alias="UserDto"/>
+		<typeAlias type="com.app.dto.JoinDto" alias="JoinDto"/>
+        <typeAlias type="com.app.dto.NoticeDto" alias="NoticeDto"/>
     </typeAliases>
     
 </configuration>

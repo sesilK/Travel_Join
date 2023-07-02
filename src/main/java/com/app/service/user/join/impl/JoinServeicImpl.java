@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.app.dao.join.JoinDao;
-import com.app.dto.join.JoinDto;
+import com.app.dto.JoinDto;
 import com.app.service.user.join.JoinService;
 
 

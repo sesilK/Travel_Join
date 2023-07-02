@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.app.dao.party.PartyDao;
-import com.app.dto.party.PartyDto;
+import com.app.dto.PartyDto;
 
 @Repository
 public class PartyDaoImpl implements PartyDao{
