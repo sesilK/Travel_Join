@@ -6,9 +6,11 @@ import com.app.service.user.UserService;
 import com.app.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -42,10 +44,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean login(UserDto userDto) {
+    public boolean login(UserDto userDto, HttpSession session) {
 
         // 입력받은 아이디를 기준으로 DB에서 회원정보 조회
         UserDto findUser = userDao.selectUserById(userDto.getUserId());
+        // 프로필사진 정보 세션에 담기
+        String profileImage = userDao.selectUserById(userDto.getUserId()).getFileName();
+        session.setAttribute("profileImage", profileImage);
+
 
         String input_pw = userDto.getPassword(); // form 에서 입력한 pw
         String db_pw = findUser.getPassword();    // db에서 찾은 pw
@@ -73,7 +79,15 @@ public class UserServiceImpl implements UserService {
 
         return false;
     }
-	//회원정보수정
+
+    @Override
+    public int update_user_profile(UserDto userDto) {
+        int result = 0;
+        result =  userDao.update_user_profile(userDto);
+        return result;
+    }
+
+    //회원정보수정
 	@Override
 	public int updateUser(UserDto userDto) {
 		// TODO Auto-generated method stub

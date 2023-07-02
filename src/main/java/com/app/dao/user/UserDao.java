@@ -16,4 +16,5 @@ public interface UserDao {
 	
 	public int selectUserCountById(String user_id);
 
+	int update_user_profile(UserDto userDto);
 }
