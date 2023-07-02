@@ -2,7 +2,7 @@ package com.app.dao.party;
 
 import java.util.List;
 
-import com.app.dto.party.PartyDto;
+import com.app.dto.PartyDto;
 
 public interface PartyDao {
 

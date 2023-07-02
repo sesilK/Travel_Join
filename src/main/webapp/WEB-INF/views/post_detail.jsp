@@ -1,16 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../resources/css/post_detail.css"/>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-    <title>Insert title here</title>
-</head>
+<%@include file="header.jsp" %>
+<link rel="stylesheet" href="/css/join_detail.css"/>
 
 <body>
+
+<div class="container-detail">
+
+    <div class="content-box">
+        <div class="title">3박4일 몽골 동행 구해요!</div>
+        <div class="info-box">
+
+            <div class="info-l">
+                <div class="in-1">
+                    <p>지역: 휴먼교육센터</p>
+                    <p>모집인원: 5명</p>
+                </div>
+                <div class="in-2">
+                    <p>여행기간: 언제부터 ~ 언제까지</p>
+                </div>
+            </div>
+
+            <div class="info-r">
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
 <article class="product">
     <section>
         <div>

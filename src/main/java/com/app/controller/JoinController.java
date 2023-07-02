@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.app.dto.join.JoinDto;
-import com.app.dto.party.PartyDto;
+import com.app.dto.JoinDto;
+import com.app.dto.PartyDto;
 import com.app.service.party.PartyService;
 import com.app.service.user.join.JoinService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,9 +53,7 @@ public class JoinController {
 		
 		List<JoinDto> list = joinService.JoinViews();
 		model.addAttribute("items", list);
-		
-		
-		
+
 		return "join_view";
 	}
 	
@@ -101,27 +99,16 @@ public class JoinController {
 	
 	@PostMapping("/joinmaking_process") //여행게시글 작성
 	@ResponseBody
-	public String joinMaking(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException{
+	public String joinMaking(@RequestBody String requestBody, HttpSession session) throws JsonProcessingException{
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		JoinDto joinDto = objectMapper.readValue(requestBody, JoinDto.class);
 		
-		String sessionId = "admin";
-		joinDto.setUserId(sessionId);
+		String sessionId = session.getAttribute("userId").toString(); // 세션 로그인정보 가져오기
+		joinDto.setUserId(sessionId); // dto에 주입
 		
-		int makingResult = joinService.boardMaking(joinDto); // 게시글 DB저
-		
-		int getBoardNum = joinService.getBoardNum(joinDto);
-		
-		PartyDto partyDto = new PartyDto(getBoardNum, sessionId);
-		int result = partyService.joinParty(partyDto);
-		
-		joinDto.setPlanId(getBoardNum);
-		for(String IMG : joinDto.getImageFileNameList()) {
-			joinDto.setFileName(IMG);
-			joinService.boardImgList(joinDto);
-		}
-		
+		int makingResult = joinService.boardMaking(joinDto); // 게시글 DB저장
+
 		return "joinMaking";
 	}
 

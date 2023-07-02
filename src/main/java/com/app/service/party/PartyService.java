@@ -2,8 +2,8 @@ package com.app.service.party;
 
 import java.util.List;
 
-import com.app.dto.board.BoardDto;
-import com.app.dto.party.PartyDto;
+import com.app.dto.BoardDto;
+import com.app.dto.PartyDto;
 
 public interface PartyService {
 	

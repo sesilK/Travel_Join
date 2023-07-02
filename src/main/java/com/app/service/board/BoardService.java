@@ -9,9 +9,7 @@ public interface BoardService {
 		
 	public BoardDto findPostById(int planId); //글상세 불러오기
 
-	public void joinParty(PartyDto partyDto); 
-
-	public void plusView(int planId);
+	public void joinParty(PartyDto partyDto);
 
 	List<BoardDto> myTeamDetail(String userId); //plan 에 참가한 user들 조회
 

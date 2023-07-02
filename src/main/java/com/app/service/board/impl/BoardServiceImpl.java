@@ -25,12 +25,6 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public void plusView(int planId) {
-		// TODO Auto-generated method stub
-		boardDao.plusView(planId);
-	}
-
-	@Override
 	public List<BoardDto> myTeamDetail(String userId) {
 		// TODO Auto-generated method stub
 		List<BoardDto> partyMembers = boardDao.myTeamDetail(userId);

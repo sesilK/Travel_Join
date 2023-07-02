@@ -7,22 +7,43 @@
 
 	<!-- 모집글 작성 -->
 	<insert id="insert_join" parameterType="JoinDto">
-		insert into "SCOTT"."JOIN_BOARD" (PLAN_ID, USER_ID, TITLE,CONTENT, PERSONNEL ,START_DAY , END_DAY, DESTINATION, PLAN_STATE, FINISH_DATE)
-		values (JOIN_BOARD_PLANID_SEQ.NEXTVAL, #{userId} , #{title}, #{content} ,#{personnel} ,TO_DATE(#{startDay}, 'YYYY-MM-DD'), TO_DATE(#{endDay}, 'YYYY-MM-DD') ,#{destination},#{planType}, TO_DATE(#{finishDate}, 'YYYY-MM-DD'))
-	</insert>
+        <selectKey resultType="Integer" keyProperty="planId" order="BEFORE">
+            select JOIN_BOARD_PLANID_SEQ.NEXTVAL from dual
+        </selectKey>
 
-	<!-- 이미지파일명 저장 -->
-	<insert id="insert_join_imageFileName" parameterType="JoinDto">
-		insert into "SCOTT"."JOIN_BOARD_IMAGE" (IMAGE_NO,FILE_NAME,PLAN_ID)
-		values ( IMAGE_SEQ.NEXTVAL, #{fileName}, #{planId})
-	</insert>
-	
+        insert all
+        into join_board (PLAN_ID, USER_ID, TITLE,CONTENT, PERSONNEL ,START_DAY , END_DAY, DESTINATION, PLAN_STATE,
+        FINISH_DATE)
+        values (#{planId}, #{userId} , #{title}, #{content} ,#{personnel} ,TO_DATE(#{startDay}, 'YYYY-MM-DD'),
+        TO_DATE(#{endDay}, 'YYYY-MM-DD') ,#{destination},#{planType}, TO_DATE(#{finishDate}, 'YYYY-MM-DD'))
+        into join_board_member (plan_id, user_id)
+        values (#{planId}, #{userId})
+
+        <foreach collection="imageFileNameList" item="filename" separator=" ">
+            into join_board_image (file_name, plan_id)
+            values (#{filename}, #{planId})
+        </foreach>
+
+        select * from dual
+    </insert>
 
 	<!-- 여행정보 조회 -->
 	<select id="select_all_JoinDto_info" resultType="JoinDto">
-		select plan_id, user_id, title, content, destination, personnel, start_day, end_day, reg_date, finish_date, plan_state,	REGEXP_SUBSTR(content, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image
-		from "SCOTT"."JOIN_BOARD"
-		where plan_state != 2
+        select a.plan_id, a.user_id, a.title, a.content, a.destination, a.personnel,
+               TO_CHAR(a.start_day, 'YY-MM-DD') as start_day,
+               TO_CHAR(a.end_day, 'YY-MM-DD') as end_day,
+               TO_CHAR(a.reg_date, 'YY-MM-DD') as reg_date,
+               TO_CHAR(a.finish_date, 'YY-MM-DD') as finish_date,
+               a.plan_state,	REGEXP_SUBSTR(a.content, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image,
+               b.nick, b.birth, b.gender, b.image_id
+        from JOIN_BOARD a, (select nick, TRUNC((SYSDATE - BIRTH) / 365) as birth,
+                                   DECODE(gender, 'M', '남자', 'F', '여자') as gender,
+                                   image_id, user_id
+                            from users
+                            where status = 0) b
+        where plan_state != 2
+        and a.user_id = b.user_id
+        order by a.plan_id desc
 	</select>
 
 	<!-- 모집글 조회 -->
@@ -31,11 +52,5 @@
 		from "SCOTT"."JOIN_BOARD" where USER_ID = #{userId} AND TITLE = #{title} AND CONTENT = #{content}
 	</select>
 
-	 <!-- 대표이미지 조회 -->
-	<!--<select id="select_JoinDto_imageFileName" resultType="JoinDto">
-		select IMG_FILE_NAME
-		from "SCOTT"."JOIN_BOARD_IMGS"
-		where IMG_FILE_SQC = 1
-	</select> -->
 
 </mapper>

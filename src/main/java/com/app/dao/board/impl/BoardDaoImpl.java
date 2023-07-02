@@ -40,13 +40,4 @@ public class BoardDaoImpl implements BoardDao{
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void plusView(int planId) {
-		// TODO Auto-generated method stub
-		sqlsessionTemplate.update("board_mapper.",planId);
-	}
-
-
-		
 }
