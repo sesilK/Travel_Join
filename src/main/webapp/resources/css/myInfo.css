@@ -12,7 +12,6 @@ body,
     display: flex;
     align-items: center;
     justify-content: center;
-    /*background-color: white;*/
     width: 100%;
     height: 100%;
 }
@@ -20,7 +19,7 @@ body,
 .infoEdit-box {
     border-radius: 20px;
     background-color: var(--button-bg);
-    box-shadow: 0px 30px 60px -5px #000;
+    box-shadow: #dedcee;
 }
 
 .infoEdit{
@@ -32,42 +31,22 @@ body,
 
 div.infoEdit i{
     position: absolute;
-    color: orange;
+    color: #6E7783;
     right: 100px;
-    top: 23%;
+    top: 26.5%;
     transform: translateY(-50%);
 }
 
-
-.active {
-    border-bottom: 2px solid #1161ed;
-}
 
 .nonactive {
     color: rgba(255, 255, 255, 0.2);
 }
 
-h2 {
-    padding-left: 12px;
-    font-size: 22px;
-    text-transform: uppercase;
-    padding-bottom: 5px;
-    letter-spacing: 2px;
-    display: inline-block;
-    font-weight: 100;
-}
-
-h2:first-child {
-    padding-left: 0px;
-}
-
-form span {
+span {
     text-transform: uppercase;
     font-size: 12px;
     opacity: 0.4;
     display: inline-block;
-    position: relative;
-    top: -65px;
     transition: all 0.5s ease-in-out;
 }
 
@@ -78,7 +57,7 @@ form span {
     display: block;
     height: 15px;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    background:#D8E6E7;
     border: 2px solid rgba(255, 255, 255, 0);
     overflow: hidden;
     margin-top: 15px;
@@ -99,7 +78,7 @@ form span {
 input[type="text"],
 input[type="password"] {
     font-family: 'Montserrat', sans-serif;
-    color: #fff;
+    color: black;
 }
 
 
@@ -149,7 +128,7 @@ label {
 }
 
 #dropout,#update {
-    background-color: orange;
+    background-color: #9DC3C1;
     color: #FFF;
     width: 40%;
     padding: 10px 20px;
@@ -169,8 +148,8 @@ label {
 }
 
 .dropout:hover ,.update:hover  {
-    background: #fdb742;;
-    box-shadow: 0px 4px 35px -5px #fdb742;
+    background: #D4DFE6;
+    box-shadow: 0px 4px 35px -5px black;
     cursor: pointer;
 }
 
@@ -181,6 +160,22 @@ label {
 .input-f {
     margin: 0 auto;
     height: 40px;
+}
+
+.genderbox{
+	display: flex;
+}
+.genderbox>.input-f{
+	border: none;
+    display: block;
+    border-radius: 20px;
+    background: #FFF;
+    border: 2px solid #D4DFE6;
+    overflow: hidden;
+    height: 39px;
+    width: 50%;
+    transition: all 0.5s ease-in-out;
+    color:black;
 }
 
 .hide {
