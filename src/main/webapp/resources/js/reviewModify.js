@@ -7,6 +7,22 @@ rating_input.addEventListener('input', () => {
   rating_star.style.width = `${rating_input.value * 10}%`;
 });
 
+// 마우스 움직일 때
+$('.rating_box').on('mousemove', function(event) {
+    const mouseX = event.clientX; // 마우스의 X 좌표
+    const starX = rating_star.getBoundingClientRect().left; // 박스의 X 좌표
+
+    // 마우스 위치까지만 width 조절
+    const newWidth = mouseX - starX;
+    rating_star.style.width = `${newWidth}px`;
+});
+
+// 마우스를 요소 밖으로 빼면 복원
+$('.rating_box').on('mouseout', function() {
+    const rating_input = document.querySelector('.rating input');
+    rating_star.style.width = `${rating_input.value * 10}%`;
+});
+
 let titleMaxByte = 300; //제목 입력제한 300 Byte
 let contentMaxByte = 3000; //내용 입력제한 3000 Byte
 let reviewId = $('#planId').data('reviewid');

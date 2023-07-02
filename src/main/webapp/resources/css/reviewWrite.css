@@ -19,7 +19,6 @@ input#title, select#planId {
 
 .rating_box {
 	display: flex;
-	width: 40%;
 	align-items: center; /* 수직 방향으로 가운데 정렬 */
 	padding-left: 10px;
 	padding-bottom: 7px;

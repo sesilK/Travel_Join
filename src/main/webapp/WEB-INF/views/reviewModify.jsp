@@ -14,7 +14,7 @@
 				<option value="${join.planId}">${join.area}(${join.startDay}~${join.endDay})</option>
 			</c:forEach>
 		</select>
-<%-- 		<select id="stars" name="stars">
+		<%-- <select id="stars" name="stars">
 			<c:forEach var="i" begin="0" end="10" step="1">
 				<option value="${10/2.0 - i/2.0}">${10/2.0 - i/2.0}</option>
 			</c:forEach>
