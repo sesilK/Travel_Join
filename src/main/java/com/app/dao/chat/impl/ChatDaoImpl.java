@@ -2,6 +2,7 @@ package com.app.dao.chat.impl;
 
 import com.app.dao.chat.ChatDao;
 import com.app.dto.ChatDto;
+import com.app.dto.ChatRoomDto;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,11 +26,11 @@ public class ChatDaoImpl implements ChatDao {
     }
 
     /**
-     * insert to chat_r 테이블
+     * insert to chat_read 테이블
      */
     @Override
-    public int insert_chat_r(ChatDto chatDto) {
-        int result = sqlSessionTemplate.insert("insert_chat_r", chatDto);
+    public int insert_chat_read(ChatDto chatDto) {
+        int result = sqlSessionTemplate.insert("insert_chat_read", chatDto);
         return result;
     }
 
@@ -42,27 +43,24 @@ public class ChatDaoImpl implements ChatDao {
         return list;
     }
 
-    /**
-     * userId가 참여중인 모든 모집방 id로 마지막 채팅정보 가져오기
-     */
+    /** plan_id와 user_id로 해당 채팅방 모두 읽음처리 */
     @Override
-    public List<ChatDto> select_all_last_chats_by_user_id(String userId) {
-        List<ChatDto> list = sqlSessionTemplate.selectList("select_all_last_chats_by_user_id", userId);
-        return list;
-    }
-
-    /**
-     * userId의 마지막 확인 채팅부터 최신 채팅까지 읽음처리 (채팅방 입장시)
-     */
-    @Override
-    public int update_chat_to_read_by_chatdto(ChatDto chatDto) {
-        int result = sqlSessionTemplate.insert("update_chat_to_read_by_chatdto", chatDto);
+    public int merge_chat_read(ChatDto chatDto) {
+        int result = sqlSessionTemplate.insert("merge_chat_read", chatDto);
         return result;
     }
 
+    /** plan_id로 안 읽은 채팅갯수 가져오기 */
     @Override
-    public List<ChatDto> select_unread_chat_by_plan_id(int planId) {
-        List<ChatDto> list = sqlSessionTemplate.selectList("select_unread_chat_by_plan_id", planId);
+    public List<ChatDto> select_all_unread_count_by_plan_id(int planId) {
+        List<ChatDto> list = sqlSessionTemplate.selectList("select_all_unread_count_by_plan_id", planId);
+        return list;
+    }
+
+    /** user_id로 참여중인 채팅리스트 정보 가져오기 */
+    @Override
+    public List<ChatRoomDto> select_my_chat_info(String userId) {
+        List<ChatRoomDto> list = sqlSessionTemplate.selectList("select_my_chat_info", userId);
         return list;
     }
 }

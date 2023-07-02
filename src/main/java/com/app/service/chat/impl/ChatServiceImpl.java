@@ -2,10 +2,12 @@ package com.app.service.chat.impl;
 
 import com.app.dao.chat.ChatDao;
 import com.app.dto.ChatDto;
+import com.app.dto.ChatRoomDto;
 import com.app.service.chat.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,13 +26,18 @@ public class ChatServiceImpl implements ChatService {
         return result;
     }
 
-    /**
-     * userId가 참여중인 모든 모집방 id로 마지막 채팅정보 가져오기
-     */
+    /** 단건 채팅 읽음처리 */
     @Override
-    public List<ChatDto> getAllChatRooms(String userId) {
-        List<ChatDto> chats = chatDao.select_all_last_chats_by_user_id(userId);
-        return chats;
+    public int readChatMessage(ChatDto chatDto) {
+        int result = chatDao.insert_chat_read(chatDto);
+        return result;
+    }
+
+    /** plan_id와 user_id로 해당 채팅방 모두 읽음처리 */
+    @Override
+    public int readAllChatMessage(ChatDto chatDto) {
+        int result = chatDao.merge_chat_read(chatDto);
+        return result;
     }
 
     /**
@@ -42,21 +49,24 @@ public class ChatServiceImpl implements ChatService {
         return chats;
     }
 
-    /**
-     * userId의 마지막 확인 채팅부터 최신 채팅까지 읽음처리 (채팅방 입장시)
-     */
+    /** plan_id로 안 읽은 채팅갯수 가져오기 chat_id : un_read 형태 */
     @Override
-    public int update_chat_to_read_by_chatdto(ChatDto chatDto) {
-        int result = chatDao.update_chat_to_read_by_chatdto(chatDto);
-        return result;
-    }
+    public List<ChatDto> select_all_unread_count_by_plan_id(ChatDto message) {
 
-    /**
-     * 채팅방 id로 채팅별로 안 읽은 갯수가져오기
-     */
-    @Override
-    public List<ChatDto> select_unread_chat_by_plan_id(int plan_id) {
-        List<ChatDto> chats = chatDao.select_unread_chat_by_plan_id(plan_id);
+        List<ChatDto> chats = null;
+        do { // unReadCount 조회한 갯수가 클라이언트가 보낸시점의 메세지 갯수보다 작으면 DB입출력이 끝나지 않은 시점으로 판단하고 unReadCount를 다시 조회
+            chats = chatDao.select_all_unread_count_by_plan_id(message.getPlanId());
+        } while (chats.size() < message.getUnRead());
+
         return chats;
     }
+
+    /** userId로 채팅방 리스트에 띄울 정보들 가져오기 */
+    @Override
+    public List<ChatRoomDto> select_my_chat_info(String userId) {
+        List<ChatRoomDto> rooms = chatDao.select_my_chat_info(userId);
+        return rooms;
+    }
+
+
 }

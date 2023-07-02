@@ -12,7 +12,6 @@
     <typeAliases>
         <typeAlias type="com.app.dto.ChatDto" alias="ChatDto" />
         <typeAlias type="com.app.dto.ChatRoomDto" alias="ChatRoomDto" />
-<!--     	<typeAlias type="com.app.dto.UserDto" alias="UserDto"/> -->
     </typeAliases>
 
 </configuration>

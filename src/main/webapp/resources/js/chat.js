@@ -3,77 +3,60 @@ $(function () {
     var sockJs = new SockJS('/ws');
     var stomp = Stomp.over(sockJs);
 
-    console.log(sockJs);
-    console.log(stomp);
-    console.log('-----------------------------------------------------');
-
-    var roomId = '';
-    var username = $("body").data("username");
+    const planId = $('#chatbox').data("roomid");
+    const myId = $("body").data("userid"); //세션값 가져옴
 
     var isScrolled = false;
 
-    // 내 채팅방
-    roomId = $('#chatbox').data("roomid");
-    // console.log(roomId);
+    var deferred = $.Deferred();
+
 
     stomp.connect({}, function () {
-        // console.log("stomp 연결됨 2.12.6");
-        sendMessage('in', roomId, username); // in 신호 보내기
 
-        stomp.subscribe("/sub/channel/" + roomId, function (chat) {
-            console.log(chat);
+        // 채팅방 입장시 unRead 요청
+        stomp.send('/pub/getUnread', {}, JSON.stringify({
+            planId: planId
+        }));
+        console.log("getUnread 전송 " + planId);
+
+        stomp.subscribe("/sub/channel/" + planId, function (chat) {
             var message = JSON.parse(chat.body);
-            var sender = message.sender;
+            var userId = message.userId;
             var content = message.content;
-            var timeStamp = message.timeStamp;
+            var time = message.time;
             var chatId = message.chatId;
             var unRead = message.unRead;
-            var str = '';
             var type = message.type;
+            var unReadList = message.data;
+            var str = '';
 
 
-            $.ajax({
-                type: 'post',   //get방식으로 명시
-                url: '/api/chat/update?roomId=' + roomId,  //이동할 jsp 파일 주소
-                dataType: 'json',   //문자형식으로 받기
-                success: function (data) {   //데이터 주고받기 성공했을 경우 실행할 결과
-                    //function(data)를 쓰게 되면 전달받은 데이터가 data안에 담아서 들어오게 된다.
-                    console.log(data);
+            // 받은 메세지가 text 타입이면
+            if (type === 'text') {
+                // 채팅 읽음처리 (본인포함)
+                stomp.send('/pub/read', {}, JSON.stringify({
+                    chatId: chatId,
+                    planId: planId,
+                    userId: myId,
+                    type: 'read'
+                }));
 
-                    for (var chat of data) {
-                        // unRead 가 0 이면 공백으로 치환
-                        const temp_unRead = (chat.unRead == 0) ? "" : chat.unRead;
-                        $('span.unread[data-chatid=' + chat.chatId + ']').text(temp_unRead);
-                    }
-                },
-                error: function () {   //데이터 주고받기가 실패했을 경우 실행할 결과
-                    console("unRead 업데이트 실패");
-                }
-            })
-
-
-            if (message.type === 'text') {
-                if (username === sender) {
-                    // str = "<div class='chat-box'>";
-                    // str += '<p> ' + username + ': ' + content + ' [' + timeStamp + ']</p>';
-                    // str += '</div>';
+                // html 업데이트 부분
+                if (myId === userId) {
                     str = "<div class='message right' data-chatid='" + chatId + "'>";
                     str += "<img src='/profile/default_profile.png'/>";
                     str += "<div class='bubble'>";
                     str += content;
-                    str += "<span class='timestamp'>" + timeStamp + "</span>";
+                    str += "<span class='timestamp'>" + time + "</span>";
                     str += "<span class='unread' data-chatid='" + chatId + "'>" + unRead + "</span>";
                     str += "</div>";
                     str += "</div>";
 
 
                 } else {
-                    // str = "<div class='chat-box'>";
-                    // str += '<p> ' + content + '  [' + timeStamp + '] </p>';
-                    // str += '</div>';
                     str = "<div class='message' data-chatid='" + chatId + "'>";
-                    str += "<span class='nick'>" + sender + "</span>";
-                    str += "<span class='timestamp'>" + timeStamp + "</span>";
+                    str += "<span class='nick'>" + userId + "</span>";
+                    str += "<span class='timestamp'>" + time + "</span>";
                     str += "<span class='unread' data-chatid='" + chatId + "'>" + unRead + "</span>";
                     str += "<img src='/profile/default_profile.png'/>";
                     str += "<div class='bubble'>";
@@ -81,9 +64,27 @@ $(function () {
                     str += "</div>";
                     str += "</div>";
                 }
+                $('#chat-messages').append(str); // 새로운 채팅 업데이트
+
+
+                stomp.send('/pub/getUnread', {}, JSON.stringify({
+                    planId: planId,
+                    unRead: $("span.unread").length // 내 채팅창 채팅갯수
+                }));
+
+            } else if (type === 'unread') { // 받은 메세지가 unread 타입이면
+                // 안 읽은숫자 업데이트
+                for (let item of unReadList) {
+                    const chatId = item.chatId;
+                    const unRead = item.unRead;
+                    console.log('chatId=' + chatId + ' unRead=' + unRead);
+
+                    // unRead 가 0 이면 공백으로 치환
+                    const temp_unRead = (unRead == 0) ? "" : unRead;
+                    $('span.unread[data-chatid=' + chatId + ']').text(temp_unRead);
+                }
             }
 
-            $('#chat-messages').append(str); // 새로운 채팅 업데이트
 
             // 스크롤중이 아닐때, 새로운 채팅 생기면 스크롤 하단으로
             if (!isScrolled) {
@@ -92,29 +93,8 @@ $(function () {
                 }, 100);
             }
 
-            if (type === 'text') {
-                sendMessage('in', roomId, username); // in 신호 보내기
-            }
-
         });
     });
-
-    // stomp send 함수 type, content 기본값은 null
-    function sendMessage(_subURL, _roomId, _username, _type = null, _content = null) {
-        stomp.send('/pub/' + _subURL, {}, JSON.stringify({
-            roomId: _roomId,
-            sender: _username,
-            content: _content,
-            type: _type
-        }));
-    }
-
-    // 페이지 나가면 out 신호 보내기
-    $(window).on("beforeunload", function () {
-        alert("out");
-        sendMessage('out', roomId, username); // out 신호 보내기
-    });
-
 
     // 채팅 전송버튼
     $('#send').click(function () {
@@ -124,15 +104,19 @@ $(function () {
         }
 
         // 채팅메세지 서버로 전송
-        sendMessage('send', roomId, username, "text", content);
-        // stomp.send('/pub/send', {}, JSON.stringify({
-        //     roomId: roomId,
-        //     sender: username,
-        //     content: content,
-        //     type: "text"
-        // }));
+        stomp.send('/pub/send', {}, JSON.stringify({
+            planId: planId,
+            userId: myId,
+            content: content,
+            type: "text"
+        }));
 
         $('#sendmessage input').val('');
+    });
+
+    // 페이지 나가면 out 신호 보내기
+    $(window).on("beforeunload", function () {
+        // sendMessage('out', roomId, username); // out 신호 보내기
     });
 
     // 채팅 input창 엔터키 연결
@@ -157,10 +141,8 @@ $(function () {
         }
     });
 
-
     // 스크롤 이벤트
     $("#chat-messages").scroll(function () {
-        // console.log($("#chat-messages").scrollTop() == ($("#chat-messages").prop("scrollHeight") - 270));
 
         const scrollHeight = $("#chat-messages").prop("scrollHeight") - 270;
         const scrollTop = $("#chat-messages").scrollTop();
@@ -187,11 +169,7 @@ $(function () {
         }
     });
 
-    // 페이지 로딩 끝나면 채팅 스크롤 하단으로 옮기기
-    // $("#chat-messages").animate({
-    //     scrollTop: $("#chat-messages").prop("scrollHeight") - 270
-    // }, 100);
-
+    // 입장시 스크롤 최하단 이동
     $("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight") - 270);
 
 });

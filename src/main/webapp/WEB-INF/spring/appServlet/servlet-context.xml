@@ -38,39 +38,7 @@
 
     <resources location="/resources/" mapping="/**"></resources>
 
-<!--    <beans:bean id="loginInterceptor" class="com.app.interceptor.LoginInterceptor"/>-->
-<!--    <beans:bean id="adminInterceptor" class="com.app.interceptor.AdminInterceptor"/>-->
-
-<!--    <interceptors>-->
-<!--        <interceptor>-->
-<!--            <mapping path="/admin/sdgdfsgfdsgdg**"/>-->
-<!--            &lt;!&ndash; 			<exclude-mapping path="/admin/login"/>						 &ndash;&gt;-->
-<!--            &lt;!&ndash; 			<exclude-mapping path="/admin/signUp"/> &ndash;&gt;-->
-<!--            <beans:ref bean="adminInterceptor"/>-->
-<!--        </interceptor>-->
-
-<!--        <interceptor>-->
-<!--            <mapping path="/abcsdsfgsdfgdf"/>-->
-<!--            <exclude-mapping path="/login"/>-->
-<!--            <exclude-mapping path="/signUp"/>-->
-<!--            <exclude-mapping path="/**/*.css"/>-->
-<!--            <exclude-mapping path="/**/*.js"/>-->
-<!--            <exclude-mapping path="/image/**"/>-->
-<!--            <exclude-mapping path="/main"/>-->
-<!--            <beans:ref bean="loginInterceptor"/>-->
-<!--        </interceptor>-->
-<!--    </interceptors>-->
 </beans:beans>
-
-
-        <!-- <mapping path="/**"/> -->
-        <!-- <exclude-mapping path="/login"/>						 -->
-        <!-- <exclude-mapping path="/signUp"/> -->
-        <!-- <exclude-mapping path="/**/*.css"/> -->
-        <!-- <exclude-mapping path="/**/*.js"/> -->
-        <!-- <exclude-mapping path="/image/**"/> -->
-        <!-- <exclude-mapping path="/main"/> -->
-
 
 
 

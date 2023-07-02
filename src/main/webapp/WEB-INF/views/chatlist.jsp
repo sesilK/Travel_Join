@@ -10,30 +10,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <link href="/css/chat.css" rel="stylesheet" type="text/css">
 </head>
-<body data-username="${username}">
+<body data-userid="${userId}">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 
 
 <div id="chatbox" class="animate">
     <div id="friendslist">
 
-        <div id="topmenu">
-            <span class="chats"></span>
-        </div>
-
         <c:forEach var="room" items="${rooms}">
-            <div id="friends">
 
-                <div class="friend" data-roomId="${room.roomId}">
+                <div class="friend" data-roomId="${room.planId}">
                     <img src="/profile/default_profile.png"/>
                     <p>
-                        <strong class="room-title" data-roomid="${room.roomId}">${room.title}</strong><br>
-                        <span class="last-chat">${room.sender}: ${room.content}</span>
+                        <strong class="room-title" data-roomid="${room.planId}">${room.title}</strong><br>
+                        <span class="last-chat">${room.sender}: ${room.content}</span><br>
+                        <span class="timestamp">${room.time}</span>
+                        <c:choose>
+                            <c:when test="${room.chatCount eq 0}">
+                                <span class="chat-count" style="color: orangered; font-weight: bolder;"></span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="chat-count" style="color: orangered; font-weight: bolder;">${room.chatCount}</span>
+                            </c:otherwise>
+                        </c:choose>
+
                     </p>
                     <div class="status available"></div>
                 </div>
 
-            </div>
         </c:forEach>
 
     </div>

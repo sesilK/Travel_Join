@@ -2,6 +2,7 @@ package com.app.controller;
 
 
 import com.app.dto.ChatDto;
+import com.app.dto.ChatRoomDto;
 import com.app.service.chat.ChatService;
 import com.app.utils.TimeStampUtil;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,62 +30,48 @@ public class MessageController {
 
 
     /**
-     * 모든 타입 메세지 핸들러
+     * 전송된 채팅처리
      */
     @MessageMapping("/send")
     public void message(ChatDto message) {
-        message.setTimeStamp(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기
+        message.setTime(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기
         chatService.sendChatMessage(message); // 전송된 채팅 db에 저장
-        simpMessageSendingOperations.convertAndSend(subScribeURL + message.getRoomId(), message); // 가공된 메세지 다시 구독자들에게 메세지 보냄 (채팅방 멤버들)
+        simpMessageSendingOperations.convertAndSend(subScribeURL + message.getPlanId(), message); // 가공된 메세지 다시 구독자들에게 메세지 보냄 (채팅방 멤버들)
     }
 
     /**
-     * 채팅방 신규가입 핸들러
+     * 채팅 읽음처리
      */
-    @MessageMapping("/join")
-    public void chatJoin(ChatDto message) {
-        // chatroom_d 테이블에 새로운 유저 추가하는 로직 구현예정 06.26
-        message.setContent(message.getSender() + " 님이 입장 했습니다.");
+    @MessageMapping("/read")
+    public void read(ChatDto message) {
+        chatService.readChatMessage(message);
+        message.setType("read");
     }
 
     /**
-     * 채팅방 탈퇴 핸들러
+     * 안 읽은 모든채팅 읽음처리
      */
-    @MessageMapping("/drop")
-    public void chatDrop(ChatDto message) {
-        // chatroom_d 테이블에 탈퇴한 유저 삭제하는 로직 구현예정 06.26
-        message.setContent(message.getSender() + " 님이 퇴장 했습니다.");
+    @MessageMapping("/readAll")
+    public void readAll(ChatDto message) {
+        chatService.readAllChatMessage(message);
     }
 
     /**
-     * 채팅방 입장 핸들러
+     * 채팅방의 모든 채팅에 대한 안 읽은갯수 보내기
      */
-    @MessageMapping("/in")
-    public void chatIn(ChatDto message) {
-        message.setTimeStamp(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기
-        int readUpdate = chatService.update_chat_to_read_by_chatdto(message); // db에 읽음처리
-
-        // ( 서버쪽에서 처리하는게 보안이 더 좋을거라고 판단 )
-        message.setContent(null); // 채팅내용 null 로 설정
-        message.setType("in"); // 메세지타입 in 으로 설정
-
-        chatService.sendChatMessage(message); // 전송된 채팅 db에 저장
-        simpMessageSendingOperations.convertAndSend(subScribeURL + message.getRoomId(), message); // 가공된 메세지 다시 구독자들에게 메세지 보냄 (채팅방 멤버들)
+    @MessageMapping("/getUnread")
+    public void getUnreadCount(ChatDto message) {
+        message.setType("unread"); // 메세지 타입 unread로 지정
+        List<ChatDto> counts = chatService.select_all_unread_count_by_plan_id(message); // {chatId, unRead} 담긴 ChatDto 리스트
+        message.setData(counts); // 메세지 Object에 리스트 넣어주기
+        simpMessageSendingOperations.convertAndSend(subScribeURL + message.getPlanId(), message);
     }
 
-    /**
-     * 채팅방 퇴장 핸들러
-     */
-    @MessageMapping("/out")
-    public void chatOut(ChatDto message) {
-        message.setTimeStamp(TimeStampUtil.sysDate()); // 현재시간 Dto에 넣기
-
-        // ( 서버쪽에서 처리하는게 보안이 더 좋을거라고 판단 )
-        message.setContent(null); // 채팅내용 null 로 설정
-        message.setType("out"); // 메세지타입 out 으로 설정
-
-        chatService.sendChatMessage(message); // 전송된 채팅 db에 저장
-        simpMessageSendingOperations.convertAndSend(subScribeURL + message.getRoomId(), message); // 가공된 메세지 다시 구독자들에게 메세지 보냄 (채팅방 멤버들)
+    @MessageMapping("/get_list")
+    public void getChatListInfo(ChatDto message) {
+        message.setType("info"); // 메세지 타입 unread로 지정
+        List<ChatRoomDto> rooms = chatService.select_my_chat_info(message.getUserId()); // 내 채팅방 목록 불러오기
+        message.setData(rooms);
+        simpMessageSendingOperations.convertAndSend(subScribeURL + message.getPlanId(), message);
     }
-
 }

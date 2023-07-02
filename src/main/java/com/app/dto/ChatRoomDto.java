@@ -1,14 +1,15 @@
 package com.app.dto;
 
 import lombok.Data;
-import lombok.ToString;
 
 @Data
-@ToString
 public class ChatRoomDto {
-    private int roomId;
-    private String master;
-    private String member;
+    private int planId;
+    private String userId;
+    private String title;
+    private String imageId;
+    private String sender;
     private String content;
-    private int status;
+    private String time;
+    private int chatCount;
 }
