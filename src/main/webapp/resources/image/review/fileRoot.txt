@@ -1,3 +1,0 @@
-server.xml에 추가해야하는 이미지 파일 저장경로
-
-<Context path="/resources/image/review/" reloadable="true" docBase="C:\\review_image"/>
