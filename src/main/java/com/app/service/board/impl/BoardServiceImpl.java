@@ -18,17 +18,33 @@ public class BoardServiceImpl implements BoardService{
 	BoardDao boardDao;
 
 	@Override
-	public BoardDto findPostById(String userId) {
+	public BoardDto findPostById(int planId) {
 		// TODO Auto-generated method stub
-		BoardDto item = boardDao.findPostById(userId);
+		BoardDto item = boardDao.findPostById(planId);
 		return item;
 	}
 
 	@Override
-	public List<PartyDto> getPartyMembersByPlanId(int planId) {
+	public void plusView(int planId) {
 		// TODO Auto-generated method stub
-		List<PartyDto> member = boardDao.getPartyMembersByPlanId(planId);
-		return member;
+		boardDao.plusView(planId);
 	}
+
+	@Override
+	public List<BoardDto> myTeamDetail(String userId) {
+		// TODO Auto-generated method stub
+		List<BoardDto> partyMembers = boardDao.myTeamDetail(userId);
+		return partyMembers;
+	}
+
+
+	@Override
+	public void joinParty(PartyDto partyDto) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
+	
+
 }

@@ -32,11 +32,11 @@ public class JoinDaoImpl implements JoinDao{
 		return JoinView;
 	}
 
-	@Override
-	public List<JoinDto> imageFileName() {
-		List<JoinDto> imageFileName = sqlSessionTemplate.selectList("join_mapper.select_JoinDto_imageFileName");
-		return imageFileName;
-	}
+	/*
+	 * @Override public List<JoinDto> imageFileName() { List<JoinDto> imageFileName
+	 * = sqlSessionTemplate.selectList("join_mapper.select_JoinDto_imageFileName");
+	 * return imageFileName; }
+	 */
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 	

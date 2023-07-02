@@ -19,20 +19,34 @@ public class BoardDaoImpl implements BoardDao{
 	
 	
 	@Override
-	public BoardDto findPostById(String userId) {
+	public BoardDto findPostById(int planId) {
 		
 		BoardDto boardDto = 
-				sqlsessionTemplate.selectOne("board_mapper.select_findPostById", userId);
+				sqlsessionTemplate.selectOne("board_mapper.select_findPostById", planId);
 		
+		return boardDto;
+	}
+
+	@Override
+	public List<BoardDto> myTeamDetail(String userId) {		
+		List<BoardDto> boardDto = 
+				sqlsessionTemplate.selectList("board_mapper.myTeamDetail", userId);
 		return boardDto;
 	}
 
 
 	@Override
-	public List<PartyDto> getPartyMembersByPlanId(int planId) {
+	public void joinParty(PartyDto partyDto) {
+		// TODO Auto-generated method stub
 		
-		return sqlsessionTemplate.selectList("party_mapper.myTeamDetail", planId);
 	}
+
+	@Override
+	public void plusView(int planId) {
+		// TODO Auto-generated method stub
+		sqlsessionTemplate.update("board_mapper.",planId);
+	}
+
 
 		
 }

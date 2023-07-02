@@ -8,7 +8,7 @@ public interface JoinDao {
 
 	List<JoinDto> JoinView();
 	
-	List<JoinDto> imageFileName();
+//	List<JoinDto> imageFileName();
 
 	int makingboard(JoinDto joinDto);
 	
