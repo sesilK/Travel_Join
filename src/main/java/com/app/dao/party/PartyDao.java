@@ -11,7 +11,7 @@ public interface PartyDao {
 	
 	public List<PartyDto> myTeamDetail(int no);		// 여행팀 멤버 조회
 	
-	public int addMember(PartyDto partyDto); // 팀원 업데이트
+	public int addMember(int no); // 팀원 업데이트
 	
 	public int checkStatus(PartyDto partyDto); //여행 참가여부 조회
 	

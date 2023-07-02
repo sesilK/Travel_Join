@@ -74,7 +74,7 @@ public class JoinController {
 		JsonObject jsonObject = new JsonObject();
 		
 		
-		String fileRoot = "D:\\summernote_image\\"; //외부경로로 저장을 희망할때.
+		String fileRoot = "C:\\plan_garlic\\images\\join\\"; //외부경로로 저장을 희망할때.
 		
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		
@@ -88,7 +88,7 @@ public class JoinController {
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);	
 			//----------------------------------------------------//
 			//파일을 열기위한 호출
-			jsonObject.addProperty("url", "\\summernote_image\\"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", "\\images\\join\\"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
 			//----------------------------------------------------//	
 		} catch (IOException e) {

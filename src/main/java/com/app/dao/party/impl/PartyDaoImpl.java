@@ -35,7 +35,7 @@ public class PartyDaoImpl implements PartyDao{
 		@Override
 		public int addMember(int no) {
 			// TODO Auto-generated method stub
-			int result = sqlsessionTemplate.update("party_mapper.addMember",no);
+			int result = sqlsessionTemplate.update("party_mapper.addMember", no);
 			return result;
 		}
 

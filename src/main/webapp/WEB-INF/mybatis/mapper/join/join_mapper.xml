@@ -8,8 +8,7 @@
 	<!-- 모집글 작성 -->
 	<insert id="insert_join" parameterType="JoinDto">
 		insert into "SCOTT"."JOIN_BOARD" (PLAN_ID, USER_ID, TITLE,CONTENT, PERSONNEL ,START_DAY , END_DAY, DESTINATION, PLAN_STATE, FINISH_DATE)
-		values (
-		JOIN_BOARD_PLANID_SEQ.NEXTVAL, #{userId} , #{title}, #{content} ,#{personnel} ,#{startDay}, #{endDay} ,#{destination},#{planType},#{finishDate})
+		values (JOIN_BOARD_PLANID_SEQ.NEXTVAL, #{userId} , #{title}, #{content} ,#{personnel} ,TO_DATE(#{startDay}, 'YYYY-MM-DD'), TO_DATE(#{endDay}, 'YYYY-MM-DD') ,#{destination},#{planType}, TO_DATE(#{finishDate}, 'YYYY-MM-DD'))
 	</insert>
 
 	<!-- 이미지파일명 저장 -->
