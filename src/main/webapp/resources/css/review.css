@@ -5,11 +5,12 @@ div.main-header {
 	display: flex; /* Flexbox 컨테이너로 설정 */
 	justify-content: space-between; /* 아이템들을 양끝으로 배치 */
 	align-items: center; /* 아이템들을 수직 가운데 정렬 */
-	padding: 0;
+	padding: 0px 15px;
 	margin-bottom: 10px;
 }
 
 span#headline {
+	padding-left: 5px;
 	padding-bottom: 20px;
 }
 
@@ -25,7 +26,15 @@ button#write, button#modifyBtn, button#deleteBtn, button#like, button#report {
 
 div.center {
 	width: 97%;
+	padding: 0px 15px;
 	display: flex;
 	justify-content: center; /* 수평 방향으로 가운데 정렬 */
+	align-items: center; /* 수직 방향으로 가운데 정렬 */
+}
+
+div.planRrating {
+	width: 97%;
+	padding: 0px 15px;
+	display: flex;
 	align-items: center; /* 수직 방향으로 가운데 정렬 */
 }

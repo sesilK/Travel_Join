@@ -31,7 +31,18 @@ $(document).ready(function() {
 			}	//요청이 실패,오류난 경우 수행할 내용
 		});
 	});
+	
+});
 
+// data-stars 속성에 따라 rating_star 요소의 너비를 설정하는 JavaScript 코드
+document.addEventListener('DOMContentLoaded', function () {
+	const ratingStars = document.querySelectorAll('.rating_star');
+	ratingStars.forEach(function (star) {
+		const stars = parseFloat(star.dataset.stars);
+		const widthPercentage = stars * 2 * 10; // 별점을 퍼센트로 변환
+		// 인라인 스타일을 사용하여 요소의 너비 설정
+		star.style.width = widthPercentage + '%';
+	});
 });
 
 $(function() {

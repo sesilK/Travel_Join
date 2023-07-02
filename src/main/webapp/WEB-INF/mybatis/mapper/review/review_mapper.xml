@@ -85,7 +85,7 @@
 	<select id="select_review_view" resultType="ReviewDto">
 		SELECT rb.review_id, rb.plan_id, rb.user_id, rb.title, rb.content, rb.create_date, rb.stars, rb.delete_at, 
 			   rb.views, rb.like_count, rb.comment_count, rb.report_count, rb.update_date, us.nick, 
-			   jb.area||'('||TO_CHAR(jb.start_day, 'YY-MM-DD')||'~'||TO_CHAR(jb.end_day, 'YY-MM-DD')||')' AS planInfo
+			   jb.area||'('||TO_CHAR(jb.start_day, 'YY/MM/DD')||'~'||TO_CHAR(jb.end_day, 'YY/MM/DD')||')' AS planInfo
 		FROM review_bbs rb
 		JOIN join_board jb ON rb.plan_id = jb.plan_id
 		JOIN users us ON rb.user_id = us.user_id

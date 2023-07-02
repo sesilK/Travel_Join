@@ -1,6 +1,15 @@
 
+const rating_input = document.querySelector('.rating input');
+const rating_star = document.querySelector('.rating_star');
+
+// 별점 드래그 할 때
+rating_input.addEventListener('input', () => {
+  rating_star.style.width = `${rating_input.value * 10}%`;
+});
+
 let titleMaxByte = 300; //제목 입력제한 300 Byte
 let contentMaxByte = 3000; //내용 입력제한 3000 Byte
+
 
 $(document).ready(function() {
 
@@ -102,11 +111,17 @@ $(document).ready(function() {
 				let title = response.title;
 				let content = response.content; // 서버로부터 받은 ${temp.content}의 값
 				$('select[name="planId"]').val(planId);
-				$('select[name="stars"]').val(stars);
+				$('input[id="stars"]').val(stars*2);
 				$('input[name="title"]').val(title);
 				$('#summernote').summernote('code', content);
+				
+				// rating_star 클래스에 추가할 스타일 속성
+				let styles = {
+			   	 width: ""+stars*2+"0%" // 원하는 너비로 설정
+				};
+				addStyleToClass("rating_star", styles);
 			} else {			//임시저장된 값이 없으면
-				$('select[name="stars"]').val('5.0');
+				$('select[name="stars"]').val('10');
 			}
 		},
 		error: function(error) {
@@ -128,6 +143,19 @@ $(document).ready(function() {
 	});
 
 });
+
+// 특정 클래스에 스타일 속성을 추가하는 함수
+function addStyleToClass(className, styles) {
+    let elements = document.getElementsByClassName(className);
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        for (let property in styles) {
+            if (styles.hasOwnProperty(property)) {
+                element.style[property] = styles[property];
+            }
+        }
+    }
+}
 
 //글자수 byte 변환 함수
 function calculateByteLength(str) {
@@ -219,7 +247,7 @@ document.getElementById("write").addEventListener("click", function() { //등록
 	shouldCallTemporarySave = false;  // 임시저장 실행여부를 false로 변경
 
 	let planId = $('select[name="planId"]').val();
-	let stars = $('select[name="stars"]').val();
+	let stars = $('input[id="stars"]').val();
 	let title = $('input[name="title"]').val();
 	let content = $('div[role="textbox"]')[0].innerHTML;
 	let contentByte = calculateByteLength(content);
@@ -259,7 +287,7 @@ document.getElementById("write").addEventListener("click", function() { //등록
 			url: "/reviewWrite", //어디 경로로 요청할건지
 			data: JSON.stringify({	//객체를 -> JSON string 으로 변환
 				planId: planId,
-				stars: stars,
+				stars: stars/2.0,
 				title: title,
 				content: content,
 				imageFileNameList: imageFileNameList
@@ -294,7 +322,7 @@ window.onbeforeunload = function() { //페이지를 떠날때 (창 닫기, 새�
 function temporarySave() {
 
 	let planId = $('select[name="planId"]').val();
-	let stars = $('select[name="stars"]').val();
+	let stars = $('input[id="stars"]').val();
 	let title = $('input[name="title"]').val();
 	let content = $('div[role="textbox"]')[0].innerHTML;
 
@@ -304,7 +332,7 @@ function temporarySave() {
 		url: "/temporarySave",	//어디 경로로 요청할건지
 		data: JSON.stringify({	//객체를 -> JSON string 으로 변환
 			planId: planId,
-			stars: stars,
+			stars: stars/2.0,
 			title: title,
 			content: content
 		}),	//파라미터로 같이 담아서 보낼 것들

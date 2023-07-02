@@ -11,12 +11,12 @@
 		<table class="anim">
 			<colgroup>
 				<col style="width: 12%;">
+				<col style="width: 10%;">
+				<col style="width: 35%;">
+				<col style="width: 14%;">
 				<col style="width: 12%;">
-				<col style="width: 38%;">
-				<col style="width: 13%;">
-				<col style="width: 13%;">
-				<col style="width: 6%;">
-				<col style="width: 6%;">
+				<col style="width: 7%;">
+				<col style="width: 7%;">
 			  </colgroup>
 	        <thead>
 	        	<tr>
@@ -32,7 +32,13 @@
 	        <tbody>
 	        	<c:forEach var="item" items="${reviewList}">
 		            <tr>
-		            	<td class="stars">${item.stars}</td>
+		            	<td class="stars">
+		            		<span class="rating_box">
+								<span class="rating">★★★★★
+									<span class="rating_star" data-stars="${item.stars}">★★★★★</span>
+								</span>
+							</span>
+		            	</td>
 		            	<td>${item.area}</td>
 		            	<td class="title" data-reviewid="${item.reviewId}">${item.title}
 		            	    <c:if test="${item.commentCount > 0}">[${item.commentCount}]</c:if></td>

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <link href="/css/review.css" rel="stylesheet" type="text/css"/>
-<!-- <link href="/css/reviewView.css" rel="stylesheet" type="text/css"/> -->
+<link href="/css/reviewView.css" rel="stylesheet" type="text/css"/>
 <%@ include file="header.jsp" %>
 
 	<div class="main-header anim">
@@ -18,7 +18,12 @@
 	</div>
 	
 	<span id="sessionId" data-sessionid="<%= session.getAttribute("userId") %>">
-		${item.stars} | ${item.planInfo}</span>
+		<span class="rating_box">
+			<span class="rating">★★★★★
+				<span class="rating_star" id="stars" data-stars="${item.stars}">★★★★★</span>
+			</span> | ${item.planInfo}
+		</span>
+	</span>
 	<p id="userId" data-userid="${item.userId}">
 		${item.nick} | ${item.createDate} | 조회 ${item.views} | 
 		추천 <span id="likeCount">${item.likeCount}</span> | 
@@ -39,7 +44,7 @@
 	</span>
 
 	
-	<table>
+	<table class="anim">
         <tbody id="commentList">
         	<c:forEach var="comment" items="${commentList}">
 	            <tr data-comment-id="${comment.commentId}"

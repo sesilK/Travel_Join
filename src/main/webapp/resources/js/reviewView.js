@@ -1,9 +1,16 @@
 let reviewId = $('#headline').data('reviewid'); // 글 번호
 let userId = $('#userId').data('userid'); // 글 작성자
 let sessionId = $('#sessionId').data('sessionid'); // 로그인 아이디
+let stars = $('#stars').data('stars'); // 별점
 let commentMaxByte = 300; //댓글 입력제한 300 Byte
 
 $(document).ready(function() {
+
+	// rating_star 클래스에 추가할 스타일 속성
+	let styles = {
+		width: ""+stars*2+"0%" // 원하는 너비로 설정
+	};
+	addStyleToClass("rating_star", styles);
 
 	// 신고 버튼 클릭 이벤트 처리
 	$('#report').click(function() {
@@ -345,6 +352,19 @@ $(document).ready(function() {
 	});
 
 });
+
+// 특정 클래스에 스타일 속성을 추가하는 함수
+function addStyleToClass(className, styles) {
+    let elements = document.getElementsByClassName(className);
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        for (let property in styles) {
+            if (styles.hasOwnProperty(property)) {
+                element.style[property] = styles[property];
+            }
+        }
+    }
+}
 
 //댓글 글자수 제한 함수
 function limitByte(content) {

@@ -1,4 +1,12 @@
 
+const rating_input = document.querySelector('.rating input');
+const rating_star = document.querySelector('.rating_star');
+
+// 별점 드래그 할 때
+rating_input.addEventListener('input', () => {
+  rating_star.style.width = `${rating_input.value * 10}%`;
+});
+
 let titleMaxByte = 300; //제목 입력제한 300 Byte
 let contentMaxByte = 3000; //내용 입력제한 3000 Byte
 let reviewId = $('#planId').data('reviewid');
@@ -7,10 +15,10 @@ $(document).ready(function() {
 
 	//썸머노트 불러오기
 	$('#summernote').summernote({
-		width: 800, // set editor width
-		height: 400, // set editor height
-		minHeight: null, // set minimum height of editor
-		maxHeight: null, // set maximum height of editor
+		//width: 800, // set editor width
+		//height: 400, // set editor height
+		minHeight: 450, // set minimum height of editor
+		//maxHeight: null, // set maximum height of editor
 		focus: false, // focus  여부 설정 (false -> focus)
 		lang: 'ko-KR', // 기본 메뉴언어 US->KR로 변경
 		placeholder: '', //placeholder 설정
@@ -40,6 +48,9 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	$('.note-editor').width($(window).width()*0.6);
+	//$('.note-editor').height($(window).height()* 0.6);
 
 	//내용 글자수 제한 함수
 	function limitByte(e) {
@@ -73,15 +84,22 @@ $(document).ready(function() {
 			let title = response.title;
 			let content = response.content;
 			$('select[name="planId"]').val(planId);
-			$('select[name="stars"]').val(stars);
+			$('input[id="stars"]').val(stars*2);
 			$('input[name="title"]').val(title);
 			$('#summernote').summernote('code', content);
+			
+			// rating_star 클래스에 추가할 스타일 속성
+			let styles = {
+			    width: ""+stars*2+"0%" // 원하는 너비로 설정
+			};
+			addStyleToClass("rating_star", styles);
 		},
 		error: function() {
 			alert("내용을 불러오지 못했습니다.");
 		}
 	});
 
+	
 	//제목 글자수 제한 함수
 	$('input[name="title"]').on('input', function() {
 		let title = $(this).val();
@@ -97,6 +115,19 @@ $(document).ready(function() {
 
 });
 
+// 특정 클래스에 스타일 속성을 추가하는 함수
+function addStyleToClass(className, styles) {
+    let elements = document.getElementsByClassName(className);
+    for (let i = 0; i < elements.length; i++) {
+        let element = elements[i];
+        for (let property in styles) {
+            if (styles.hasOwnProperty(property)) {
+                element.style[property] = styles[property];
+            }
+        }
+    }
+}
+	
 //글자수 byte 변환 함수
 function calculateByteLength(str) {
 	let byteLength = 0;
@@ -179,11 +210,10 @@ function deleteSummernoteImageFile(imageName) {
 	})
 }
 
-document.getElementById("write").addEventListener("click", function() { //수정버튼 클릭시
+document.getElementById("modifyBtn").addEventListener("click", function() { //수정버튼 클릭시
 
-	let reviewId = $('#submitBtn').data('reviewid');
 	let planId = $('select[name="planId"]').val();
-	let stars = $('select[name="stars"]').val();
+	let stars = $('input[id="stars"]').val();
 	let title = $('input[name="title"]').val();
 	let content = $('div[role="textbox"]')[0].innerHTML;
 	let contentByte = calculateByteLength(content);
@@ -218,7 +248,7 @@ document.getElementById("write").addEventListener("click", function() { //수정
 			data: JSON.stringify({	//객체를 -> JSON string 으로 변환
 				reviewId: reviewId,
 				planId: planId,
-				stars: stars,
+				stars: stars/2.0,
 				title: title,
 				content: content,
 				imageFileNameList: imageFileNameList

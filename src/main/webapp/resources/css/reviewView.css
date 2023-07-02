@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+.rating_box {
+	display: flex;
+	/* width: 100px; */
+	align-items: center; /* 수직 방향으로 가운데 정렬 */
+}
+
+.rating {
+	position: relative;
+	color: #ddd;
+	font-size: 20px;
+	text-align: center;
+}
+
+.rating_star {
+	color: #ffc107;
+	position: absolute;
+	font-size: 20px;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	pointer-events: none;
+}
