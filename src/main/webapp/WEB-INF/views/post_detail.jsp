@@ -2,171 +2,36 @@
 <%@include file="header.jsp" %>
 <link rel="stylesheet" href="/css/join_detail.css"/>
 
-<body>
+<body data-planid="${item.planId}">
 
-<div class="container-detail">
+<p>모집 제목 : ${item.title}</p>
+<p>모집 마감날짜: ${item.finishDate}</p>
+<p>지역: ${item.destination}</p>
+<p>모집인원: ${CurrPersonnel}/${item.personnel}명</p>
+<p>여행기간: ${item.startDay} ~ ${item.endDay}</p>
+<p>방장아이디: ${item.userId}</p>
+<p>조회수: ${item.views}</p>
+<p>추천: ${item.likes}</p>
 
-    <div class="content-box">
-        <div class="title">3박4일 몽골 동행 구해요!</div>
-        <div class="info-box">
+<c:if test="${not empty sessionScope.userId}">
+<div class="button-box">
+    <c:choose>
+        <c:when test="${item.planState eq 1}">
+            <p>마감된 모집입니다.</p>
+        </c:when>
 
-            <div class="info-l">
-                <div class="in-1">
-                    <p>지역: 휴먼교육센터</p>
-                    <p>모집인원: 5명</p>
-                </div>
-                <div class="in-2">
-                    <p>여행기간: 언제부터 ~ 언제까지</p>
-                </div>
-            </div>
+        <c:when test="${sessionScope.userId eq item.userId}">
+            <button type="button" id="btn-end">모집마감</button>
+            <button type="button" id="btn-mod">내용수정</button>
+            <button type="button" id="btn-del">글 삭제</button>
+        </c:when>
 
-            <div class="info-r">
-
-            </div>
-
-        </div>
-    </div>
-
+        <c:when test="${item.planState eq 0}">
+            <button type="button" id="btn-join">참가하기</button>
+        </c:when>
+    </c:choose>
 </div>
-
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-<article class="product">
-    <section>
-        <div>
-            <h4>${item.userId}</h4>
-            <span>
-                    <h5>${item.views}</h5>
-                </span>
-            <img src="data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iNDQiIGhlaWdodD0iNDQiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBpZD0iaWNvbi1sb3ZlLTEiIGZpbGw9IiNjODBhMWUiPjxwYXRoIGQ9Im04IDE0Ljg4LS45OC0uOThDMy4zOCAxMC42OCAxIDguNTEgMSA1Ljg1IDEgMy42OCAyLjY4IDIgNC44NSAyIDYuMDQgMiA3LjIzIDIuNTYgOCAzLjQ3IDguNzcgMi41NiA5Ljk2IDIgMTEuMTUgMiAxMy4zMiAyIDE1IDMuNjggMTUgNS44NWMwIDIuNjYtMi4zOCA0LjgzLTYuMDIgOC4wNWwtLjk4Ljk4WiIgZmlsbD0iI2M4MGExZSIgZmlsbC1ydWxlPSJub256ZXJvIj48L3BhdGg+PC9zdmc+"
-                 alt="">
-        </div>
-        <h4>${item.title}</h4>
-        <div class="shippinginfo">
-            <p>${item.content} </p>
-        </div>
-    </section>
-</article>
-
-<article class="productinfo">
-    <h4>필수 정보</h4>
-    <div class="productinfo_01">
-        <ul>
-            <li>여행기간</li>
-            <li>여행지</li>
-            <li>들어갈 것</li>
-        </ul>
-        <ul>
-            <li>${item.startDay.substring(0,10)} ~ ${item.endDay.substring(0,10)}</li>
-            <li>어디를 갈 건지</li>
-            <li>*상세페이지 참조</li>
-        </ul>
-    </div>
-</article>
-
-<%
-    session.setAttribute("userId", "admin");
-%>
-
-<c:if test="${CurrPersonnel < item.personnel && item.planState == 0}">
-    <button type="button" id="submitBtn">신청하기</button>
-    <c:if test="${sessionScope.userId == item.userId}">
-        <button type="button" id="deadBtn">모집마감</button>
-    </c:if>
-</c:if>
-<c:if test="${CurrPersonnel >= item.personnel || item.planState == 1}">
-    <c:if test="${sessionScope.userId == item.userId}">
-        <button type="button" id="deleteBtn">삭제하기</button>
-        <button type="button" id="Btn">그냥누름</button>
-    </c:if>
-    <span>모집 종료 되었습니다.</span>
 </c:if>
 
-<script type="text/javascript">
-
-    let planId = ${item.planId};
-
-    document.getElementById("submitBtn").addEventListener("click", function () {
-        $.ajax({
-            url: "/joinParty",	//Controller 요청 주소
-            type: "POST",	//요청 method
-            contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
-            data: JSON.stringify({	//JSON string 으로 변환
-                planId: planId
-            }), //파라미터로 같이 담아서 보낼 것들
-
-            success: (data) => {
-                console.log(data);
-                if (data == 'true') {
-                    alert('신청 완료');
-                }
-                if (data == 'false') {
-                    alert('신청할 수 없습니다.');
-                }
-            },	//요청에 대해 성공한 경우 수행할 내용
-            error: () => {
-                alert('참가 실행 오류');
-            }	//요청이 실패,오류난 경우 수행할 내용
-
-        });
-    });
-
-    document.getElementById("deadBtn").addEventListener("click", function () {
-
-        $.ajax({
-            url: "/joinDead",	//Controller 요청 주소
-            type: "POST",	//요청 method
-            contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
-            data: JSON.stringify({	//JSON string 으로 변환
-                planId: planId
-            }),	//파라미터로 같이 담아서 보낼 것들
-            success: (data) => {
-                if (data === 'true') {
-                    alert('마감 완료');
-                    window.location.href = "/join_view";
-                }
-                if (data === 'false') {
-                    alert('마감 실패');
-                }
-            },	//요청에 대해 성공한 경우 수행할 내용
-            error: () => {
-                alert('마감 실행 오류');
-            }	//요청이 실패,오류난 경우 수행할 내용
-
-        });
-
-    });
-
-    document.getElementById("Btn").addEventListener("click", function () {
-        console.log('버튼누름');
-    });
-    document.getElementById("deleteBtn").addEventListener("click", function () {
-        console.log('삭제버튼누름');
-        $.ajax({
-            url: "/joinDelete",	//Controller 요청 주소
-            type: "POST",	//요청 method
-            contentType: "application/json; charset=utf-8",	//json 포맷 utf-8 내용으로 통신하겠다
-            data: JSON.stringify({	//JSON string 으로 변환
-                planId: planId
-            }),	//파라미터로 같이 담아서 보낼 것들
-            success: (data) => {
-                if (data === 'true') {
-                    alert('삭제 완료');
-                    window.location.href = "/join_view";
-                }
-                if (data === 'false') {
-                    alert('삭제 실패');
-                }
-            },	//요청에 대해 성공한 경우 수행할 내용
-            error: () => {
-                alert('삭제 실행 오류');
-            }	//요청이 실패,오류난 경우 수행할 내용
-
-        });
-
-    });
-
-</script>
-</body>
-</html>
+<%@include file="footer.jsp" %>
+<script src="/js/post_detail.js"></script>

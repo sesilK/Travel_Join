@@ -2,6 +2,7 @@ package com.app.dao.board.impl;
 
 import java.util.List;
 
+import com.app.dto.JoinDto;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,12 +20,12 @@ public class BoardDaoImpl implements BoardDao{
 	
 	
 	@Override
-	public BoardDto findPostById(int planId) {
-		
-		BoardDto boardDto = 
+	public JoinDto findPostById(int planId) {
+
+		JoinDto joinDto =
 				sqlsessionTemplate.selectOne("board_mapper.select_findPostById", planId);
 		
-		return boardDto;
+		return joinDto;
 	}
 
 	@Override

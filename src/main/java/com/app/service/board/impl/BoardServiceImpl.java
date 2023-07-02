@@ -2,6 +2,7 @@ package com.app.service.board.impl;
 
 import java.util.List;
 
+import com.app.dto.JoinDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,9 @@ public class BoardServiceImpl implements BoardService{
 	BoardDao boardDao;
 
 	@Override
-	public BoardDto findPostById(int planId) {
+	public JoinDto findPostById(int planId) {
 		// TODO Auto-generated method stub
-		BoardDto item = boardDao.findPostById(planId);
+		JoinDto item = boardDao.findPostById(planId);
 		return item;
 	}
 

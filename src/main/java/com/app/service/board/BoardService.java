@@ -3,11 +3,12 @@ package com.app.service.board;
 import java.util.List;
 
 import com.app.dto.BoardDto;
+import com.app.dto.JoinDto;
 import com.app.dto.PartyDto;
 
 public interface BoardService {
 		
-	public BoardDto findPostById(int planId); //글상세 불러오기
+	public JoinDto findPostById(int planId); //글상세 불러오기
 
 	public void joinParty(PartyDto partyDto);
 

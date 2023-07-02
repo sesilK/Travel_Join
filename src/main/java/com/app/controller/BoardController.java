@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import com.app.dto.JoinDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,41 +35,42 @@ public class BoardController {
     public String detail(@PathVariable("planId") int planId, Model model) {
 
         // 요청했을때 모집글정보, 멤버정보, 조회수증가 시켜야함
-        
-        BoardDto item = boardService.findPostById(planId);
+
+        // 글 정보 가져오기
+        JoinDto item = boardService.findPostById(planId);
         model.addAttribute("item", item);
 
+        // 멤버 정보 리스트 가져오기
         List<PartyDto> list = partyService.myTeamDetail(planId);
-        model.addAttribute("CurrPersonnel", list.size());
+        model.addAttribute("CurrPersonnel", list.size()); // 참여중인 인원 몇명
+        model.addAttribute("memberList", list); // 참여중인 인원 정보
 
         return "post_detail";
     }
 
     @PostMapping("/joinParty") // 동행신청하기 	plan_id 에 user_id insert\
     @ResponseBody
-    public String joinParty(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
+    public String joinParty(@RequestBody String requestBody, HttpSession session) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         PartyDto partyDto = objectMapper.readValue(requestBody, PartyDto.class);
 
-        //아이디는 세션에서 받아오고
-        String userId = (String) session.getAttribute("userId");
 
+        String userId = (String) session.getAttribute("userId"); //아이디는 세션에서 받아오고
         partyDto.setUserId(userId); //dto에 세션id 세팅
-        partyDto.setUserId("admin"); //dto에 세션id 세팅
-        int planId = partyDto.getPlanId(); //게시글 번호
 
-        int result = partyService.checkStatus(partyDto); //여행 참가여부 조회
-        System.out.println(result);
+        int result = 0;
 
-        if (result == 0) {
-            partyService.joinParty(partyDto); //party 테이블에 inserst
-            partyService.addMember(planId); //join 테이블에 update
-            return "true";
-        } else {
-            return "false";
+        int checkJoin = partyService.checkStatus(partyDto); //여행 참가여부 조회
+
+        if (checkJoin == 0) {
+            result = partyService.joinParty(partyDto); //party 테이블에 inserst
         }
 
+        if (result > 0) {
+            return "true";
+        }
+        return "false";
     }
 
     @PostMapping("/joinDead") // 동행신청하기 	plan_id 에 user_id insert\
@@ -78,7 +80,7 @@ public class BoardController {
         ObjectMapper objectMapper = new ObjectMapper();
         PartyDto partyDto = objectMapper.readValue(requestBody, PartyDto.class);
 
-        int result = partyService.joinDead(partyDto); //여행 모집 마감
+        int result = partyService.joinDead(partyDto); //여행 모집 마감 update 쿼리
 
         if (result == 1) { //마감성공
             return "true";
@@ -88,14 +90,14 @@ public class BoardController {
 
     }
 
-    @PostMapping("/joinDelete") // 동행신청하기 	plan_id 에 user_id insert\
+    @PostMapping("/joinDelete")
     @ResponseBody
     public String joinDelete(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
         System.out.println("joinDelete 버튼 눌림");
         ObjectMapper objectMapper = new ObjectMapper();
         PartyDto partyDto = objectMapper.readValue(requestBody, PartyDto.class);
 
-        int result = partyService.joinDelete(partyDto); //여행 모집 마감
+        int result = partyService.joinDelete(partyDto); //여행 모집 마감 update 쿼리
 
         if (result == 1) { //삭제성공
             return "true";
@@ -104,30 +106,5 @@ public class BoardController {
         }
 
     }
-    /*
-     * @RequestMapping("/joinParty_process") // 동행신청 프로세스 public String
-     * joinPartyProcess(@RequestBody PartyDto partyDto, Model model) throws
-     * JsonMappingException, JsonProcessingException {
-     *
-     * // 필요한 데이터 추출 int planId = partyDto.getPlanId(); String userId =
-     * partyDto.getUserId();
-     *
-     * // PartyDto에 데이터 설정 partyDto.setPlanId(planId); partyDto.setUserId(userId);
-     *
-     * // PartyService를 사용하여 동행 신청 처리 partyService.joinParty(partyDto);
-     *
-     * // 모델에 필요한 데이터 추가 model.addAttribute("planId", planId);
-     *
-     * return "redirect:/detail"; }
-     */
-
-
-    /*
-     * @GetMapping("/partyMembers") //plan_id에 동행신청한 user_id 조회 public String
-     * partyMembers(@RequestParam("planId") int planId, Model model) {
-     * List<PartyDto> partyMembers = boardService.getPartyMembersByPlanId(planId);
-     * model.addAttribute("partyMembers", partyMembers); return "post_detail"; }
-     */
-
 
 }

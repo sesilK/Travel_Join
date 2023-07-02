@@ -13,15 +13,8 @@
 		INSERT INTO JOIN_BOARD_MEMBER (plan_id, user_id)
 		VALUES (#{planId}, #{userId})  
 		<!-- 모집인원 테이블에 받아온 게시글 번호(plan_id)와 회원아이디(user_id) 입력-->
-	 </insert>	
-	
-	
-<!-- 모집인원 업데이트 --> 
-	<update id="update_addMember" parameterType="PartyDto">
-		UPDATE join_board
-		SET PERSONNEL = PERSONNEL +1
-		WHERE plan_id = #{planId}
-	</update>	 
+	 </insert>
+
 	 
 <!-- 모집 마감하기 --> 
 	<update id="joinDead" parameterType="PartyDto">
