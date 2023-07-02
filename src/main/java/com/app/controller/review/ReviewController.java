@@ -372,9 +372,9 @@ public class ReviewController {
 	}
 	
 	//리뷰 작성시 첨부한 이미지 파일을 경로에 저장하기
-	@PostMapping(value="/uploadSummernoteImageFile", produces = "application/json; charset=utf8")
+	@PostMapping(value="/uploadReviewImageFile", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, 
+	public String uploadReviewImageFile(@RequestParam("file") MultipartFile multipartFile, 
 											HttpServletRequest request, HttpSession session)  {
 		
 		
@@ -388,7 +388,7 @@ public class ReviewController {
 		
 		//String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		//String fileRoot = contextRoot+"resources\\image\\review\\"; // 내부경로 저장
-		String fileRoot = "C:\\review_image\\"; //외부경로 저장
+		String fileRoot = "C:\\plan_garlic\\images\\review\\"; //외부경로 저장
 		
 		System.out.println(fileRoot); // -> server.xml에 저장경로 추가해야함
 		
@@ -420,7 +420,7 @@ public class ReviewController {
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-			jsonObject.addProperty("url", "/resources/image/review/"+savedFileName);
+			jsonObject.addProperty("url", "/images/review/"+savedFileName);
 			jsonObject.addProperty("responseCode", "success");
 			
 		} catch (IOException e) {
@@ -432,9 +432,9 @@ public class ReviewController {
 		return jsonObject.toString();
 	}
 
-	@PostMapping(value = "/deleteSummernoteImageFile", produces = "application/json; charset=utf8")
+	@PostMapping(value = "/deleteReviewImageFile", produces = "application/json; charset=utf8")
 	@ResponseBody
-	public String deleteSummernoteImageFile(@RequestParam("file") String fileName, 
+	public String deleteReviewImageFile(@RequestParam("file") String fileName, 
 										  HttpServletRequest request, HttpSession session) {
 		
 		String sessionId = (String) session.getAttribute("userId");
@@ -446,7 +446,7 @@ public class ReviewController {
 	    // 폴더 위치
 		//String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		//String fileRoot = contextRoot+"resources\\image\\review\\"; //내부 경로
-		String fileRoot = "C:\\review_image\\"; //외부 경로
+		String fileRoot = "C:\\plan_garlic\\images\\review\\"; //외부 경로
 	    
 	    // 해당 파일 삭제
 	    Path path = Paths.get(fileRoot, fileName);

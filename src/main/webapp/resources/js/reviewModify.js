@@ -1,4 +1,3 @@
-
 const rating_input = document.querySelector('.rating input');
 const rating_star = document.querySelector('.rating_star');
 
@@ -44,7 +43,7 @@ $(document).ready(function() {
 					let content = $('div[role="textbox"]')[0].innerHTML;
 					let byteLength = calculateByteLength(content); // 바이트 길이 계산
 					if (byteLength <= contentMaxByte) { // 바이트 제한 이내인 경우
-						uploadSummernoteImageFile(files[i], this); //업로드
+						uploadReviewImageFile(files[i], this); //업로드
 					} else { // 바이트 제한 걸리면
 						alert("용량을 초과하여 업로드할 수 없습니다.");
 						break;
@@ -53,7 +52,7 @@ $(document).ready(function() {
 			},
 			onMediaDelete: function($target) { //이미지 삭제
 				let imageName = $target.attr('src').split('/').pop()
-				deleteSummernoteImageFile(imageName)
+				deleteReviewImageFile(imageName)
 			},
 			onKeydown: function(e) {
 				limitByte(e);
@@ -65,7 +64,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('.note-editor').width($(window).width()*0.6);
+	//$('.note-editor').width($(window).width()*0.6);
 	//$('.note-editor').height($(window).height()* 0.6);
 
 	//내용 글자수 제한 함수
@@ -182,13 +181,13 @@ function trimTextToByteLength(text, maxBytes) {
 }
 
 //파일 업로드 함수
-function uploadSummernoteImageFile(file, el) {
+function uploadReviewImageFile(file, el) {
 	let formData = new FormData();
 	formData.append("file", file);
 	$.ajax({
 		data: formData,
 		type: "POST",
-		url: "/uploadSummernoteImageFile",	//Controller 요청 주소
+		url: "/uploadReviewImageFile",	//Controller 요청 주소
 		contentType: false,
 		enctype: 'multipart/form-data',
 		processData: false,
@@ -203,13 +202,13 @@ function uploadSummernoteImageFile(file, el) {
 }
 
 //파일 삭제 함수
-function deleteSummernoteImageFile(imageName) {
+function deleteReviewImageFile(imageName) {
 	let formData = new FormData()
 	formData.append('file', imageName)
 	$.ajax({
 		data: formData,
 		type: 'POST',
-		url: "/deleteSummernoteImageFile",
+		url: "/deleteReviewImageFile",
 		contentType: false,
 		enctype: 'multipart/form-data',
 		processData: false,

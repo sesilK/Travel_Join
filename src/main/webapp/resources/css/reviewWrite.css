@@ -50,3 +50,7 @@ input#title, select#planId {
 	overflow: hidden;
 	pointer-events: none;
 }
+
+.note-modal-backdrop {
+	bottom: 5000;
+}

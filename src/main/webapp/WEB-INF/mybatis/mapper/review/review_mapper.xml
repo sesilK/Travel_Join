@@ -91,7 +91,7 @@
 			   rb.views, rb.like_count, rb.comment_count, rb.report_count, us.nick, 
 			    TO_CHAR(rb.create_date, 'YY.MM.DD HH:MM') create_date,
 			    TO_CHAR(rb.update_date, 'YY.MM.DD HH:MM') update_date,
-			   jb.area||'('||TO_CHAR(jb.start_day, 'YY/MM/DD')||'~'||TO_CHAR(jb.end_day, 'YY/MM/DD')||')' AS planInfo
+			   jb.area||'('||TO_CHAR(jb.start_day, 'YY-MM-DD')||'~'||TO_CHAR(jb.end_day, 'YY-MM-DD')||')' AS planInfo
 		FROM review_bbs rb
 		JOIN join_board jb ON rb.plan_id = jb.plan_id
 		JOIN users us ON rb.user_id = us.user_id
