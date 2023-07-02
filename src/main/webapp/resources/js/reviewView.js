@@ -148,14 +148,14 @@ $(document).ready(function() {
 		$('#commentList button').hide();
 
 		let commentRow = $(this).closest('tr');
+		let parentLv = parseInt(commentRow.attr('data-comment-lv'), 10); //부모댓글레벨(10진수 표현)
 
 		// 답글 입력 input 추가
 		let replyInput = '<tr id="replyRow">' +
-			'<td colspan="4">' +
-			'<input type="text" name="replyContent">' +
-			'<button id="replyConfirmBtn" type="button">등록</button>' +
-			'<button id="replyCancelBtn" type="button">취소</button>' +
-			'</td>' +
+			'<td></td>' +
+			'<td><input type="text" name="replyContent" id="replyContent"></td>' +
+			'<td><button id="replyConfirmBtn" class="emojiBtn">✔</button></td>' +
+			'<td><button id="replyCancelBtn" class="emojiBtn">✖</button></td>' +
 			'</tr>';
 		commentRow.after(replyInput);
 
@@ -178,8 +178,6 @@ $(document).ready(function() {
 
 	// 답글 등록버튼 클릭 이벤트 처리
 	$('#commentList').on('click', '#replyConfirmBtn', function() {
-		// 원래의 버튼들을 다시 보이게 처리
-		$('#commentList button').show();
 
 		let replyEl = $('input[name="replyContent"]');	//답글 입력 요소
 		let content = replyEl.val(); //답글 내용
@@ -188,6 +186,8 @@ $(document).ready(function() {
 		let parentLv = parseInt(commentRow.attr('data-comment-lv'), 10); //부모댓글레벨(10진수 표현)
 
 		if (content != '') {
+			// 원래의 버튼들을 다시 보이게 처리
+			$('#commentList button').show();
 			$.ajax({
 				type: "POST",
 				contentType: "application/json; charset=utf-8",
@@ -223,18 +223,20 @@ $(document).ready(function() {
 		$('#commentList button').hide();
 
 		let commentRow = $(this).closest('tr');
-		let contentDateEl = commentRow.find('td:first-child').find('span:first-child')
+		let contentDateEl = commentRow.find('td:eq(1)').find('span:first-child');
+		let buttonEl1 = commentRow.find('td:eq(2)');
+		let buttonEl2 = commentRow.find('td:eq(3)');
 		let content = contentDateEl.find('span:first-child').text();
 
 		//수정할 댓글을 입력요소로 변경
-		let modifyCommentForm = `
-			    	<span>
-				    	<input name="modifiedComment" value="` + content + `">
-				    	<button type="button" id="confirmBtn">확인</button>
-				    	<button type="button" id="cancelBtn">취소</button>
-			    	</span>
-			    `;
+		let modifyCommentForm = `<span><input name="modifiedComment" id="modifiedComment" value="` + content + `"></span>`;
+		let confirmBtn = `<td><button class="emojiBtn" id="confirmBtn">✔</button></td>`;
+		let cancelBtn = `<td><button class="emojiBtn" id="cancelBtn">✖</button></td>`;
+		
 		contentDateEl.replaceWith(modifyCommentForm);
+		buttonEl1.replaceWith(confirmBtn);
+		buttonEl2.replaceWith(cancelBtn);
+		
 
 		//수정 글자수 제한
 		$('input[name="modifiedComment"]').on('input', function() {
@@ -249,24 +251,32 @@ $(document).ready(function() {
 		$('#commentList button').show();
 
 		let commentRow = $(this).closest('tr');
-		let commentTd = commentRow.find('td:first-child');
-		let content = commentTd.data('content');		//댓글내용(수정전)
-		let createDate = commentTd.data('createdate');	//작성일
-		let updateDate = commentTd.data('updatedate');	//수정일
+		let commentTd = commentRow.find('td:eq(1)');
+		let buttonEl1 = commentRow.find('td:eq(2)');
+		let buttonEl2 = commentRow.find('td:eq(3)');
+		let content = commentRow.find('td:eq(0)').data('content');		//댓글내용(수정전)
+		let createDate = commentRow.find('td:eq(0)').data('createdate');	//작성일
+		let updateDate = commentRow.find('td:eq(0)').data('updatedate');	//수정일
 		let commentLv = commentRow.data('comment-lv');	//댓글레벨
 		let modifyCommentForm = commentTd.find('span:first-child');	//수정모드 요소
+		let confirmBtn = `<td><button class="modifyBtn emojiBtn" type="button">↩</button></td>`;
+		let cancelBtn = `<td><button class="deleteBtn emojiBtn" type="button">✖</button></td>`;
 
 		// 원래의 댓글 내용으로 변경
 		let contentDateEl = $('<span></span>').append($('<span></span>').text(content));
+		
 		if (updateDate == '' || updateDate == null) {
-			contentDateEl.append(' (' + createDate + ')');
+			contentDateEl.append(' <span class="unimportant">(' + createDate + ')</span>');
 		} else {
-			contentDateEl.append(' (' + updateDate + ' 수정)');
+			contentDateEl.append(' <span class="unimportant">(' + updateDate + ' 수정)</span>');
 		}
+		
 		if (commentLv < 3) {
-			contentDateEl.append('<button class="replyBtn" type="button">답글</button>');
+			contentDateEl.append('<button class="replyBtn emojiBtn unimportant" type="button">답글</button>');
 		}
 		modifyCommentForm.replaceWith(contentDateEl);
+		buttonEl1.replaceWith(confirmBtn);
+		buttonEl2.replaceWith(cancelBtn);
 	});
 
 	// 댓글 수정완료 버튼 클릭 이벤트 처리
@@ -413,27 +423,35 @@ function renderComments(commentList) {
 				for (let i = 1; i < comment.commentLv; i++) {
 					html += '&emsp;';
 				}
+				html += '┗ ';
 			}
-			html += ' ' + comment.nick;
+			html += '<span class="commentNick">';
 			if (comment.userId === userId) {
-				html += '(글쓴이)';
+				html += '<b>'+comment.nick+'</b>';
+			} else {
+				html += comment.nick;
 			}
-			html += ' | <span><span>' + comment.content + '</span>';
+			html += '</span></td><td>';
+			html += '<span><span>' + comment.content + '</span>';
+			html += '<span class="unimportant">';
 			if (comment.updateDate == null) {
 				html += ' (' + comment.createDate + ') ';
 			} else {
 				html += ' (' + comment.updateDate + ' 수정) ';
 			}
+			html += '</span>';
 			if (comment.commentLv < 3) {
-				html += '<button class="replyBtn" type="button">답글</button>';
+				html += '<button class="replyBtn emojiBtn unimportant" type="button">답글</button>';
 			}
 			html += '</span></td>';
 			if (comment.userId == sessionId) {
-				html += '<td><button class="modifyBtn" type="button">수정</button></td>';
-				html += '<td><button class="deleteBtn" type="button">삭제</button></td>';
+				html += '<td><button class="modifyBtn emojiBtn">↩</button></td>';
+				html += '<td><button class="deleteBtn emojiBtn">✖</button></td>';
+			} else {
+				html += '<td></td><td></td>';
 			}
 		} else if (comment.deleteAt == 'Y') {// 삭제된 댓글
-			html += '<td>';
+			html += '<td colspan="4">';
 			if (comment.commentLv > 1) {
 				for (let i = 1; i < comment.commentLv; i++) {
 					html += '&emsp;';

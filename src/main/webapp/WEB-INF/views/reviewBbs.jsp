@@ -11,17 +11,15 @@
 		<table class="anim">
 			<colgroup>
 				<col style="width: 12%;">
+				<col style="width: 50%;">
+				<col style="width: 13%;">
 				<col style="width: 10%;">
-				<col style="width: 35%;">
-				<col style="width: 14%;">
-				<col style="width: 12%;">
-				<col style="width: 7%;">
-				<col style="width: 7%;">
+				<col style="width: 6%;">
+				<col style="width: 6%;">
 			  </colgroup>
 	        <thead>
 	        	<tr>
 		            <th class="NotAligned">별점</th>
-		            <th>여행지</th>
 		            <th class="NotAligned">제목</th>
 		            <th>글쓴이</th>
 		            <th>작성</th>
@@ -39,8 +37,7 @@
 								</span>
 							</span>
 		            	</td>
-		            	<td>${item.area}</td>
-		            	<td class="title" data-reviewid="${item.reviewId}">${item.title}
+		            	<td class="title" data-reviewid="${item.reviewId}">${item.area} │ ${item.title}
 		            	    <c:if test="${item.commentCount > 0}">[${item.commentCount}]</c:if></td>
 		            	<td>${item.nick}</td>
 		            	<td>${item.createDate}</td>
@@ -51,25 +48,25 @@
 	        </tbody>
 		</table>
 	</div>
-	<div class="center">
-		<form action="" method="GET"  class="anim">
-			|<select name="searchType" class="select selectType">
+	<form action="" method="GET"  class="center anim">
+		<div class="planRrating searchBox">
+			<select name="searchType" class="select selectType">
 					<option value="all" ${param.searchType eq 'all' ? 'selected' : ''}>전체</option>
 					<option value="domestic" ${param.searchType eq 'domestic' ? 'selected' : ''}>국내</option>
 					<option value="overseas" ${param.searchType eq 'overseas' ? 'selected' : ''}>해외</option>
 			</select>
-			|<select name="searchCondition" class="select selectCon">
-					<option>검색조건</option>
+			│<select name="searchCondition" class="select selectCon">
+					<option value="all">키워드</option>
 					<%-- <option value="title" ${param.searchCondition eq 'title' ? 'selected' : ''}>제목</option>
 					<option value="content" ${param.searchCondition eq 'content' ? 'selected' : ''}>내용</option> --%>
 					<option value="ticon" ${param.searchCondition eq 'ticon' ? 'selected' : ''}>제목+내용</option>
 					<option value="user" ${param.searchCondition eq 'user' ? 'selected' : ''}>글쓴이</option>
 					<option value="area" ${param.searchCondition eq 'area' ? 'selected' : ''}>여행지</option>
 			</select>
-			<input type="text" name="keyword" value="${param.keyword}"/>
-			<button type="submit">검색</button>
-		</form>
-	</div>
+			<input type="text" name="keyword" id="keyword" value="${param.keyword}"/>
+			<button type="submit" class="emojiBtn">🔍</button>
+		</div>
+	</form>
 
 
 <%@ include file="footer.jsp" %>

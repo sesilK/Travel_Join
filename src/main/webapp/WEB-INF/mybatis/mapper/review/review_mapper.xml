@@ -49,7 +49,7 @@
 	
 	<!-- 글목록 불러오기 (+검색기능) -->
 	<select id="select_review_list" resultType="ReviewDto" parameterType="hashMap">
-		SELECT rb.review_id, rb.user_id, rb.title, SUBSTR(rb.create_date,1,10) create_date, rb.views, 
+		SELECT rb.review_id, rb.user_id, rb.title, TO_CHAR(rb.create_date, 'YY.MM.DD') create_date, rb.views, 
 			   rb.like_count, rb.comment_count, rb.report_count, rb.stars, us.nick, jb.area, jb.plan_type
 		FROM review_bbs rb
 		JOIN join_board jb ON rb.plan_id = jb.plan_id
@@ -61,14 +61,18 @@
 		 <if test="searchType == 'overseas'">
 			AND jb.plan_type = 1
 		</if>
-		<if test="searchCondition == 'title'">
+		<if test="searchCondition == 'all'">
+			AND ( (rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%')
+			   or (rb.user_id LIKE '%'||#{keyword}||'%') or (jb.area LIKE '%'||#{keyword}||'%') )
+		</if>
+		<!-- <if test="searchCondition == 'title'">
 			AND rb.title LIKE '%'||#{keyword}||'%'
 		</if>
 		<if test="searchCondition == 'content'">
 			AND rb.content LIKE '%'||#{keyword}||'%'
-		</if>
+		</if> -->
 		<if test="searchCondition == 'ticon'">
-			AND (rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%')
+			AND ((rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%'))
 		</if>
 		<if test="searchCondition == 'user'">
 			AND rb.user_id LIKE '%'||#{keyword}||'%'
@@ -83,8 +87,10 @@
 
 	<!-- 글상세 불러오기 -->
 	<select id="select_review_view" resultType="ReviewDto">
-		SELECT rb.review_id, rb.plan_id, rb.user_id, rb.title, rb.content, rb.create_date, rb.stars, rb.delete_at, 
-			   rb.views, rb.like_count, rb.comment_count, rb.report_count, rb.update_date, us.nick, 
+		SELECT rb.review_id, rb.plan_id, rb.user_id, rb.title, rb.content, rb.stars, rb.delete_at, 
+			   rb.views, rb.like_count, rb.comment_count, rb.report_count, us.nick, 
+			    TO_CHAR(rb.create_date, 'YY.MM.DD HH:MM') create_date,
+			    TO_CHAR(rb.update_date, 'YY.MM.DD HH:MM') update_date,
 			   jb.area||'('||TO_CHAR(jb.start_day, 'YY/MM/DD')||'~'||TO_CHAR(jb.end_day, 'YY/MM/DD')||')' AS planInfo
 		FROM review_bbs rb
 		JOIN join_board jb ON rb.plan_id = jb.plan_id
@@ -195,7 +201,9 @@
 	<!-- 댓글목록 불러오기 -->
 	<select id="select_comment_list" resultType="CommentDto">
 		SELECT LEVEL COMMENTLEVEL, rc.comment_lv, rc.comment_id, rc.parent_comment_id, 
-			   rc.user_id, rc.create_date, rc.update_date, rc.delete_at, rc.content, us.nick
+			   rc.user_id, rc.delete_at, rc.content, us.nick,
+			   TO_CHAR(rc.create_date, 'YY.MM.DD HH:MM') create_date,
+			   TO_CHAR(rc.update_date, 'YY.MM.DD HH:MM') update_date
 		FROM review_comment rc
 		JOIN users us ON rc.user_id = us.user_id
  		WHERE rc.review_id = #{reviewId}
