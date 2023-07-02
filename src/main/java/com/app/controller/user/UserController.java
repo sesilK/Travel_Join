@@ -1,6 +1,6 @@
 package com.app.controller.user;
 
-import com.app.dto.user.UserDto;
+import com.app.dto.UserDto;
 import com.app.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -91,10 +91,12 @@ public class UserController {
     //수정요청
     @PostMapping("/myinfo")
     @ResponseBody
-    public String myinfo_proc(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+    public String myinfo_proc(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
 
+    	String userId = session.getAttribute("userId").toString(); // 세션에서 아이디 받기
         ObjectMapper objectMapper = new ObjectMapper();
         UserDto userDto = objectMapper.readValue(requestBody, UserDto.class); //바꿀 정보 담겨있음
+        userDto.setUserId(userId); // 디티오에 아이디 넣어주기
         System.out.println(userDto);
         int result = userService.updateUser(userDto);
         if (result == 1) {

@@ -1,8 +1,8 @@
 package com.app.dao.user;
 
-import com.app.dto.user.UserDto;
-
 import java.util.List;
+
+import com.app.dto.UserDto;
 
 public interface UserDao {
 

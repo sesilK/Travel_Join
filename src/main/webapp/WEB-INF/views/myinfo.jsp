@@ -17,11 +17,11 @@
 	<div class="infoEdit-box">
 		<div class="infoEdit">
 				 <span>아이디</span><br> <input type="text" class="text input-f" value="${user.userId}" readonly="readonly"><br> 
-				 <span>비밀번호</span><br> <input type="password" class="text input-f" name="password" value="${user.password}"> <i class="fa fa-eye fa-lg"></i><br> 
+				 <div><span>비밀번호</span><br> <input type="password" class="text input-f" name="password" value="${user.password}"> <i class="fa fa-eye fa-lg"></i></div><br> 
 				 <span>이메일</span><br> <input type="email" class="text input-f" name="email" value="${user.email}"><br> 
 				 <span>닉네임</span><br> <input type="text" class="text input-f" name="nick" value="${user.nick}"><br> 
 				 <span>전화번호</span><br> <input type="tel" class="text input-f" name="tel" value="${user.tel}"><br>
-				 <span>인적사항</span><br>  
+
 
 			<div class="genderbox">
 				<input type="text" class="text input-f" value="${user.name}" readonly>
@@ -36,7 +36,6 @@
 
 		</div>
 	</div>
-	
 </div>
 
 </div>
@@ -59,9 +58,9 @@
 
         // 수정하기 버튼 클릭 이벤트
         $('#update').click(function(event) {
-            event.preventDefault(); // 폼의 기본 동작인 submit을 막음
+            //event.preventDefault(); // 폼의 기본 동작인 submit을 막음
 
-            let userId = $('input[name="userId"]').val();
+            let userId = $('input[name="userId"]').val(); 
             let password = $('input[name="password"]').val();
             let email = $('input[name="email"]').val();
             let name = $('input[name="name"]').val();
@@ -81,6 +80,7 @@
                     tel: tel
                 }), // 파라미터로 같이 담아서 보낼 것들
                 success: function(data) {
+                	console.log(data);
                     if (data === 'true') {
                         alert('수정완료');
                     } else if (data === 'false') {

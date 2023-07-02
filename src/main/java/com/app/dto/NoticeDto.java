@@ -1,4 +1,4 @@
-package com.app.dto.notice;
+package com.app.dto;
 
 public class NoticeDto {
 

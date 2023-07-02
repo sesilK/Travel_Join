@@ -1,7 +1,8 @@
 package com.app.dao.user.impl;
 
 import com.app.dao.user.UserDao;
-import com.app.dto.user.UserDto;
+import com.app.dto.UserDto;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

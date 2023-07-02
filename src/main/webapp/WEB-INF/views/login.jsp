@@ -51,7 +51,7 @@
                 <span>닉네임</span><br><br>
 
                 <input type="text" id="input_tel" id="input_tel" class="text input-f" name="tel">
-                <span>전화번호</span><br><br>
+                <span>전화번호</span>
 
                 <input type="text" id="birth" name="birth" hidden>
 

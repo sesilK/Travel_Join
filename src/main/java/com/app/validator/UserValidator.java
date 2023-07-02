@@ -1,7 +1,8 @@
 package com.app.validator;
 
-import com.app.dto.user.UserDto;
 import org.springframework.validation.Errors;
+
+import com.app.dto.UserDto;
 
 import java.util.regex.Pattern;
 

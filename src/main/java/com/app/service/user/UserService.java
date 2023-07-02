@@ -1,7 +1,8 @@
 package com.app.service.user;
 
-import com.app.dto.user.UserDto;
 import org.springframework.validation.BindingResult;
+
+import com.app.dto.UserDto;
 
 import java.util.List;
 
