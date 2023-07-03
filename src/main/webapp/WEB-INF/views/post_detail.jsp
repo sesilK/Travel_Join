@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -88,7 +88,7 @@
 </body>
 
 </html>
-=======
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="header.jsp" %>
 <link rel="stylesheet" href="/css/join_detail.css"/>
@@ -126,4 +126,4 @@
 
 <%@include file="footer.jsp" %>
 <script src="/js/post_detail.js"></script>
->>>>>>> e326f5cd561d7f37949b95509f368b795511a199
+
