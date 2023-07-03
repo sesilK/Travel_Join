@@ -1,24 +1,25 @@
-        const detail = document.querySelector('.detail');
-        const detailTitle = document.querySelector('.detail-title');
-        const masterItems = document.querySelectorAll('.master-item');
+/**
+ * 
+ */
 
-        function select(selected){
-            //Remove active class from all master-items
-            for(var item of masterItems){
-                item.classList.remove('active-item');
-            }
-            //Make selected tab active
-            selected.classList.add('active-item');
-            //Toggle the class that hides when the screen is medium size or less
-            detail.classList.remove('hidden-md-down');
-            //Set the content of the detail to the innerHTML of the selected item
-            detailTitle.innerHTML = selected.innerHTML;
-        }
 
-        function back(){
-            //Remove active class from all master-items
-            for(var item of masterItems){
-                item.classList.remove('active-item');
-            }
-            detail.classList.add('hidden-md-down');
-        }
+ document.addEventListener('DOMContentLoaded', () => {
+  const imgs = document.querySelectorAll('.img-select a');
+  const imgBtns = [...imgs];
+  let imgId = 1;
+
+  imgBtns.forEach((imgItem) => {
+    imgItem.addEventListener('click', (event) => {
+      event.preventDefault();
+      imgId = imgItem.dataset.id;
+      slideImage();
+    });
+  });
+
+  function slideImage(){
+    const displayWidth = document.querySelector('.img-showcase img:first-child').clientWidth;
+    document.querySelector('.img-showcase').style.transform = `translateX(${- (imgId - 1) * displayWidth}px)`;
+  }
+
+  window.addEventListener('resize', slideImage);
+});
