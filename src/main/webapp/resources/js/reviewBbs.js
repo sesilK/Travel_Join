@@ -94,7 +94,7 @@ function displayData(currentPage, dataPerPage, dataList) {
 }
 
 //페이징 표시 함수  (총 데이터 수, 한 페이지에 나타낼 글 수/페이지 수, 현재 페이지)
-function paging(totalData, dataPerPage, pageCount, currentPage) {
+function paging(totalData, dataPerPage, pageCount, currentPage, dataList) {
 	console.log("currentPage : " + currentPage);
 
 	totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
@@ -151,7 +151,7 @@ function paging(totalData, dataPerPage, pageCount, currentPage) {
 		//전역변수에 선택한 페이지 번호를 담기
 		globalCurrentPage = selectedPage;
 		//페이징 표시 재호출
-		paging(totalData, dataPerPage, pageCount, selectedPage);
+		paging(totalData, dataPerPage, pageCount, selectedPage, dataList);
 		//글 목록 표시 재호출
 		displayData(selectedPage, dataPerPage, dataList);
 	});
@@ -178,7 +178,7 @@ function loadReviewList(){
 			totalData = dataList.length; //총 데이터 수
 			displayData(1, dataPerPage, dataList); //글 목록 표시 호출 (테이블 생성)
 			starsWidth(); //별점 너비 넣기
-			paging(totalData, dataPerPage, pageCount, 1); //페이징 표시 호출
+			paging(totalData, dataPerPage, pageCount, 1, dataList); //페이징 표시 호출
 		}
 	});
 }
