@@ -43,6 +43,9 @@
                     <li>여행종료 : <span>이때까지 ${item.endDay}</span></li>
                     <li>모집 마감일: <span>${item.finishDate}</span></li>
                     <li>모집 상태: <span>${item.planState}</span></li>
+                    <li>조회수: <span>${item.views}</span></li>
+                    <li>추천: <span id="likes">${item.likes}</span></li>
+                    <button type="button" id="btn-like">추천하기</button>
                 </ul>
             </div>
 

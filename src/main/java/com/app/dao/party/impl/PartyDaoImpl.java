@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.app.dao.party.PartyDao;
-import com.app.dto.BoardDto;
 import com.app.dto.PartyDto;
 
 @Repository

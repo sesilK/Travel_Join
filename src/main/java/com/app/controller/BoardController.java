@@ -3,6 +3,13 @@ package com.app.controller;
 
 import com.app.dto.ChatDto;
 import com.app.dto.JoinDto;
+import com.app.dto.MarkDto;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
 import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
 import com.app.service.chat.ChatService;
@@ -33,13 +40,19 @@ public class BoardController {
 
 
     @GetMapping("/detail/{planId}") // 글상세 페이지 요청
-    public String detail(@PathVariable("planId") int planId, Model model) {
+    public String detail(@PathVariable("planId") int planId, Model model, HttpSession session) {
 
         // 요청했을때 모집글정보, 멤버정보, 조회수증가 시켜야함
 
         // 글 정보 가져오기
         JoinDto item = boardService.findPostById(planId);
         model.addAttribute("item", item);
+        
+        // 조회수 증가        
+        String sessionId = (String) session.getAttribute("userId");
+        if(!(sessionId.equals(item.getUserId()))) { //접속자와 작성자가 다를때만
+        	boardService.joinBoardViewIncrease(planId);
+        }
 
         // 멤버 정보 리스트 가져오기
         List<PartyDto> list = partyService.myTeamDetail(planId);
@@ -118,5 +131,25 @@ public class BoardController {
         }
 
     }
+    
+	@PostMapping("/joinLike") //추천 버튼 클릭
+	@ResponseBody
+	public int joinLike(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		MarkDto markDto = objectMapper.readValue(requestBody, MarkDto.class);
+		
+		String userId = (String) session.getAttribute("userId");
+		
+		MarkDto isNull =	//추천 여부 확인 
+				boardService.selectBoardMark(markDto.getPlanId(), userId, markDto.getSort());
+		
+		if (isNull == null) { //추천한 적 없으면
+			int count = boardService.insertBoardMark(markDto.getPlanId(), userId, markDto.getSort()); //추천하기
+			return count; //추천 성공 (추천 횟수 반환)
+		} else {
+			return -1;	//추천 실패
+		}
+	}
 
 }

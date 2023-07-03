@@ -5,9 +5,9 @@
         <Property name="layoutPattern">[%d{yyyy/MM/dd HH:mm:ss,SSS}] [%t] [%-5level] [%logger{36}] %m%n</Property>
     </Properties>
     <Appenders>
-        <Console name="Console_Appender" target="SYSTEM_OUT">
+        <!-- <Console name="Console_Appender" target="SYSTEM_OUT">
             <PatternLayout pattern="${layoutPattern}"/>
-        </Console>
+        </Console> -->
         <RollingFile name="File_Appender" fileName="C:/logs/${logNm}.log" filePattern="C:/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.gz">
             <PatternLayout pattern="${layoutPattern}"/>
             <Policies>
@@ -18,7 +18,7 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="INFO" additivity="false">
+        <!-- <Root level="INFO" additivity="false">
             <AppenderRef ref="Console_Appender"/>
             <AppenderRef ref="File_Appender"/>
         </Root>
@@ -27,7 +27,7 @@
             <AppenderRef ref="Console_Appender" />
             <AppenderRef ref="File_Appender"/>
         </Logger>
-        <!--하단 name에 본인이 사용하는 package명으로 수정할 것-->
+        하단 name에 본인이 사용하는 package명으로 수정할 것
         <Logger name="com.app.controller" level="INFO" additivity="false">
             <AppenderRef ref="Console_Appender" />
             <AppenderRef ref="File_Appender"/>
@@ -47,23 +47,6 @@
         <Logger name="jdbc.connection" level="DEBUG" additivity="false">
             <AppenderRef ref="Console_Appender" />
             <AppenderRef ref="File_Appender"/>
-        </Logger>
-        
-        
-        
-        
-        
+        </Logger> -->
     </Loggers>
 </Configuration>
-
-
-
-
-
-
-
-
-
-
-
-
