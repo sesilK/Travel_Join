@@ -134,6 +134,7 @@ public class UserController {
         int result = userService.update_user_profile(userDto);
 
         if(result > 0) {
+        	session.setAttribute("profileImage", savedFileName);
             return "true";
         }
         return "false";

@@ -14,8 +14,6 @@
             integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <script src="/js/header.js"></script>
     <link href="/images/linkicon.png" rel="shortcut icon" type="image/x-icon">
-    
-    
 </head>
 
 <body>
@@ -66,7 +64,11 @@
         <div class="side-wrapper">
             <div class="side-title">마이페이지</div>
             <div class="side-menu">
+<<<<<<< HEAD
                 <a class="sidebar-link" href="#">
+=======
+                <a class="sidebar-link" href="/myPartying">
+>>>>>>> 39635e2e6cd9bfba918e57bd25cac30f16d3b000
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M15.164 6.083l.948.011c3.405 0 5.888 2.428 5.888 5.78v4.307c0 3.353-2.483 5.78-5.888 5.78A193.5 193.5 0 0112.01 22c-1.374 0-2.758-.01-4.122-.038-3.405 0-5.888-2.428-5.888-5.78v-4.307c0-3.353 2.483-5.78 5.898-5.78 1.286-.02 2.6-.04 3.935-.04v-.163c0-.665-.56-1.204-1.226-1.204h-.972c-1.109 0-2.012-.886-2.012-1.965 0-.395.334-.723.736-.723.412 0 .736.328.736.723 0 .289.246.52.54.52h.972c1.481.01 2.688 1.194 2.698 2.64v.183c.619 0 1.238.008 1.859.017zm-4.312 8.663h-1.03v1.02a.735.735 0 01-.737.723.728.728 0 01-.736-.722v-1.021H7.31a.728.728 0 01-.736-.723c0-.395.334-.722.736-.722h1.04v-1.012c0-.395.324-.723.736-.723.403 0 .736.328.736.723v1.012h1.03c.403 0 .737.327.737.722a.728.728 0 01-.736.723zm4.17-1.629h.099a.728.728 0 00.736-.722.735.735 0 00-.736-.723h-.098a.722.722 0 100 1.445zm1.679 3.315h.098a.728.728 0 00.736-.723.735.735 0 00-.736-.723H16.7a.722.722 0 100 1.445z"/>
@@ -80,7 +82,11 @@
                     </svg>
                     내 후기내역
                 </a>
+<<<<<<< HEAD
                 <a class="sidebar-link" href="#">
+=======
+                <a class="sidebar-link" href="/travelTogether">
+>>>>>>> 39635e2e6cd9bfba918e57bd25cac30f16d3b000
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M19.761 12.001c0 .814.668 1.475 1.489 1.475.414 0 .75.333.75.743v2.677C22 19.159 20.142 21 17.858 21H6.143C3.859 21 2 19.159 2 16.896v-2.677c0-.41.336-.743.75-.743.822 0 1.49-.662 1.49-1.475 0-.793-.641-1.39-1.49-1.39a.752.752 0 01-.53-.217.74.74 0 01-.22-.525l.002-2.764C2.002 4.842 3.86 3 6.144 3h11.712c2.284 0 4.143 1.842 4.143 4.105L22 9.782a.741.741 0 01-.219.526.753.753 0 01-.531.218c-.821 0-1.489.662-1.489 1.475zm-5.509.647l1.179-1.137a.73.73 0 00-.409-1.25l-1.629-.236-.729-1.462a.737.737 0 00-.662-.41H12a.74.74 0 00-.663.409l-.729 1.463-1.626.235a.735.735 0 00-.6.498.724.724 0 00.187.753l1.179 1.137-.278 1.608a.727.727 0 00.295.719.742.742 0 00.777.054L12 14.27l1.455.757a.733.733 0 00.78-.053.723.723 0 00.296-.718l-.279-1.608z"/>
@@ -99,6 +105,10 @@
     </div>
     <div class="wrapper">
         <div class="header">
+<<<<<<< HEAD
+=======
+       
+>>>>>>> 39635e2e6cd9bfba918e57bd25cac30f16d3b000
             <div class="search-bar">
                 <input type="text" placeholder="Search">
             </div>
@@ -107,7 +117,11 @@
                 <c:choose>
                     <c:when test="${not empty sessionScope.userId}">
                         <img class="user-img"
+<<<<<<< HEAD
                              src="${sessionScope.profileImage}"
+=======
+                             src="/images/profile/${sessionScope.profileImage}"
+>>>>>>> 39635e2e6cd9bfba918e57bd25cac30f16d3b000
                              alt="">
                         <div class="user-name">${sessionScope.userId}</div>
                         <svg viewBox="0 0 492 492" fill="currentColor">
@@ -129,6 +143,10 @@
                     </c:otherwise>
                 </c:choose>
 
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> 39635e2e6cd9bfba918e57bd25cac30f16d3b000
             </div>
         </div>

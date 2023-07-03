@@ -68,7 +68,7 @@ public class JoinController {
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);	
 			//----------------------------------------------------//
 			//파일을 열기위한 호출
-			jsonObject.addProperty("url", "\\images\\join\\"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", "/images/join/"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
 			//----------------------------------------------------//	
 		} catch (IOException e) {

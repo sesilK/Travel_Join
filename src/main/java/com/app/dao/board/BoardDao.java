@@ -13,5 +13,8 @@ public interface BoardDao {
 	public void joinParty(PartyDto partyDto); //동행자 추가
 	
 	public List<BoardDto> myTeamDetail(String userId); //plan 에 참가한 user들 조회
+	
+	public List<JoinDto> travelTogether(String userId);
 
+	public List<JoinDto> myPartying(String userId);
 }

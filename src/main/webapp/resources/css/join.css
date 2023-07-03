@@ -50,7 +50,7 @@ body {
 
 .profile-image {
     width: 30%;
-    display: flex; !important;
+    display: flex; 
     align-items: center;
     justify-content: center;
 }

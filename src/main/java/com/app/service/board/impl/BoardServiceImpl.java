@@ -39,6 +39,21 @@ public class BoardServiceImpl implements BoardService{
 		
 	}
 
+	@Override
+	public List<JoinDto> travelTogether(String userId) {
+		// TODO Auto-generated method stub
+		List<JoinDto> travelTogether = boardDao.travelTogether(userId);
+		return travelTogether;
+	}
+
+	@Override
+	public List<JoinDto> myPartying(String userId) {
+		// TODO Auto-generated method stub
+		
+		List<JoinDto> myPartying = boardDao.myPartying(userId);
+		return myPartying;
+	}
+
 	
 	
 
