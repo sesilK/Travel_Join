@@ -4,7 +4,7 @@
 }
 ::-moz-selection{
     background: #F0F8FF
-}
+}  
 
 .draggable {
   -webkit-user-select:text;
