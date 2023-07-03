@@ -2,7 +2,7 @@
  * 
  */
 
-
+   
  document.addEventListener('DOMContentLoaded', () => {
   const imgs = document.querySelectorAll('.img-select a');
   const imgBtns = [...imgs];
