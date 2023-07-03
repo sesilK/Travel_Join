@@ -35,10 +35,10 @@
                TO_CHAR(a.reg_date, 'YY-MM-DD') as reg_date,
                TO_CHAR(a.finish_date, 'YY-MM-DD') as finish_date,
                a.plan_state,	REGEXP_SUBSTR(a.content, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image,
-               b.nick, b.birth, b.gender, b.image_id
+               b.nick, b.birth, b.gender<!-- , b.image_id -->
         from JOIN_BOARD a, (select nick, TRUNC((SYSDATE - BIRTH) / 365) as birth,
                                    DECODE(gender, 'M', '남자', 'F', '여자') as gender,
-                                   image_id, user_id
+                                   <!-- image_id, --> user_id
                             from users
                             where status = 0) b
         where plan_state != 2

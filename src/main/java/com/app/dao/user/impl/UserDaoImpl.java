@@ -49,6 +49,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public int update_user_profile(UserDto userDto) {
+        int result = 0;
+        result = sqlSessionTemplate.update("user_mapper.update_user_profile", userDto);
+        return result;
+    }
+
+    @Override
     public int update_user_info(UserDto userDto) {
 
         try {

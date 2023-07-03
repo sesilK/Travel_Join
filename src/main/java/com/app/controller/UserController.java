@@ -5,13 +5,19 @@ import com.app.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
 
 @Controller
 public class UserController {
@@ -58,7 +64,7 @@ public class UserController {
     @PostMapping("/login")
     public String login_proc(@ModelAttribute UserDto userDto, HttpSession session) {
 
-        boolean result = userService.login(userDto);
+        boolean result = userService.login(userDto, session);
 
         if (result) {
             session.setAttribute("userId", userDto.getUserId());
@@ -88,7 +94,7 @@ public class UserController {
         return "myinfo";
     }
 
-    //수정요청
+    // 회원정보 수정요청
     @PostMapping("/myinfo")
     @ResponseBody
     public String myinfo_proc(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
@@ -104,6 +110,34 @@ public class UserController {
         } else {
             return "false";
         }
+    }
+
+    // 프로필사진 수정요청
+    @PostMapping("/change_profile")
+    @ResponseBody
+    public String changeProfileImage(@RequestParam("file") MultipartFile multipartFile, HttpSession session) throws IOException {
+
+        String fileRoot = "C:\\plan_garlic\\images\\profile\\"; //외부경로로 저장을 희망할때.
+        String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
+        String savedFileName = UUID.randomUUID() + "_" + originalFileName/* + extension */;	//저장될 파일명
+        File targetFile = new File(fileRoot + savedFileName);
+
+        //파일 저장
+        InputStream fileStream = multipartFile.getInputStream();
+        FileUtils.copyInputStreamToFile(fileStream, targetFile);
+        //----------------------------------------------------//
+        UserDto userDto = new UserDto();
+        userDto.setUserId(session.getAttribute("userId").toString());
+        userDto.setFileName(savedFileName);
+
+        // DB저장 로직 후 성공시 true 주기
+        int result = userService.update_user_profile(userDto);
+
+        if(result > 0) {
+        	session.setAttribute("profileImage", savedFileName);
+            return "true";
+        }
+        return "false";
     }
 
 }
