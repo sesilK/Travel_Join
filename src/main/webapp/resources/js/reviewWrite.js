@@ -14,12 +14,23 @@ $('.rating_box').on('mousemove', function(event) {
     // 마우스 위치까지만 width 조절
     const newWidth = mouseX - starX;
     rating_star.style.width = `${newWidth}px`;
+    rating_star.style.color = `#ff9307`;
 });
 
 // 마우스를 요소 밖으로 빼면 복원
 $('.rating_box').on('mouseout', function() {
     const rating_input = document.querySelector('.rating input');
     rating_star.style.width = `${rating_input.value * 10}%`;
+    rating_star.style.color = `#ffc107`;
+});
+
+// 마우스를 클릭한 경우
+$('.rating_box').on('mousedown', function() {
+	$('.rating').css('font-size', '30.1px');
+});
+// 마우스를 놓은 경우
+$('.rating_box').on('mouseup', function() {
+	$('.rating').css('font-size', '30px');
 });
     
 let titleMaxByte = 300; //제목 입력제한 300 Byte
