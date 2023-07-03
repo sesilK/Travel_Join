@@ -31,6 +31,7 @@
         </div>
 
         <div id="chat-messages">
+
             <div class="scroll-btn">
                 <span class="material-symbols-outlined">stat_minus_2</span>
             </div>
@@ -40,28 +41,28 @@
             <c:forEach items="${chats}" var="chat">
 
 
-                    <c:if test="${chat.userId eq sessionScope.userId}">
-                        <div class="message right">
-                            <img src="/profile/default_profile.png"/>
-                            <div class="bubble">
-                                    ${chat.content}
-                                <span class="timestamp">${chat.time}</span>
-                                <span class="unread" data-chatid="${chat.chatId}">${chat.unRead}</span>
-                            </div>
-                        </div>
-                    </c:if>
-
-                    <c:if test="${chat.userId ne sessionScope.userId}">
-                        <div class="message">
-                            <span class="nick">${chat.userId}</span>
+                <c:if test="${chat.userId eq sessionScope.userId}">
+                    <div class="message right">
+                        <img src="/profile/default_profile.png"/>
+                        <div class="bubble">
+                                ${chat.content}
                             <span class="timestamp">${chat.time}</span>
                             <span class="unread" data-chatid="${chat.chatId}">${chat.unRead}</span>
-                            <img src="/profile/default_profile.png"/>
-                            <div class="bubble">
-                                    ${chat.content}
-                            </div>
                         </div>
-                    </c:if>
+                    </div>
+                </c:if>
+
+                <c:if test="${chat.userId ne sessionScope.userId}">
+                    <div class="message">
+                        <span class="nick">${chat.userId}</span>
+                        <span class="timestamp">${chat.time}</span>
+                        <span class="unread" data-chatid="${chat.chatId}">${chat.unRead}</span>
+                        <img src="/profile/default_profile.png"/>
+                        <div class="bubble">
+                                ${chat.content}
+                        </div>
+                    </div>
+                </c:if>
 
             </c:forEach>
 

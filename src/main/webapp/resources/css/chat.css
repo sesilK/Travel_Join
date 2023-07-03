@@ -6,6 +6,9 @@
 body {
     background: #f0f1f2;
     font: 12px "Open Sans", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #view-code {

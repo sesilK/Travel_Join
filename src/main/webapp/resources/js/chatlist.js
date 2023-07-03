@@ -35,7 +35,7 @@ $(function () {
                     }));
 
                 } else if (type === 'info') {
-                    
+
                     // 채팅방 정보들 업데이트
                     for (let item of chatListInfo) {
 
@@ -65,7 +65,8 @@ $(function () {
     // 채팅방 클릭 이벤트
     $(".friend").click(function () {
         const roomId = $(this).data("roomid");
-        location.href = '/chat/' + roomId;
+        const chatId = $(this).find(".last-chat").data("chatid");
+        location.href = '/chat/' + roomId + '?chatId=' + chatId;
     });
 
     // 페이지 나가면 out 신호 보내기

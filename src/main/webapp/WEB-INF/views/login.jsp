@@ -21,7 +21,7 @@
                 <span>password</span>
                 <br>
 
-                <button class="signin" type="submit">로그인</button>
+                <button class="signin" type="button">로그인</button>
                 <hr>
                 <a class="forgot" href="#">Forgot Password?</a>
             </form>

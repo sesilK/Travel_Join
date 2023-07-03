@@ -67,16 +67,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login_proc(@ModelAttribute UserDto userDto, HttpSession session) {
+    @ResponseBody
+    public boolean login_proc(UserDto userDto, HttpSession session) {
 
         boolean result = userService.login(userDto, session);
 
         if (result) {
             session.setAttribute("userId", userDto.getUserId());
-            return "redirect:/home";
+            return true;
         } else {
-            // alert ~~~
-            return "redirect:/login";
+            return false;
         }
     }
 

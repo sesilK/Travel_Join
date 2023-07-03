@@ -81,12 +81,12 @@ $(function () {
                 console.log(data);
                 if (data === 'true') {
                     alert('수정완료');
+                    location.href = "/myinfo";
                 } else if (data === 'false') {
                     alert('수정실패');
                 } else {
                     alert(data);
                 }
-                window.location.href = "/myinfo";
             }, // 요청에 대해 성공한 경우 수행할 내용
             error: function () {
                 alert('실행 오류');

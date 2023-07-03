@@ -52,6 +52,7 @@
 			<exclude-mapping path="/**/*.css"/>		<!-- css -->
 			<exclude-mapping path="/**/*.js"/>		<!-- js -->
 			<exclude-mapping path="/**/image/**"/>	<!-- 이미지파일들 -->
+			<exclude-mapping path="/images/**"/>	<!-- 이미지파일들 -->
 			<exclude-mapping path="/notExist"/>		<!-- 존재하지않는 페이지 -->
 			<exclude-mapping path=""/>	<!--  -->
 			<exclude-mapping path=""/>	<!--  -->

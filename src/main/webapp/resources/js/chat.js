@@ -17,17 +17,18 @@ $(function () {
         stomp.send('/pub/getUnread', {}, JSON.stringify({
             planId: planId
         }));
-        console.log("getUnread 전송 " + planId);
+
 
         stomp.subscribe("/sub/channel/" + planId, function (chat) {
             var message = JSON.parse(chat.body);
+            console.log(message);
             var userId = message.userId;
             var content = message.content;
             var time = message.time;
             var chatId = message.chatId;
             var unRead = message.unRead;
             var type = message.type;
-            var unReadList = message.data;
+            var itemList = message.data;
             var str = '';
 
 
@@ -74,15 +75,66 @@ $(function () {
 
             } else if (type === 'unread') { // 받은 메세지가 unread 타입이면
                 // 안 읽은숫자 업데이트
-                for (let item of unReadList) {
+                for (let item of itemList) {
                     const chatId = item.chatId;
                     const unRead = item.unRead;
-                    console.log('chatId=' + chatId + ' unRead=' + unRead);
+
 
                     // unRead 가 0 이면 공백으로 치환
                     const temp_unRead = (unRead == 0) ? "" : unRead;
                     $('span.unread[data-chatid=' + chatId + ']').text(temp_unRead);
                 }
+            } else if (type === 'paging') {
+                if (userId === myId && itemList.length > 0) {
+
+                    let headChat = document.querySelectorAll(".message")[1];
+
+                    for (let item of itemList) {
+
+
+                        let _chatId = item.chatId;
+                        let _userId = item.userId;
+                        let _content = item.content;
+                        let _time = item.time;
+                        let _unRead = item.unRead;
+
+                        if(_content != null && _content != NaN && _content != "") {
+                            console.log(_content + " ------------------------------------------");
+                            if (myId === _userId) {
+                                str = "<div class='message right'>";
+                                str += "<img src='/profile/default_profile.png'/>";
+                                str += "<div class='bubble'>";
+                                str += _content;
+                                str += "<span class='timestamp'>" + _time + "</span>";
+                                str += "<span class='unread' data-chatid='" + _chatId + "'>" + _unRead + "</span>";
+                                str += "</div>";
+                                str += "</div>";
+
+
+                            } else {
+                                str = "<div class='message'>";
+                                str += "<span class='nick'>" + _userId + "</span>";
+                                str += "<span class='timestamp'>" + _time + "</span>";
+                                str += "<span class='unread' data-chatid='" + _chatId + "'>" + _unRead + "</span>";
+                                str += "<img src='/profile/default_profile.png'/>";
+                                str += "<div class='bubble'>";
+                                str += +_content;
+                                str += "</div>";
+                                str += "</div>";
+                            }
+
+                            $(".scroll-btn").after(str);
+                            headChat.scrollIntoView();
+                        }
+                    }
+
+                    stomp.send('/pub/getUnread', {}, JSON.stringify({
+                        planId: planId,
+                        unRead: $("span.unread").length // 내 채팅창 채팅갯수
+                    }));
+
+                }
+
             }
 
 
@@ -147,6 +199,20 @@ $(function () {
         const scrollHeight = $("#chat-messages").prop("scrollHeight") - 270;
         const scrollTop = $("#chat-messages").scrollTop();
         const scrollCal = scrollHeight - scrollTop;
+
+        if (scrollTop == 0) {
+
+            // 제일 상단에 있는 chatId 보다 1 작은것
+            const chatId = $(".unread")[0].dataset.chatid - 1;
+
+            // 채팅메세지 서버로 전송
+            stomp.send('/pub/chat_paging', {}, JSON.stringify({
+                planId: planId, // 전역변수에서 가져옴
+                chatId: chatId,
+                userId: myId
+            }));
+
+        }
 
         // 스크롤높이가 200보다 작으면 (최하단 근처)
         if (scrollCal < 300) {

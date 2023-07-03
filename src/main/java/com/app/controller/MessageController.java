@@ -69,9 +69,22 @@ public class MessageController {
 
     @MessageMapping("/get_list")
     public void getChatListInfo(ChatDto message) {
-        message.setType("info"); // 메세지 타입 unread로 지정
+        message.setType("info");
         List<ChatRoomDto> rooms = chatService.select_my_chat_info(message.getUserId()); // 내 채팅방 목록 불러오기
         message.setData(rooms);
         simpMessageSendingOperations.convertAndSend(subScribeURL + message.getPlanId(), message);
     }
+
+    @MessageMapping("/chat_paging")
+    public void chatPaging(ChatDto message) {
+        ChatRoomDto chatRoomDto = new ChatRoomDto();
+        chatRoomDto.setChatCount(5); // 페이징 갯수
+        chatRoomDto.setPlanId(message.getPlanId()); // 불러올 채팅방 id
+        chatRoomDto.setChatId(message.getChatId()); // 불러올 기준 chat_id
+        List<ChatDto> list = chatService.select_chat_paging(chatRoomDto);
+        message.setData(list);
+        message.setType("paging");
+        simpMessageSendingOperations.convertAndSend(subScribeURL + message.getPlanId(), message);
+    }
+
 }

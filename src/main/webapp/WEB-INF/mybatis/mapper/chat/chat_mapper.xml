@@ -28,6 +28,20 @@
         order by chat_id
     </select>
 
+    <!--    채팅 페이지네이션-->
+    <select id="select_chat_paging" resultType="ChatDto" parameterType="ChatRoomDto">
+        select chat_id, plan_id, user_id, content, TO_CHAR(time, 'YY-MM-DD HH24:MM:SS') as time
+        from (select chat_id, plan_id, user_id, content, time, rownum
+        from chat
+        where plan_id = #{planId}
+        and chat_id &lt;= #{chatId}
+        order by chat_id desc)
+        where plan_id = #{planId}
+        and chat_id &lt;= #{chatId}
+        and rownum &lt;= #{chatCount}
+        order by chat_id desc
+    </select>
+
     <!--    plan_id와 user_id로 해당 채팅방 모두 읽음처리-->
     <insert id="merge_chat_read" parameterType="ChatDto">
         insert into chat_read
@@ -50,34 +64,72 @@
         ORDER BY chat_id
     </select>
 
+    <!--    채팅리스트 내 채팅방 정보 불러오기 + -->
     <select id="select_my_chat_info" parameterType="String" resultType="ChatRoomDto">
-        SELECT jb.plan_id, jb.user_id, jb.title, u.file_name, c.user_id AS sender, c.content,
+        SELECT jb.plan_id,
+               jb.user_id,
+               jb.title,
+               u.file_name,
+               c.chat_id,
+               c.user_id AS sender,
+               c.content,
                TO_CHAR(c.time, 'YYYY-MM-DD HH24:MI:SS') AS time,
-           (c.chat_count - COALESCE(r.read_count, 0)) AS chat_count
-        FROM join_board jb
-            JOIN join_board_member jbm ON jb.plan_id = jbm.plan_id
-            JOIN users u ON jb.user_id = u.user_id
-            JOIN (
-            SELECT a.plan_id, a.user_id, a.content, a.time, b.chat_count
-            FROM (
-            SELECT plan_id, user_id, content, time,
+    (c.chat_count - COALESCE(r.read_count, 0)) AS chat_count
+        FROM
+            join_board jb
+            JOIN
+            join_board_member jbm
+        ON jb.plan_id = jbm.plan_id
+            JOIN
+            users u ON jb.user_id = u.user_id
+            JOIN
+            (
+            SELECT
+            a.plan_id,
+            a.user_id,
+            a.chat_id,
+            a.content,
+            a.time,
+            b.chat_count
+            FROM
+            (
+            SELECT
+            plan_id,
+            chat_id,
+            user_id,
+            content,
+            time,
             ROW_NUMBER() OVER (PARTITION BY plan_id ORDER BY chat_id DESC) AS rn
-            FROM chat
+            FROM
+            chat
             ) a
-            JOIN (
-            SELECT plan_id, COUNT(chat_id) AS chat_count
-            FROM chat
-            GROUP BY plan_id
+            JOIN
+            (
+            SELECT
+            plan_id,
+            COUNT (chat_id) AS chat_count
+            FROM
+            chat
+            GROUP BY
+            plan_id
             ) b ON a.plan_id = b.plan_id AND a.rn = 1
             ) c ON jb.plan_id = c.plan_id
-            LEFT JOIN (
-            SELECT plan_id, COUNT(chat_id) AS read_count
-            FROM chat_read
-            WHERE user_id = #{value}
-            GROUP BY plan_id
+            LEFT JOIN
+            (
+            SELECT
+            plan_id,
+            COUNT (chat_id) AS read_count
+            FROM
+            chat_read
+            WHERE
+            user_id = #{value}
+            GROUP BY
+            plan_id
             ) r ON jb.plan_id = r.plan_id
-        WHERE jbm.user_id = #{value}
-        ORDER BY c.time DESC
+        WHERE
+            jbm.user_id = #{value}
+        ORDER BY
+            c.time DESC
     </select>
 
 </mapper>

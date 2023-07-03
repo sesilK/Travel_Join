@@ -19,7 +19,7 @@
         into join_board_member (plan_id, user_id)
         values (#{planId}, #{userId})
         into chat (chat_id, plan_id, user_id, content, time)
-        values (chat_id_seq.NEXTVAL, #{planId}, '[공지]', '새로운 채팅방', SYSDATE)
+        values (chat_id_seq.NEXTVAL, #{planId}, #{userId}, '트립갈릭에 오신걸 환영합니다!', SYSDATE)
 
         <foreach collection="imageFileNameList" item="filename" separator=" ">
             into join_board_image (file_name, plan_id)

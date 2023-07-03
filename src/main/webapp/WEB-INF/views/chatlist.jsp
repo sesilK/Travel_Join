@@ -23,7 +23,7 @@
                     <img src="/profile/default_profile.png"/>
                     <p>
                         <strong class="room-title" data-roomid="${room.planId}">${room.title}</strong><br>
-                        <span class="last-chat">${room.sender}: ${room.content}</span><br>
+                        <span class="last-chat" data-chatid="${room.chatId}">${room.sender}: ${room.content}</span><br>
                         <span class="timestamp">${room.time}</span>
                         <c:choose>
                             <c:when test="${room.chatCount eq 0}">

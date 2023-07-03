@@ -7,7 +7,6 @@ import com.app.service.chat.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,6 +65,12 @@ public class ChatServiceImpl implements ChatService {
     public List<ChatRoomDto> select_my_chat_info(String userId) {
         List<ChatRoomDto> rooms = chatDao.select_my_chat_info(userId);
         return rooms;
+    }
+
+    @Override
+    public List<ChatDto> select_chat_paging(ChatRoomDto chatRoomDto) {
+        List<ChatDto> list = chatDao.select_chat_paging(chatRoomDto);
+        return list;
     }
 
 

@@ -63,4 +63,10 @@ public class ChatDaoImpl implements ChatDao {
         List<ChatRoomDto> list = sqlSessionTemplate.selectList("select_my_chat_info", userId);
         return list;
     }
+
+    @Override
+    public List<ChatDto> select_chat_paging(ChatRoomDto chatRoomDto) {
+        List<ChatDto> list = sqlSessionTemplate.selectList("select_chat_paging", chatRoomDto);
+        return list;
+    }
 }

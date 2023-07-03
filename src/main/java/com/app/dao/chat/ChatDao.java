@@ -20,4 +20,6 @@ public interface ChatDao {
 
     List<ChatRoomDto> select_my_chat_info(String userId);
 
+    List<ChatDto> select_chat_paging(ChatRoomDto chatRoomDto);
+
 }

@@ -27,4 +27,6 @@ public interface ChatService {
     /** userId로 채팅방 리스트에 띄울 정보들 가져오기 */
     List<ChatRoomDto> select_my_chat_info(String userId);
 
+    List<ChatDto> select_chat_paging(ChatRoomDto chatRoomDto);
+
 }
