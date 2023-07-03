@@ -15,7 +15,8 @@
     	<typeAlias type="com.app.dto.PartyDto" alias="PartyDto"/>
     	<typeAlias type="com.app.dto.UserDto" alias="UserDto"/>
 		<typeAlias type="com.app.dto.JoinDto" alias="JoinDto"/>
-        <typeAlias type="com.app.dto.NoticeDto" alias="NoticeDto"/>
+        <typeAlias type="com.app.dto.ChatDto" alias="ChatDto" />
+        <typeAlias type="com.app.dto.ChatRoomDto" alias="ChatRoomDto" />
     </typeAliases>
     
 </configuration>

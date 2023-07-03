@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="chat_mapper">
+
+    <!--    chat 테이블에 채팅정보 insert-->
+    <insert id="insert_chat" parameterType="ChatDto">
+        <selectKey resultType="Integer" keyProperty="chatId" order="BEFORE">
+            select chat_id_seq.NEXTVAL from dual
+        </selectKey>
+        insert into chat (chat_id, plan_id, user_id, content, time)
+        values (#{chatId}, #{planId}, #{userId}, #{content}, TO_DATE(#{time}, 'YYYY-MM-DD HH24:MI:SS'))
+    </insert>
+
+    <!--    chat_read 테이블에 읽은사람 insert-->
+    <insert id="insert_chat_read" parameterType="ChatDto">
+        insert into chat_read (chat_id, plan_id, user_id)
+        values (#{chatId}, #{planId}, #{userId})
+    </insert>
+
+    <!--    plan_id로 모든 채팅내역 가져오기-->
+    <select id="select_all_chat_by_plan_id" resultType="ChatDto" parameterType="int">
+        select *
+        from chat
+        where plan_id = #{value}
+        order by chat_id
+    </select>
+
+    <!--    plan_id와 user_id로 해당 채팅방 모두 읽음처리-->
+    <insert id="merge_chat_read" parameterType="ChatDto">
+        insert into chat_read
+        select chat_id, plan_id, #{userId} as user_id
+        from chat
+        where plan_id = #{planId}
+          and chat_id not in (select chat_id
+                              from chat_read
+                              where user_id = #{userId})
+    </insert>
+
+    <!--    plan_id로 안 읽은 채팅갯수 가져오기-->
+    <select id="select_all_unread_count_by_plan_id" parameterType="Integer" resultType="ChatDto">
+        select chat_id, (select COUNT(*)
+                         from join_board_member
+                         where plan_id = #{value})-COUNT(user_id) as un_read
+        from chat_read
+        where plan_id = #{value}
+        GROUP BY chat_id
+        ORDER BY chat_id
+    </select>
+
+    <select id="select_my_chat_info" parameterType="String" resultType="ChatRoomDto">
+        SELECT jb.plan_id, jb.user_id, jb.title, u.image_id, c.user_id AS sender, c.content,
+               TO_CHAR(c.time, 'YYYY-MM-DD HH24:MI:SS') AS time,
+           (c.chat_count - COALESCE(r.read_count, 0)) AS chat_count
+        FROM join_board jb
+            JOIN join_board_member jbm ON jb.plan_id = jbm.plan_id
+            JOIN users u ON jb.user_id = u.user_id
+            JOIN (
+            SELECT a.plan_id, a.user_id, a.content, a.time, b.chat_count
+            FROM (
+            SELECT plan_id, user_id, content, time,
+            ROW_NUMBER() OVER (PARTITION BY plan_id ORDER BY chat_id DESC) AS rn
+            FROM chat
+            ) a
+            JOIN (
+            SELECT plan_id, COUNT(chat_id) AS chat_count
+            FROM chat
+            GROUP BY plan_id
+            ) b ON a.plan_id = b.plan_id AND a.rn = 1
+            ) c ON jb.plan_id = c.plan_id
+            LEFT JOIN (
+            SELECT plan_id, COUNT(chat_id) AS read_count
+            FROM chat_read
+            WHERE user_id = #{value}
+            GROUP BY plan_id
+            ) r ON jb.plan_id = r.plan_id
+        WHERE jbm.user_id = #{value}
+        ORDER BY c.time DESC
+    </select>
+
+</mapper>
