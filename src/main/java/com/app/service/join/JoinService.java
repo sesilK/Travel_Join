@@ -1,4 +1,4 @@
-package com.app.service.user.join;
+package com.app.service.join;
 
 import java.util.List;
 

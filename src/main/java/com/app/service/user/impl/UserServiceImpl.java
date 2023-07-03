@@ -6,7 +6,6 @@ import com.app.service.user.UserService;
 import com.app.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
@@ -48,6 +47,10 @@ public class UserServiceImpl implements UserService {
 
         // 입력받은 아이디를 기준으로 DB에서 회원정보 조회
         UserDto findUser = userDao.selectUserById(userDto.getUserId());
+        if(findUser.getStatus() == -1) {
+            // 탈퇴한 회원이면 false
+            return false;
+        }
         // 프로필사진 정보 세션에 담기
         String profileImage = userDao.selectUserById(userDto.getUserId()).getFileName();
         session.setAttribute("profileImage", profileImage);
@@ -87,12 +90,19 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public int update_user_status(UserDto userDto) {
+        int result = 0;
+        result = userDao.update_user_status(userDto);
+        return result;
+    }
+
     //회원정보수정
 	@Override
-	public int updateUser(UserDto userDto) {
+	public int updateUser(UserDto userDto, BindingResult bindingResult) {
 		// TODO Auto-generated method stub
 	
-		int result= userDao.update_user_info(userDto);
+		int result= userDao.update_user_info(userDto, bindingResult);
 		
 		return result;
 	}

@@ -41,8 +41,8 @@
             </div>
 
             <div class="submitbox">
-                <button id="update" type="submit">수정하기</button>
-                <button id="dropout" type="submit">탈퇴하기</button>
+                <button id="update" type="button">수정하기</button>
+                <button id="dropout" type="button">탈퇴하기</button>
             </div>
 
         </div>

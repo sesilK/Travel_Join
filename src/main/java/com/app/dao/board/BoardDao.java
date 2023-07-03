@@ -14,4 +14,5 @@ public interface BoardDao {
 	
 	public List<BoardDto> myTeamDetail(String userId); //plan 에 참가한 user들 조회
 
+	List<JoinDto> select_images_by_planId(int planId);
 }

@@ -1,11 +1,11 @@
-package com.app.service.user.join.impl;
+package com.app.service.join.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.app.dao.join.JoinDao;
 import com.app.dto.JoinDto;
-import com.app.service.user.join.JoinService;
+import com.app.service.join.JoinService;
 
 
 

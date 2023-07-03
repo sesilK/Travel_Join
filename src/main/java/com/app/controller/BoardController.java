@@ -1,17 +1,7 @@
 package com.app.controller;
 
 
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-
 import com.app.dto.JoinDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import com.app.dto.BoardDto;
 import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
 import com.app.service.party.PartyService;
@@ -19,6 +9,13 @@ import com.app.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class BoardController {
@@ -44,6 +41,11 @@ public class BoardController {
         List<PartyDto> list = partyService.myTeamDetail(planId);
         model.addAttribute("CurrPersonnel", list.size()); // 참여중인 인원 몇명
         model.addAttribute("memberList", list); // 참여중인 인원 정보
+
+        // 사진 정보 가져오기
+        List<JoinDto> images = boardService.select_images_by_planId(planId);
+        model.addAttribute("images", images);
+        model.addAttribute("imageCount", images.size());
 
         return "post_detail";
     }

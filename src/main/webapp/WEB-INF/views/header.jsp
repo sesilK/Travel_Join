@@ -105,7 +105,7 @@
                 <c:choose>
                     <c:when test="${not empty sessionScope.userId}">
                         <img class="user-img"
-                             src="${sessionScope.profileImage}"
+                             src="/images/profile/${sessionScope.profileImage}"
                              alt="">
                         <div class="user-name">${sessionScope.userId}</div>
                         <svg viewBox="0 0 492 492" fill="currentColor">

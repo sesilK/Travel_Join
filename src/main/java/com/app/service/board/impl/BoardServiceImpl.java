@@ -1,15 +1,14 @@
 package com.app.service.board.impl;
 
-import java.util.List;
-
+import com.app.dao.board.BoardDao;
+import com.app.dto.BoardDto;
 import com.app.dto.JoinDto;
+import com.app.dto.PartyDto;
+import com.app.service.board.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.dao.board.BoardDao;
-import com.app.dto.BoardDto;
-import com.app.dto.PartyDto;
-import com.app.service.board.BoardService;
+import java.util.List;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -30,6 +29,12 @@ public class BoardServiceImpl implements BoardService{
 		// TODO Auto-generated method stub
 		List<BoardDto> partyMembers = boardDao.myTeamDetail(userId);
 		return partyMembers;
+	}
+
+	@Override
+	public List<JoinDto> select_images_by_planId(int planId) {
+		List<JoinDto> list = boardDao.select_images_by_planId(planId);
+		return list;
 	}
 
 

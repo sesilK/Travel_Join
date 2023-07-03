@@ -1,5 +1,26 @@
 $(function () {
 
+    // 템플릿 슬라이드 관련 설정
+    const imgs = document.querySelectorAll('.img-item a');
+    const imgBtns = [...imgs];
+    let imgId = 1;
+
+    imgBtns.forEach((imgItem) => {
+        imgItem.addEventListener('click', (event) => {
+            event.preventDefault();
+            imgId = imgItem.dataset.id;
+            slideImage();
+        });
+    });
+
+    function slideImage() {
+        const displayWidth = document.querySelector('.img-showcase img:first-child').clientWidth;
+        document.querySelector('.img-showcase').style.transform = `translateX(${-(imgId - 1) * displayWidth}px)`;
+    }
+
+    window.addEventListener('resize', slideImage);
+
+
     // planId 전역변수 설정
     const planId = $("body").data("planid");
 

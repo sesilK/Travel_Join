@@ -1,15 +1,14 @@
 package com.app.dao.board.impl;
 
-import java.util.List;
-
+import com.app.dao.board.BoardDao;
+import com.app.dto.BoardDto;
 import com.app.dto.JoinDto;
+import com.app.dto.PartyDto;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.app.dao.board.BoardDao;
-import com.app.dto.BoardDto;
-import com.app.dto.PartyDto;
+import java.util.List;
 
 @Repository
 public class BoardDaoImpl implements BoardDao{
@@ -33,6 +32,12 @@ public class BoardDaoImpl implements BoardDao{
 		List<BoardDto> boardDto = 
 				sqlsessionTemplate.selectList("board_mapper.myTeamDetail", userId);
 		return boardDto;
+	}
+
+	@Override
+	public List<JoinDto> select_images_by_planId(int planId) {
+		List<JoinDto> list = sqlsessionTemplate.selectList("board_mapper.select_images_by_planId", planId);
+		return list;
 	}
 
 
