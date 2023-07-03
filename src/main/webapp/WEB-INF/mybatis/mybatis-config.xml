@@ -11,10 +11,10 @@
     </settings>
 
     <typeAliases>
-    	<typeAlias type="com.app.dto.review.ReviewDto" alias="ReviewDto"/>
-    	<typeAlias type="com.app.dto.review.ReviewImgDto" alias="ReviewImgDto"/>
-		<typeAlias type="com.app.dto.review.MarkDto" alias="MarkDto"/>
-		<typeAlias type="com.app.dto.review.CommentDto" alias="CommentDto"/>
+    	<typeAlias type="com.app.dto.ReviewDto" alias="ReviewDto"/>
+    	<typeAlias type="com.app.dto.ReviewImgDto" alias="ReviewImgDto"/>
+		<typeAlias type="com.app.dto.MarkDto" alias="MarkDto"/>
+		<typeAlias type="com.app.dto.CommentDto" alias="CommentDto"/>
     	<typeAlias type="com.app.dto.BoardDto" alias="BoardDto"/>
     	<typeAlias type="com.app.dto.PartyDto" alias="PartyDto"/>
     	<typeAlias type="com.app.dto.UserDto" alias="UserDto"/>

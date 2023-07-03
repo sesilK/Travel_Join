@@ -39,6 +39,14 @@ public class BoardServiceImpl implements BoardService{
 		
 	}
 
+	@Override
+	public int joinBoardViewIncrease(int planId) {
+
+		int result = boardDao.joinBoardViewIncrease(planId);
+
+		return result;
+	}
+
 	
 	
 

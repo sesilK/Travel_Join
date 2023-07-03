@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.app.dao.review.ReviewDao;
+import com.app.dto.CommentDto;
 import com.app.dto.JoinDto;
-import com.app.dto.review.CommentDto;
-import com.app.dto.review.MarkDto;
-import com.app.dto.review.ReviewDto;
-import com.app.dto.review.ReviewImgDto;
+import com.app.dto.MarkDto;
+import com.app.dto.ReviewDto;
+import com.app.dto.ReviewImgDto;
 
 @Repository
 public class ReviewDaoImpl implements ReviewDao{

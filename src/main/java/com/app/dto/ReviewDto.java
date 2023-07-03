@@ -1,4 +1,4 @@
-package com.app.dto.review;
+package com.app.dto;
 
 import java.util.List;
 

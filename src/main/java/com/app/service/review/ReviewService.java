@@ -3,11 +3,11 @@ package com.app.service.review;
 import java.util.List;
 import java.util.Map;
 
+import com.app.dto.CommentDto;
 import com.app.dto.JoinDto;
-import com.app.dto.review.CommentDto;
-import com.app.dto.review.MarkDto;
-import com.app.dto.review.ReviewDto;
-import com.app.dto.review.ReviewImgDto;
+import com.app.dto.MarkDto;
+import com.app.dto.ReviewDto;
+import com.app.dto.ReviewImgDto;
 
 public interface ReviewService {
 

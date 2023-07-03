@@ -14,6 +14,6 @@ public interface BoardService {
 
 	List<BoardDto> myTeamDetail(String userId); //plan 에 참가한 user들 조회
 
-	
+	public int joinBoardViewIncrease(int planId); //조회수 증가
 
 }

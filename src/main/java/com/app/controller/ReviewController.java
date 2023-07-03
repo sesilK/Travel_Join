@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.app.dto.CommentDto;
 import com.app.dto.JoinDto;
-import com.app.dto.review.CommentDto;
-import com.app.dto.review.MarkDto;
-import com.app.dto.review.ReviewDto;
-import com.app.dto.review.ReviewImgDto;
+import com.app.dto.MarkDto;
+import com.app.dto.ReviewDto;
+import com.app.dto.ReviewImgDto;
 import com.app.service.review.ReviewService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
