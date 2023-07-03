@@ -1,7 +1,5 @@
 package com.app.service.board;
 
-import java.util.List;
-
 import com.app.dto.JoinDto;
 import com.app.dto.MarkDto;
 import com.app.dto.PartyDto;
@@ -15,6 +13,8 @@ public interface BoardService {
 	public void joinParty(PartyDto partyDto);
 
 	List<JoinDto> myTeamDetail(String userId); //plan 에 참가한 user들 조회
+
+	List<JoinDto> select_images_by_planId(int planId);
 
 	public int joinBoardViewIncrease(int planId); //조회수 증가
 	

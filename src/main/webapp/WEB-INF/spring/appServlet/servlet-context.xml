@@ -26,6 +26,7 @@
 	</annotation-driven>
 	
 	<context:component-scan base-package="com.app.controller"></context:component-scan>
+	<context:component-scan base-package="com.app.config"></context:component-scan>
 	<context:component-scan base-package="com.app.service"></context:component-scan>
 	<context:component-scan base-package="com.app.dao"></context:component-scan>
 	
@@ -44,8 +45,9 @@
 		<interceptor>	<!-- 로그인 인터셉터 제외시킬 것들 -->
 			<mapping path="/**"/>
 			<exclude-mapping path="/login"/>		<!-- 로그인 -->
-			<exclude-mapping path="/signUp"/>		<!-- 회원가입 -->
-			<exclude-mapping path="/main"/>			<!-- 메인페이지 -->
+			<exclude-mapping path="/register"/>		<!-- 회원가입 -->
+			<exclude-mapping path="/api/register"/>		<!-- 회원가입 -->
+			<exclude-mapping path="/home"/>			<!-- 메인페이지 -->
 			<exclude-mapping path="/review"/>		<!-- 리뷰게시판 -->
 			<exclude-mapping path="/**/*.css"/>		<!-- css -->
 			<exclude-mapping path="/**/*.js"/>		<!-- js -->
