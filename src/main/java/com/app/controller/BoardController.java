@@ -6,12 +6,13 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import com.app.dto.JoinDto;
+import com.app.dto.MarkDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.app.dto.BoardDto;
 import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
 import com.app.service.party.PartyService;
@@ -112,5 +113,25 @@ public class BoardController {
         }
 
     }
+    
+	@PostMapping("/joinLike") //추천 버튼 클릭
+	@ResponseBody
+	public int joinLike(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		MarkDto markDto = objectMapper.readValue(requestBody, MarkDto.class);
+		
+		String userId = (String) session.getAttribute("userId");
+		
+		MarkDto isNull =	//추천 여부 확인 
+				boardService.selectBoardMark(markDto.getPlanId(), userId, markDto.getSort());
+		
+		if (isNull == null) { //추천한 적 없으면
+			int count = boardService.insertBoardMark(markDto.getPlanId(), userId, markDto.getSort()); //추천하기
+			return count; //추천 성공 (추천 횟수 반환)
+		} else {
+			return -1;	//추천 실패
+		}
+	}
 
 }

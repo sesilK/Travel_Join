@@ -9,7 +9,7 @@
 	<!-- 게시글 상세페이지 호출과 조회수 업데이트 -->
 	<!-- 글상세 불러오기 -->
 	<select id="select_findPostById" parameterType="int" resultType="JoinDto">
-		select a.plan_id, a.user_id, a.title, a.content, a.destination, a.personnel, a.views,
+		select a.plan_id, a.user_id, a.title, a.content, a.destination, a.personnel, a.views, a.likes,
 			   TO_CHAR(a.start_day, 'YY-MM-DD') as start_day,
 			   TO_CHAR(a.end_day, 'YY-MM-DD') as end_day,
 			   TO_CHAR(a.reg_date, 'YY-MM-DD') as reg_date,
@@ -28,14 +28,14 @@
  
  	<!-- 여행팀 신청하기 -->
 		<!-- 모집인원 테이블에 받아온 게시글 번호(plan_id)와 회원아이디(user_id) 입력-->
-	<insert	id="insert_joinParty" parameterType="BoardDto"> 
+	<insert	id="insert_joinParty" parameterType="JoinDto"> 
 		INSERT INTO JOIN_BOARD_MEMBER (plan_id, user_id)
 		VALUES (planId, userId)  
 	</insert>	
  
  
  	<!-- 여행팀 멤버 조회 -->
-	<select	id="select_myTeamDetail" resultType="BoardDto">
+	<select	id="select_myTeamDetail" resultType="JoinDto">
 		  SELECT p.plan_id, p.user_id
 		  FROM JOIN_BOARD_MEMBER p
 		  WHERE p.plan_id = #{planId}
@@ -44,10 +44,39 @@
 	</select> 
  
  	<!--  게시판 상세보기시 조회수 증가 -->
-	<update id="update_joinBoardViewIncrease" parameterType="BoardDto">  
+	<update id="update_joinBoardViewIncrease" parameterType="JoinDto">  
 			UPDATE join_board
 			SET views = views + 1 
 			WHERE plan_id = #{planId}
 	</update>
+	
+	<!-- 추천 여부 확인 -->
+	<select id="select_join_mark" resultType="MarkDto">
+	    SELECT *
+	    FROM join_mark
+	    WHERE plan_id = #{planId}
+	    AND user_id = #{userId}
+	    AND sort = #{sort}
+	</select>
+	
+	<!-- 추천하기 -->
+	<insert id="insert_join_mark" parameterType="MarkDto">
+	    INSERT INTO join_mark
+	    VALUES ( #{planId}, #{userId}, #{sort} )
+	</insert>
+	
+	<!-- 추천 횟수 증가 -->
+	<update id="update_join_mark_count">
+		UPDATE join_board
+		SET likes = (SELECT count(*) FROM join_mark WHERE plan_id = #{planId} AND sort = 'L')
+		WHERE plan_id = #{planId}
+	</update>
+	
+	<!-- 추천 횟수 조회 -->
+	<select id="select_join_mark_count" resultType="JoinDto">
+		SELECT count(*) likes FROM join_mark
+		WHERE plan_id = #{planId}
+		AND sort = #{sort}
+	</select>
 	
 </mapper>	

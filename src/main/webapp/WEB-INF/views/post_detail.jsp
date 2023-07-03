@@ -11,7 +11,8 @@
 <p>여행기간: ${item.startDay} ~ ${item.endDay}</p>
 <p>방장아이디: ${item.userId}</p>
 <p>조회수: ${item.views}</p>
-<p>추천: ${item.likes}</p>
+<p id="likes">추천: ${item.likes}</p>
+<button type="button" id="btn-like">추천하기</button>
 
 <c:if test="${not empty sessionScope.userId}">
 <div class="button-box">

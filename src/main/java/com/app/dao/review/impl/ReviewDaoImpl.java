@@ -112,7 +112,7 @@ public class ReviewDaoImpl implements ReviewDao{
 	public int insertMark(int reviewId, String userId, String sort) {
 
 		//추천/신고 테이블에 insert
-		MarkDto markDto = new MarkDto(reviewId, userId, sort);
+		MarkDto markDto = new MarkDto(0, reviewId, userId, sort);
 		sqlsessionTemplate.insert("review_mapper.insert_review_mark", markDto);
 		//리뷰 테이블에 추천/신고 횟수 증가
 		sqlsessionTemplate.update("review_mapper.update_review_mark_count", reviewId);

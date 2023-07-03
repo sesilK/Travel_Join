@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class MarkDto {
 
-	int reviewId;		//글번호
+	int planId;			//여행번호
+	int reviewId;		//리뷰번호
 	String userId;		//아이디
-	String sort;		//종류
+	String sort;		//종류 (L:추천, R:신고)
 	
 }
