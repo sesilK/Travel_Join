@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration
-        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+<!DOCTYPE configuration 
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="jdbcTypeForNull" value="VARCHAR" />
@@ -14,6 +15,11 @@
     	<typeAlias type="com.app.dto.review.ReviewImgDto" alias="ReviewImgDto"/>
 		<typeAlias type="com.app.dto.review.MarkDto" alias="MarkDto"/>
 		<typeAlias type="com.app.dto.review.CommentDto" alias="CommentDto"/>
+    	<typeAlias type="com.app.dto.BoardDto" alias="BoardDto"/>
+    	<typeAlias type="com.app.dto.PartyDto" alias="PartyDto"/>
+    	<typeAlias type="com.app.dto.UserDto" alias="UserDto"/>
+		<typeAlias type="com.app.dto.JoinDto" alias="JoinDto"/>
+        <typeAlias type="com.app.dto.NoticeDto" alias="NoticeDto"/>
     </typeAliases>
-
+    
 </configuration>
