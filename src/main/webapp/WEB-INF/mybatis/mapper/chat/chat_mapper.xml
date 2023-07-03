@@ -51,7 +51,7 @@
     </select>
 
     <select id="select_my_chat_info" parameterType="String" resultType="ChatRoomDto">
-        SELECT jb.plan_id, jb.user_id, jb.title, u.image_id, c.user_id AS sender, c.content,
+        SELECT jb.plan_id, jb.user_id, jb.title, u.file_name, c.user_id AS sender, c.content,
                TO_CHAR(c.time, 'YYYY-MM-DD HH24:MI:SS') AS time,
            (c.chat_count - COALESCE(r.read_count, 0)) AS chat_count
         FROM join_board jb

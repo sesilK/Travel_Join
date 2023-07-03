@@ -23,7 +23,11 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/register")
-    public String register() {
+    public String register(HttpSession session) {
+        // 로그인 완료 상태면 홈으로 이동
+        if(session.getAttribute("userId") != null) {
+            return "redirect:/home";
+        }
         return "register";
     }
 
@@ -54,7 +58,11 @@ public class UserController {
 
     // 로그인
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, HttpSession session) {
+        // 로그인 완료 상태면 홈으로 이동
+        if(session.getAttribute("userId") != null) {
+            return "redirect:/home";
+        }
         return "login";
     }
 
@@ -76,7 +84,7 @@ public class UserController {
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
 
-        session.removeAttribute("userId");
+        session.invalidate();
         return "redirect:/home";
     }
 

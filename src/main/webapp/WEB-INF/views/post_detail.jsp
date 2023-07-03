@@ -47,7 +47,7 @@
             </div>
 
             <div class="accompany-button">
-                <button type="button" class="btn">동행 신청하기</button>
+                <button type="button" id="btn-join" class="btn">동행 신청하기</button>
             </div>
 
             <div class="social-links">
@@ -84,7 +84,7 @@
         </c:when>
 
         <c:when test="${item.planState eq 0}">
-            <button type="button" id="btn-join">참가하기</button>
+<%--            <button type="button" id="btn-join">참가하기</button>--%>
         </c:when>
     </c:choose>
 </div>

@@ -19,9 +19,7 @@ public class ChatController {
 
 
     @RequestMapping("/chatlist")
-    public String roomList(Model model, HttpSession session, @RequestParam String id) {
-        session.removeAttribute("userId");
-        session.setAttribute("userId", id);
+    public String roomList(Model model, HttpSession session) {
         String userId = (String) session.getAttribute("userId"); // 세션에서 userID가져오기
         List<ChatRoomDto> rooms = chatService.select_my_chat_info(userId); // 내 채팅방 목록 불러오기
         model.addAttribute("rooms", rooms); // model에 담아서 view에 뿌리기

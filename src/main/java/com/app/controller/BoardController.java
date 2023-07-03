@@ -1,9 +1,11 @@
 package com.app.controller;
 
 
+import com.app.dto.ChatDto;
 import com.app.dto.JoinDto;
 import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
+import com.app.service.chat.ChatService;
 import com.app.service.party.PartyService;
 import com.app.service.user.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,6 +28,8 @@ public class BoardController {
     PartyService partyService;
     @Autowired
     UserService userService;
+    @Autowired
+    ChatService chatService;
 
 
     @GetMapping("/detail/{planId}") // 글상세 페이지 요청
@@ -67,6 +71,12 @@ public class BoardController {
 
         if (checkJoin == 0) {
             result = partyService.joinParty(partyDto); //party 테이블에 inserst
+
+            // 입장하는 채팅방 기존 내역 모두 읽음처리
+            ChatDto chatDto = new ChatDto();
+            chatDto.setPlanId(partyDto.getPlanId());
+            chatDto.setUserId(partyDto.getUserId());
+            chatService.readAllChatMessage(chatDto);
         }
 
         if (result > 0) {
@@ -75,7 +85,7 @@ public class BoardController {
         return "false";
     }
 
-    @PostMapping("/joinDead") // 동행신청하기 	plan_id 에 user_id insert\
+    @PostMapping("/joinDead") // 모집 마감?
     @ResponseBody
     public String joinDead(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
 
@@ -92,7 +102,7 @@ public class BoardController {
 
     }
 
-    @PostMapping("/joinDelete")
+    @PostMapping("/joinDelete") // 모집 삭제
     @ResponseBody
     public String joinDelete(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
         System.out.println("joinDelete 버튼 눌림");

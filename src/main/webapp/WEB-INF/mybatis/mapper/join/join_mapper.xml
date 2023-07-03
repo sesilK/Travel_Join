@@ -18,6 +18,8 @@
         TO_DATE(#{endDay}, 'YYYY-MM-DD') ,#{destination},#{planType}, TO_DATE(#{finishDate}, 'YYYY-MM-DD'))
         into join_board_member (plan_id, user_id)
         values (#{planId}, #{userId})
+        into chat (chat_id, plan_id, user_id, content, time)
+        values (chat_id_seq.NEXTVAL, #{planId}, '[공지]', '새로운 채팅방', SYSDATE)
 
         <foreach collection="imageFileNameList" item="filename" separator=" ">
             into join_board_image (file_name, plan_id)

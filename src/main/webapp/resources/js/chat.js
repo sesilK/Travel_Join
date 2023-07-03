@@ -99,7 +99,7 @@ $(function () {
     // 채팅 전송버튼
     $('#send').click(function () {
         var content = $('#sendmessage input').val();
-        if (content == '') {
+        if (content == '' || content == '메세지를 입력하세요') {
             return;
         }
 
