@@ -8,9 +8,22 @@
 
 	<!-- 게시글 상세페이지 호출과 조회수 업데이트 -->
 	<!-- 글상세 불러오기 -->
-	<select id="select_findPostById" parameterType="int" resultType="BoardDto">
-		SELECT * FROM join_board
- 		WHERE plan_id = #{planId}
+	<select id="select_findPostById" parameterType="int" resultType="JoinDto">
+		select a.plan_id, a.user_id, a.title, a.content, a.destination, a.personnel,
+			   TO_CHAR(a.start_day, 'YY-MM-DD') as start_day,
+			   TO_CHAR(a.end_day, 'YY-MM-DD') as end_day,
+			   TO_CHAR(a.reg_date, 'YY-MM-DD') as reg_date,
+			   TO_CHAR(a.finish_date, 'YY-MM-DD') as finish_date,
+			   a.plan_state,	REGEXP_SUBSTR(a.content, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image,
+			   b.nick, b.birth, b.gender, b.image_id
+		from JOIN_BOARD a, (select nick, TRUNC((SYSDATE - BIRTH) / 365) as birth,
+								   DECODE(gender, 'M', '남자', 'F', '여자') as gender,
+								   image_id, user_id
+							from users
+							where status = 0) b
+		where plan_state != 2
+        and a.user_id = b.user_id
+		and a.plan_id = #{value}
  	</select>
  	<!-- 조회수 업데이트  -->
  	<update id="">

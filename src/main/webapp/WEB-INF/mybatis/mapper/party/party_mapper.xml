@@ -8,44 +8,41 @@
 
 
 
+ <!-- 여행팀 신청하기 -->
+	<insert	id="joinParty" parameterType="PartyDto"> 
+		INSERT INTO JOIN_BOARD_MEMBER (plan_id, user_id)
+		VALUES (#{planId}, #{userId})  
+		<!-- 모집인원 테이블에 받아온 게시글 번호(plan_id)와 회원아이디(user_id) 입력-->
+	 </insert>
 
-	
-	
-<!-- 모집인원 업데이트 --> 
-	<update id="update_addMember" parameterType="PartyDto">
+	 
+<!-- 모집 마감하기 --> 
+	<update id="joinDead" parameterType="PartyDto">
 		UPDATE join_board
-		SET PERSONNEL = PERSONNEL +1
+		SET plan_state = 1
 		WHERE plan_id = #{planId}
-	</update>	 
-	 
-	 
+	</update>	  
+	
+<!-- 모집 삭제하기 --> 
+	<update id="joinDelete" parameterType="PartyDto">
+		UPDATE join_board
+		SET plan_state = 2
+		WHERE plan_id = #{planId}
+	</update>	  
  
-<!-- 여행팀 멤버 조회 
+<!-- 여행팀 멤버 조회 --> 
 	<select	id="myTeamDetail" resultType="PartyDto">
-		  SELECT p.plan_id, p.user_id, u.tel
-		  FROM join_board_party p, users u
-		  WHERE p.plan_id = #{planId}
-		  GROUP BY p.plan_id, p.user_id, u.tel
-		  ORDER BY plan_id, user_id
-	</select> -->
-	
-	<!-- 여행팀 멤버 조회 
-	<select	id="select_myTeamDetail" resultType="PartyDto">
-		  SELECT p.plan_id, p.user_id
-		  FROM join_board_party p
-		  WHERE p.plan_id = #{planId}
-		  GROUP BY p.plan_id, p.user_id
-		  ORDER BY plan_id, user_id
-	</select> 
-	-->
-	
-	
-	
+		  SELECT plan_id, user_id
+		  FROM JOIN_BOARD_MEMBER
+		  WHERE plan_id = #{planId}
+	</select>
+
 <!-- 여행 참가 여부 -->
- 	<select id="checkStatus" parameterType="String" resultType="Integer">
+ 	<select id="checkStatus" parameterType="PartyDto" resultType="Integer">
 		select COUNT(*) as here
-		from join_board_party
-		where user_id = #{value}
+		from JOIN_BOARD_MEMBER
+		where user_id = #{userId}
+		and plan_id = #{planId}
 	</select>
 	
 

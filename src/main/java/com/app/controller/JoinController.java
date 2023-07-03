@@ -1,41 +1,25 @@
 package com.app.controller;
-import java.io.File;
 
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpSession;
-
+import com.app.dto.JoinDto;
+import com.app.service.party.PartyService;
+import com.app.service.user.join.JoinService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.core.script.Script;
-import org.junit.runner.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.app.dto.join.JoinDto;
-import com.app.service.user.join.JoinService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
-
-import oracle.jdbc.driver.Message;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.UUID;
 
 
 @Controller
@@ -44,14 +28,15 @@ public class JoinController {
 	@Autowired
 	JoinService joinService;
 	
+	@Autowired
+	PartyService partyService;
+	
 	@GetMapping("/join_view") // 여행게시판목록 요청
 	public String Join_View(Model model) {
 		
 		List<JoinDto> list = joinService.JoinViews();
 		model.addAttribute("items", list);
-		
-		
-		
+
 		return "join_view";
 	}
 	
@@ -69,7 +54,7 @@ public class JoinController {
 		JsonObject jsonObject = new JsonObject();
 		
 		
-		String fileRoot = "D:\\summernote_image\\"; //외부경로로 저장을 희망할때.
+		String fileRoot = "C:\\plan_garlic\\images\\join\\"; //외부경로로 저장을 희망할때.
 		
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		
@@ -83,7 +68,7 @@ public class JoinController {
 			FileUtils.copyInputStreamToFile(fileStream, targetFile);	
 			//----------------------------------------------------//
 			//파일을 열기위한 호출
-			jsonObject.addProperty("url", "\\summernote_image\\"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", "\\images\\join\\"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
 			//----------------------------------------------------//	
 		} catch (IOException e) {
@@ -97,24 +82,16 @@ public class JoinController {
 	
 	@PostMapping("/joinmaking_process") //여행게시글 작성
 	@ResponseBody
-	public String joinMaking(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException{
+	public String joinMaking(@RequestBody String requestBody, HttpSession session) throws JsonProcessingException{
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		JoinDto joinDto = objectMapper.readValue(requestBody, JoinDto.class);
 		
-		String sessionId = "admin";
-		joinDto.setUserId(sessionId);
+		String sessionId = session.getAttribute("userId").toString(); // 세션 로그인정보 가져오기
+		joinDto.setUserId(sessionId); // dto에 주입
 		
-		int makingResult = joinService.boardMaking(joinDto); // 게시글 DB저
-		
-		int getBoardNum = joinService.getBoardNum(joinDto);
-		
-		joinDto.setPlanId(getBoardNum);
-		for(String IMG : joinDto.getImageFileNameList()) {
-			joinDto.setFileName(IMG);
-			joinService.boardImgList(joinDto);
-		}
-		
+		int makingResult = joinService.boardMaking(joinDto); // 게시글 DB저장
+
 		return "joinMaking";
 	}
 

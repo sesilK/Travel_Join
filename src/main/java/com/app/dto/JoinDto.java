@@ -1,4 +1,4 @@
-package com.app.dto.join;
+package com.app.dto;
 
 import java.util.List; 
 
@@ -21,9 +21,8 @@ public class JoinDto {
 	String endDay; 			// 여행 종료일
 	String regDate; 		// 모집 시작일
 	String finishDate; 		// 모집 마감일 
-	int planState;		// 글 상태
-	
-	
+	int planState;			// 글 상태 (모집중0,모집마감1,삭제함2)
+
 	int views; 	// 조회수
 	int likes; 	// 좋아요
 	
@@ -31,15 +30,9 @@ public class JoinDto {
 	String fileName;
 	String firstImage;
 	List<String> imageFileNameList; //이미파일명 리스트 ??
-	
 
-//	String destination; //여행지 -> 해시태그로 대체 (카테고리 역황)
-//	String content_img;	//게시글 사진
-//	String start_date; //여행 시작일
-//	String end_date; //여행 종료일
-//	int participants; //참가인원
-//	int view_count; //조회수
-	
-//	String hashtags;
-	
+	String nick;
+	String birth;
+	String gender;
+	String imageId;
 }
