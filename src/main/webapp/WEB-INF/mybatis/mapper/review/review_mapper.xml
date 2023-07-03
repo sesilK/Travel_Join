@@ -50,7 +50,7 @@
 	<!-- 글목록 불러오기 (+검색기능) -->
 	<select id="select_review_list" resultType="ReviewDto" parameterType="hashMap">
 		SELECT rb.review_id, rb.user_id, rb.title, TO_CHAR(rb.create_date, 'YY.MM.DD') create_date, rb.views, 
-			   rb.like_count, rb.comment_count, rb.report_count, rb.stars, us.nick, jb.area, jb.plan_type
+			   rb.like_count, rb.comment_count, rb.report_count, rb.stars, us.nick, jb.destination, jb.plan_type
 		FROM review_bbs rb
 		JOIN join_board jb ON rb.plan_id = jb.plan_id
 		JOIN users us ON rb.user_id = us.user_id
@@ -63,7 +63,7 @@
 		</if>
 		<if test="searchCondition == 'all'">
 			AND ( (rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%')
-			   or (us.nick LIKE '%'||#{keyword}||'%') or (jb.area LIKE '%'||#{keyword}||'%') )
+			   or (us.nick LIKE '%'||#{keyword}||'%') or (jb.destination LIKE '%'||#{keyword}||'%') )
 		</if>
 		<!-- <if test="searchCondition == 'title'">
 			AND rb.title LIKE '%'||#{keyword}||'%'
@@ -78,7 +78,7 @@
 			AND us.nick LIKE '%'||#{keyword}||'%'
 		</if>
 		<if test="searchCondition == 'area'">
-			AND jb.area LIKE '%'||#{keyword}||'%'
+			AND jb.destination LIKE '%'||#{keyword}||'%'
 		</if>
 		AND rb.delete_at = 'N'
 		AND rb.report_count &lt;= 5 <!-- 부등호(<)의 XML 엔티티 &lt; -->
@@ -91,7 +91,7 @@
 			   rb.views, rb.like_count, rb.comment_count, rb.report_count, us.nick, 
 			    TO_CHAR(rb.create_date, 'YY.MM.DD HH:MM') create_date,
 			    TO_CHAR(rb.update_date, 'YY.MM.DD HH:MM') update_date,
-			   jb.area||'('||TO_CHAR(jb.start_day, 'YY-MM-DD')||'~'||TO_CHAR(jb.end_day, 'YY-MM-DD')||')' AS planInfo
+			   jb.destination||'('||TO_CHAR(jb.start_day, 'YY-MM-DD')||'~'||TO_CHAR(jb.end_day, 'YY-MM-DD')||')' AS planInfo
 		FROM review_bbs rb
 		JOIN join_board jb ON rb.plan_id = jb.plan_id
 		JOIN users us ON rb.user_id = us.user_id
@@ -224,10 +224,10 @@
 	
 	<!-- 여행 목록 불러오기 (리뷰 작성 가능한 것만) -->
 	<select id="select_review_join_list" resultType="JoinDto">
-		SELECT plan_id, area, title, TO_CHAR(end_day, 'YY-MM-DD') end_day, TO_CHAR(start_day, 'YY-MM-DD') start_day
+		SELECT plan_id, destination, title, TO_CHAR(end_day, 'YY-MM-DD') end_day, TO_CHAR(start_day, 'YY-MM-DD') start_day
 		FROM join_board
  		WHERE SYSDATE > end_day <!-- 여행종료일 기준 -->
- 		AND plan_id IN (SELECT plan_id FROM join_party_member WHERE user_id = #{userId}) <!-- 로그인한 아이디로 참여한 여행 -->
+ 		AND plan_id IN (SELECT plan_id FROM join_board_member WHERE user_id = #{userId}) <!-- 로그인한 아이디로 참여한 여행 -->
  		AND plan_id NOT IN (SELECT plan_id FROM review_bbs
  					   WHERE user_id = #{userId} AND delete_at = 'N' ) <!-- 리뷰 작성한 것 제외 -->
 		ORDER BY end_day
@@ -235,7 +235,7 @@
 	
 	<!-- 여행 찾기 -->
 	<select id="select_review_join" resultType="JoinDto">
-		SELECT plan_id, title, area, TO_CHAR(end_day, 'YY-MM-DD') end_day, TO_CHAR(start_day, 'YY-MM-DD') start_day
+		SELECT plan_id, title, destination, TO_CHAR(end_day, 'YY-MM-DD') end_day, TO_CHAR(start_day, 'YY-MM-DD') start_day
 		FROM join_board
 		WHERE plan_id = #{planId}
 	</select>

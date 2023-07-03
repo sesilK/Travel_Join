@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dao.review.ReviewDao;
-import com.app.dto.join.JoinDto;
+import com.app.dto.JoinDto;
 import com.app.dto.review.CommentDto;
 import com.app.dto.review.MarkDto;
 import com.app.dto.review.ReviewDto;

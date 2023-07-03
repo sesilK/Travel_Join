@@ -2,6 +2,7 @@
 
 input#title {
 	width: 100%;
+	max-width: 751px;
 	border: 1px solid #00000032; /* 1픽셀 너비의 회색 테두리 */
 }
 
@@ -52,5 +53,6 @@ input#title, select#planId {
 }
 
 .note-modal-backdrop {
-	bottom: 5000;
+	bottom: 500000;
+	top:50000;
 }
