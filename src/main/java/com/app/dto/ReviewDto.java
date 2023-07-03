@@ -30,6 +30,7 @@ public class ReviewDto {
 	int planType;		//여행분류(국내0/해외1)
 	String area;		//여행지
 	String nick;		//작성자닉네임
+	String page;		//글목록 페이지
 	List<String> imageFileNameList; //파일명 리스트
 	
 }

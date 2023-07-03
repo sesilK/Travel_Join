@@ -75,6 +75,14 @@ public class ReviewServiceImpl implements ReviewService{
 		
 		return list;
 	}
+	
+	@Override
+	public int findReviewCount(Map<String, String> map) {
+		
+		int reviewCount = reviewDao.selectReviewCount(map);
+		
+		return reviewCount;
+	}
 
 	@Override
 	public ReviewDto findReview(int reviewId){

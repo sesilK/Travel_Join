@@ -25,6 +25,8 @@ public interface ReviewDao {
 	
 	public List<ReviewDto> selectReviewList(Map<String, String> map); //글목록 불러오기
 	
+	public int selectReviewCount(Map<String, String> map); //글 개수 조회
+	
 	public ReviewDto selectReview(int reviewId); //글상세 불러오기
 	
 	public int updateViews(ReviewDto reviewDto); //조회수 증가

@@ -72,10 +72,19 @@ public class ReviewDaoImpl implements ReviewDao{
 
 	@Override
 	public List<ReviewDto> selectReviewList(Map<String, String> map) {
+		
 		List<ReviewDto> list = 
 				sqlsessionTemplate.selectList("review_mapper.select_review_list", map);
 		
 		return list;
+	}
+	
+	@Override
+	public int selectReviewCount(Map<String, String> map) {
+		
+		int reviewCount = sqlsessionTemplate.selectOne("review_mapper.select_review_count", map);
+		
+		return reviewCount;
 	}
 	
 	@Override

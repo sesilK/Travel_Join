@@ -25,6 +25,8 @@ public interface ReviewService {
 	
 	public List<ReviewDto> findReviewList(Map<String, String> map); //글목록 불러오기
 	
+	public int findReviewCount(Map<String, String> map); //글 개수 조회
+	
 	public ReviewDto findReview(int reviewId); //글상세 불러오기
 	
 	public int increaseViews(ReviewDto reviewDto);	//조회수 증가

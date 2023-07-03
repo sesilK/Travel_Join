@@ -48,6 +48,30 @@ public class ReviewController {
 		return "reviewBbs";
 	}
 	
+	@PostMapping("/reviewTotalCount") //글목록 총 데이터 개수 요청
+	@ResponseBody
+	public int reviewTotalCount(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+	
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
+
+		String searchType = reviewDto.getArea();
+	    String searchCondition = reviewDto.getPlanInfo();
+	    String keyword = reviewDto.getContent();
+	    
+	    if(reviewDto.getContent() == null || reviewDto.getContent().equals("")) {
+	    	keyword ="";
+	    }
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("searchType", searchType);
+		map.put("searchCondition", searchCondition);
+		map.put("keyword", keyword);
+		
+		int reviewCount = reviewService.findReviewCount(map);
+				
+		return reviewCount;
+	}
+	
 	@PostMapping("/review") //글목록 데이터 요청
 	@ResponseBody
 	public List<ReviewDto> reviewBbs_process(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
@@ -58,18 +82,22 @@ public class ReviewController {
 		String searchType = reviewDto.getArea();
 	    String searchCondition = reviewDto.getPlanInfo();
 	    String keyword = reviewDto.getContent();
-	    if(reviewDto.getContent() == null || reviewDto.getContent().equals("")) {
+	    String page = reviewDto.getPage();
+	    String dataPerPage = reviewDto.getNick();
+	    
+		if (keyword == null /* || keyword.equals("") */) {
 	    	keyword ="";
 	    }
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("searchType", searchType);
 		map.put("searchCondition", searchCondition);
 		map.put("keyword", keyword);
+		map.put("page", page);
+		map.put("dataPerPage", dataPerPage);
 		
 		List<ReviewDto> reviewList = reviewService.findReviewList(map);
 		
 		return reviewList;
-
 	}
 	
 	@GetMapping("/reviewWrite")	//글작성 페이지 요청
@@ -162,7 +190,7 @@ public class ReviewController {
 	}
 	
 	@GetMapping("/reviewView") //글상세 페이지 요청
-	public String reviewView(Model model, @RequestParam int reviewId, HttpSession session) {
+	public String reviewView(Model model, @RequestParam int reviewId, HttpSession session) throws JsonProcessingException {
 		
 		ReviewDto reviewDto = new ReviewDto();
 		String sessionId = (String) session.getAttribute("userId");
@@ -175,13 +203,26 @@ public class ReviewController {
 		ReviewDto item = reviewService.findReview(reviewId); //해당글 불러오기
 		
 		if(!(item.getDeleteAt().equals("Y")) && item.getReportCount() <= 5 ) { //삭제나 신고누적 해당 X
-			List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
-			model.addAttribute("item", item);
-			model.addAttribute("commentList", commentList);
+			//List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
+			//model.addAttribute("commentList", commentList);
+			model.addAttribute("item", item);			
+			
 			return "reviewView";
 		} else {
 			return "redirect:/notExist";
 		}	
+	}
+	
+	@PostMapping("/commentList") //글상세 페이지 요청
+	@ResponseBody
+	public List<CommentDto> commentList(@RequestBody String requestBody) throws JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
+		
+		List<CommentDto> commentList = reviewService.findCommentList(reviewDto.getReviewId()); //댓글목록 불러오기
+		
+		return commentList;
 	}
 	
 	@GetMapping("/reviewModify") //글수정 페이지 요청
