@@ -211,6 +211,17 @@ function displayPageAndData(currentPage, dataPerPage, dataList, totalData) {
     paging(totalData, dataPerPage, pageCount, currentPage); //페이징 표시 호출
 }
 
+// 엔터 키를 눌렀을 때 처리할 함수를 정의합니다.
+function handleEnterKeyPress(event) {
+  if (event.key === "Enter") { //누른 키가 엔터일 경우에
+    event.preventDefault(); // 엔터키 기본동작(폼제출) 막기
+    document.getElementById("searchBtn").click(); //검색버튼 클릭하기
+  }
+}
+
+//엔터 키 이벤트를 감지할 요소를 선택
+document.body.addEventListener("keypress", handleEnterKeyPress);
+
 $(function() {
 	$(".review").addClass("is-active");
 });
