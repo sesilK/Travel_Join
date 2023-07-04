@@ -49,47 +49,54 @@
 	
 	<!-- 글목록 불러오기 (+검색기능) (+페이지네이션) -->
 	<select id="select_review_list" resultType="ReviewDto" parameterType="hashMap">
-		SELECT rb.review_id, rb.user_id, rb.title, TO_CHAR(rb.create_date, 'YY.MM.DD') create_date, rb.views, rb.plan_id, 
+		SELECT rb.review_id, rb.user_id, rb.title, TO_CHAR(rb.create_date, 'YY.MM.DD') create_date, rb.views, rb.plan_id, rb.content, 
 			   rb.like_count, rb.comment_count, rb.report_count, rb.stars, us.nick, jb.destination, jb.plan_type
 		FROM (
 			SELECT rb.review_id, rb.user_id, rb.title, rb.create_date, rb.views, rb.like_count, rb.comment_count,
-			 rb.report_count, rb.stars, rb.plan_id, ROWNUM AS rnum
-			FROM review_bbs rb
+				   rb.report_count, rb.stars, rb.plan_id, rb.delete_at, rb.content, ROWNUM AS rnum
+			FROM (
+				SELECT rb.review_id, rb.user_id, rb.title, rb.create_date, rb.views, rb.like_count, rb.comment_count,
+				   rb.report_count, rb.stars, rb.plan_id, rb.delete_at, rb.content
+				FROM review_bbs rb
+				JOIN join_board jb ON rb.plan_id = jb.plan_id
+				JOIN users us ON rb.user_id = us.user_id
+				WHERE 1=1
+		 		<if test="searchType == 'domestic'">
+					AND jb.plan_type = 0
+				</if>
+				<if test="searchType == 'overseas'">
+					AND jb.plan_type = 1
+				</if>
+				<if test="searchCondition == 'all'">
+					AND ( (rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%')
+					   or (us.nick LIKE '%'||#{keyword}||'%') or (jb.destination LIKE '%'||#{keyword}||'%') )
+				</if>
+				<!-- <if test="searchCondition == 'title'">
+					AND rb.title LIKE '%'||#{keyword}||'%'
+				</if>
+				<if test="searchCondition == 'content'">
+					AND rb.content LIKE '%'||#{keyword}||'%'
+				</if> -->
+				<if test="searchCondition == 'ticon'">
+					AND ((rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%'))
+				</if>
+				<if test="searchCondition == 'user'">
+					AND us.nick LIKE '%'||#{keyword}||'%'
+				</if>
+				<if test="searchCondition == 'destination'">
+					AND jb.destination LIKE '%'||#{keyword}||'%'
+				</if>
+				ORDER BY review_id DESC
+				) rb
 			JOIN join_board jb ON rb.plan_id = jb.plan_id
 			JOIN users us ON rb.user_id = us.user_id
-	 		WHERE 1=1
-	 		<if test="searchType == 'domestic'">
-				AND jb.plan_type = 0
-			</if>
-			<if test="searchType == 'overseas'">
-				AND jb.plan_type = 1
-			</if>
-			<if test="searchCondition == 'all'">
-				AND ( (rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%')
-				   or (us.nick LIKE '%'||#{keyword}||'%') or (jb.destination LIKE '%'||#{keyword}||'%') )
-			</if>
-			<!-- <if test="searchCondition == 'title'">
-				AND rb.title LIKE '%'||#{keyword}||'%'
-			</if>
-			<if test="searchCondition == 'content'">
-				AND rb.content LIKE '%'||#{keyword}||'%'
-			</if> -->
-			<if test="searchCondition == 'ticon'">
-				AND ((rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%'))
-			</if>
-			<if test="searchCondition == 'user'">
-				AND us.nick LIKE '%'||#{keyword}||'%'
-			</if>
-			<if test="searchCondition == 'destination'">
-				AND jb.destination LIKE '%'||#{keyword}||'%'
-			</if>
-			AND rb.delete_at = 'N'
+			WHERE rb.delete_at = 'N'
 			AND rb.report_count &lt;= 5 <!-- 부등호(<)의 XML 엔티티 &lt; -->
 			ORDER BY rb.review_id DESC
 		) rb
 		JOIN join_board jb ON rb.plan_id = jb.plan_id
 		JOIN users us ON rb.user_id = us.user_id
-		WHERE rnum BETWEEN ( TO_NUMBER(#{page}) -1 ) * TO_NUMBER( #{dataPerPage} ) + 1 
+		WHERE rnum BETWEEN ( TO_NUMBER( #{page} ) -1 ) * TO_NUMBER( #{dataPerPage} ) + 1 
 						AND TO_NUMBER( #{page} ) * TO_NUMBER( #{dataPerPage} )
 		ORDER BY rb.review_id DESC
 	</select>

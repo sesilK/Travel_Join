@@ -48,6 +48,12 @@ public class ReviewController {
 		return "reviewBbs";
 	}
 	
+	@GetMapping("/myReview") //글목록 페이지 요청
+	public String myReview() {
+		
+		return "myReview";
+	}
+	
 	@PostMapping("/reviewTotalCount") //글목록 총 데이터 개수 요청
 	@ResponseBody
 	public int reviewTotalCount(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
