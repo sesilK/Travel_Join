@@ -1,9 +1,9 @@
 package com.app.service.user;
 
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
 import com.app.dto.UserDto;
+import org.springframework.validation.BindingResult;
+
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

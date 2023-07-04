@@ -97,7 +97,6 @@
     </div>
     <div class="wrapper">
         <div class="header">
-       
             <div class="search-bar">
                 <input type="text" placeholder="Search">
             </div>
