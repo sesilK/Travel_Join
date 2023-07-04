@@ -40,7 +40,7 @@
 				<option value="all" selected>전체</option>
 		</select>
 		<select name="searchCondition" id="searchCondition" class="select selectCon">
-			<option value="user" selected>글쓴이</option>
+			<option value="sessionId" selected>글쓴이</option>
 		</select>
 		<input type="text" name="keyword" id="keyword" value="${sessionScope.userId}"/>
 	</div>

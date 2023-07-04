@@ -71,12 +71,6 @@
 					AND ( (rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%')
 					   or (us.nick LIKE '%'||#{keyword}||'%') or (jb.destination LIKE '%'||#{keyword}||'%') )
 				</if>
-				<!-- <if test="searchCondition == 'title'">
-					AND rb.title LIKE '%'||#{keyword}||'%'
-				</if>
-				<if test="searchCondition == 'content'">
-					AND rb.content LIKE '%'||#{keyword}||'%'
-				</if> -->
 				<if test="searchCondition == 'ticon'">
 					AND ((rb.title LIKE '%'||#{keyword}||'%') or (rb.content LIKE '%'||#{keyword}||'%'))
 				</if>
@@ -85,6 +79,9 @@
 				</if>
 				<if test="searchCondition == 'destination'">
 					AND jb.destination LIKE '%'||#{keyword}||'%'
+				</if>
+				<if test="searchCondition == 'sessionId'">
+					AND us.user_id LIKE '%'||#{keyword}||'%'
 				</if>
 				ORDER BY review_id DESC
 				) rb
