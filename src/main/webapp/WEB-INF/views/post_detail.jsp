@@ -56,12 +56,17 @@
                     <li>모집 상태: <span>${item.planState}</span></li>
                     <li>조회수: <span>${item.views}</span></li>
                     <li>추천: <span id="likes">${item.likes}</span></li>
-                    <button type="button" id="btn-like">추천하기</button>
                 </ul>
             </div>
 
             <div class="accompany-button">
+                <button type="button" id="btn-like" class="btn">추천하기</button>
                 <button type="button" id="btn-join" class="btn">동행 신청하기</button>
+                <c:if test="${sessionScope.userId eq item.userId}">
+                    <br>
+                    <button type="button" id="btn-end" class="btn deleteBtn">모집 마감</button>
+                    <button type="button" id="btn-del" class="btn deleteBtn">모집 삭제</button>
+                </c:if>
             </div>
 
             <div class="social-links">
@@ -74,35 +79,6 @@
         </div>
     </div>
 </div>
-
-<!-- 동행신청한 멤버 목록 -->
-<h2>모집 인원</h2>
-<ul>
-    <c:forEach var="member" items="${partyMembers}">
-        <li>${member.userId}</li>
-    </c:forEach>
-</ul>
-
-
-<c:if test="${not empty sessionScope.userId}">
-<div class="button-box">
-    <c:choose>
-        <c:when test="${item.planState eq 1}">
-            <p>마감된 모집입니다.</p>
-        </c:when>
-
-        <c:when test="${sessionScope.userId eq item.userId}">
-            <button type="button" id="btn-end">모집마감</button>
-            <button type="button" id="btn-mod">내용수정</button>
-            <button type="button" id="btn-del">글 삭제</button>
-        </c:when>
-
-        <c:when test="${item.planState eq 0}">
-            <%--            <button type="button" id="btn-join">참가하기</button>--%>
-        </c:when>
-    </c:choose>
-</div>
-</c:if>
 
 <%@include file="footer.jsp" %>
 <script src="/js/post_detail.js"></script>

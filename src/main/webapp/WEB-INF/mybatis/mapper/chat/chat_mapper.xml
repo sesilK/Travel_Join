@@ -28,6 +28,21 @@
         order by chat_id
     </select>
 
+    <!--    채팅방 입장시 방에 속한 유저가 맞는지 조회-->
+    <select id="check_chatroom_member" resultType="Integer" parameterType="ChatDto">
+        select COUNT(*)
+        from join_board_member
+        where user_id = #{userId}
+        and plan_id = #{planId}
+    </select>
+
+    <!--    채팅방 입장시 마지막 채팅id 조회-->
+    <select id="get_last_chat_id" resultType="Integer" parameterType="Integer">
+        select MAX(chat_id)
+        from chat
+        where plan_id = #{planId}
+    </select>
+
     <!--    채팅 페이지네이션-->
     <select id="select_chat_paging" resultType="ChatDto" parameterType="ChatRoomDto">
         select chat_id, plan_id, user_id, content, TO_CHAR(time, 'YY-MM-DD HH24:MM:SS') as time

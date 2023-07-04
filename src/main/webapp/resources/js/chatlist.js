@@ -66,7 +66,7 @@ $(function () {
     $(".friend").click(function () {
         const roomId = $(this).data("roomid");
         const chatId = $(this).find(".last-chat").data("chatid");
-        location.href = '/chat/' + roomId + '?chatId=' + chatId;
+        location.href = '/chat/' + roomId;
     });
 
     // 페이지 나가면 out 신호 보내기

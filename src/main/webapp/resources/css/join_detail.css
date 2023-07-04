@@ -174,11 +174,11 @@ img {
     color: #fff;
 }
 
-.accompany-button .btn:first-of-type {
+.accompany-button .btn {
     background: #256eff;
 }
 
-.accompany-button .btn:last-of-type {
+.accompany-button .deleteBtn {
     background: #f64749;
 }
 

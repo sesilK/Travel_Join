@@ -4,12 +4,6 @@ package com.app.controller;
 import com.app.dto.ChatDto;
 import com.app.dto.JoinDto;
 import com.app.dto.MarkDto;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
 import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
 import com.app.service.chat.ChatService;
@@ -100,10 +94,11 @@ public class BoardController {
 
     @PostMapping("/joinDead") // 모집 마감?
     @ResponseBody
-    public String joinDead(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+    public String joinDead(@RequestBody String requestBody, HttpSession session) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         PartyDto partyDto = objectMapper.readValue(requestBody, PartyDto.class);
+        partyDto.setUserId(session.getAttribute("userId").toString());
 
         int result = partyService.joinDead(partyDto); //여행 모집 마감 update 쿼리
 
@@ -117,10 +112,11 @@ public class BoardController {
 
     @PostMapping("/joinDelete") // 모집 삭제
     @ResponseBody
-    public String joinDelete(@RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
+    public String joinDelete(@RequestBody String requestBody, HttpSession session) throws JsonProcessingException {
         System.out.println("joinDelete 버튼 눌림");
         ObjectMapper objectMapper = new ObjectMapper();
         PartyDto partyDto = objectMapper.readValue(requestBody, PartyDto.class);
+        partyDto.setUserId(session.getAttribute("userId").toString());
 
         int result = partyService.joinDelete(partyDto); //여행 모집 마감 update 쿼리
 

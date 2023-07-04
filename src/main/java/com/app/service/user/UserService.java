@@ -12,7 +12,7 @@ public interface UserService {
 
 	List<UserDto> getUserList(UserDto userDto);
 	
-	boolean login(UserDto userDto, HttpSession session);
+	String login(UserDto userDto, HttpSession session);
 	
 	int updateUser(UserDto userDto, BindingResult bindingResult);
 	

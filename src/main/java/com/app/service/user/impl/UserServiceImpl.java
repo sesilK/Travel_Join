@@ -43,15 +43,20 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean login(UserDto userDto, HttpSession session) {
+    public String login(UserDto userDto, HttpSession session) {
 
         try {
             // 입력받은 아이디를 기준으로 DB에서 회원정보 조회
             UserDto findUser = userDao.selectUserById(userDto.getUserId());
+            if(findUser == null) {
+                return "회원정보가 없습니다";
+            }
+
             if (findUser.getStatus() == -1) {
                 // 탈퇴한 회원이면 false
-                return false;
+                return "탈퇴한 회원입니다";
             }
+
             // 프로필사진 정보 세션에 담기
             String profileImage = userDao.selectUserById(userDto.getUserId()).getFileName();
             session.setAttribute("profileImage", profileImage);
@@ -62,14 +67,16 @@ public class UserServiceImpl implements UserService {
 
             if (findUser != null) { // 찾은 회원정보가 null 이 아니면
                 if (input_pw.equals(db_pw)) { // 입력한 pw와 회원정보의 pw가 일치하면
-                    return true;
+                    return "성공";
+                } else {
+                    return "비밀번호가 일치하지 않습니다";
                 }
             }
         } catch (Exception e) {
             // 그대로 return false
         }
 
-        return false;
+        return "오류가 발생했습니다";
     }
 
     /**

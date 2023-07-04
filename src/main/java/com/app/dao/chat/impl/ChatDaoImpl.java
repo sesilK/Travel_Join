@@ -69,4 +69,16 @@ public class ChatDaoImpl implements ChatDao {
         List<ChatDto> list = sqlSessionTemplate.selectList("select_chat_paging", chatRoomDto);
         return list;
     }
+
+    @Override
+    public int check_chatroom_member(ChatDto chatDto) {
+        int result = sqlSessionTemplate.selectOne("check_chatroom_member", chatDto);
+        return result;
+    }
+
+    @Override
+    public int get_last_chat_id(int planId) {
+        int chat_id = sqlSessionTemplate.selectOne("get_last_chat_id", planId);
+        return chat_id;
+    }
 }

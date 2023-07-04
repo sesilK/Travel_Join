@@ -29,12 +29,23 @@ public class ChatController {
     }
 
     @RequestMapping("/chat/{roomId}")
-    public String enterRoom(@PathVariable String roomId, Model model, HttpSession session, @RequestParam String chatId) {
+    public String enterRoom(@PathVariable String roomId, Model model, HttpSession session) {
 
         // 채팅방 모든 채팅 읽음처리에 필요한 ChatDto 생성
         ChatDto chatDto = new ChatDto();
         chatDto.setPlanId(Integer.parseInt(roomId));
         chatDto.setUserId(session.getAttribute("userId").toString());
+
+        // 채팅방에 속한 멤버가 맞는지 체크
+        int isMember = chatService.check_chatroom_member(chatDto);
+        if(isMember <= 0) {
+            return "redirect:/chatlist";
+        }
+
+        // 채팅방 마지막 채팅 id 가져오기
+        String chatId = String.valueOf(chatService.get_last_chat_id(Integer.parseInt(roomId)));
+
+        // 쌓인 채팅들 읽음처리
         chatService.readAllChatMessage(chatDto);
 
         // 페이징에 필요한 ChatRoomDto 생성

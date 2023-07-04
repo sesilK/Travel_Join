@@ -159,10 +159,10 @@ $(function () {
             data : formData,
             success : function(data) {
                 console.log(data);
-                if(data == true) {
+                if(data == "성공") {
                     location.href = "/";
                 } else {
-                    alert("정확한 회원정보를 입력해주세요");
+                    alert(data);
                 }
             }, // success
             error : function() {

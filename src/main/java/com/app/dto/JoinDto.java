@@ -1,10 +1,10 @@
 package com.app.dto;
 
-import java.util.List; 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data @AllArgsConstructor @NoArgsConstructor
 public class JoinDto {
@@ -21,7 +21,7 @@ public class JoinDto {
 	String endDay; 			// 여행 종료일
 	String regDate; 		// 모집 시작일
 	String finishDate; 		// 모집 마감일 
-	int planState;			// 글 상태 (모집중0,모집마감1,삭제함2)
+	String planState;			// 글 상태 (모집중0,모집마감1,삭제함2)
 
 	int views; 	// 조회수
 	int likes; 	// 좋아요

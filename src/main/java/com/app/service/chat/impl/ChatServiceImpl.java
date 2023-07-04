@@ -67,10 +67,25 @@ public class ChatServiceImpl implements ChatService {
         return rooms;
     }
 
+    /** 채팅내역 페이징처리 */
     @Override
     public List<ChatDto> select_chat_paging(ChatRoomDto chatRoomDto) {
         List<ChatDto> list = chatDao.select_chat_paging(chatRoomDto);
         return list;
+    }
+
+    /** 채팅방 멤버가 맞는지 체크 */
+    @Override
+    public int check_chatroom_member(ChatDto chatDto) {
+        int result = chatDao.check_chatroom_member(chatDto);
+        return result;
+    }
+
+    /** 마지막 채팅id 가져오기 */
+    @Override
+    public int get_last_chat_id(int planId) {
+        int chatId = chatDao.get_last_chat_id(planId);
+        return chatId;
     }
 
 

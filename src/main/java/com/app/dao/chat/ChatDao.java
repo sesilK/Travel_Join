@@ -22,4 +22,8 @@ public interface ChatDao {
 
     List<ChatDto> select_chat_paging(ChatRoomDto chatRoomDto);
 
+    int check_chatroom_member(ChatDto chatDto);
+
+    int get_last_chat_id(int planId);
+
 }

@@ -68,16 +68,15 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseBody
-    public boolean login_proc(UserDto userDto, HttpSession session) {
+    public String login_proc(UserDto userDto, HttpSession session) {
 
-        boolean result = userService.login(userDto, session);
+        String result = userService.login(userDto, session);
 
-        if (result) {
+        if (result.equals("성공")) {
             session.setAttribute("userId", userDto.getUserId());
-            return true;
-        } else {
-            return false;
         }
+
+        return result;
     }
 
     // 로그아웃
@@ -99,8 +98,8 @@ public class UserController {
     @PostMapping("/myinfo/before")
     public String myinfoBefore_proc(@ModelAttribute UserDto userDto, HttpSession session) {
 
-        boolean result = userService.login(userDto, session);
-        if (result) {
+        String result = userService.login(userDto, session);
+        if (result.equals("성공")) {
             session.setAttribute("passCheck", true);
             return "redirect:/myinfo";
         }

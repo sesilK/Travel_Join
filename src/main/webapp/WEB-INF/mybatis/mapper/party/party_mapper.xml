@@ -21,6 +21,7 @@
 		UPDATE join_board
 		SET plan_state = 1
 		WHERE plan_id = #{planId}
+		and user_id = #{userId}
 	</update>	  
 	
 <!-- 모집 삭제하기 --> 
@@ -28,6 +29,7 @@
 		UPDATE join_board
 		SET plan_state = 2
 		WHERE plan_id = #{planId}
+		and user_id = #{userId}
 	</update>	  
  
 <!-- 여행팀 멤버 조회 --> 
