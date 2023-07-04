@@ -7,7 +7,7 @@
             <div class="card-header">
                 <div class="left">
                     <div class="profile-image">
-                        <img src="https://tripsoda.s3.ap-northeast-2.amazonaws.com/test/image/1670229253636-1"
+                        <img src="/images/profile/${item.fileName}"
                              alt="avatar">
                     </div>
                 </div>

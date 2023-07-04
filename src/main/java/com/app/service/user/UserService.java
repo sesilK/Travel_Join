@@ -16,11 +16,13 @@ public interface UserService {
 	
 	boolean login(UserDto userDto, HttpSession session);
 	
-	int updateUser(UserDto userDto);
+	int updateUser(UserDto userDto, BindingResult bindingResult);
 	
 	UserDto getUserInfo(String userId);
 
 	boolean idCheck(String userId);
 
 	int update_user_profile(UserDto userDto);
+
+	int update_user_status(UserDto userDto);
 }

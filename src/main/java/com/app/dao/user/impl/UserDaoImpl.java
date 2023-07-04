@@ -2,10 +2,11 @@ package com.app.dao.user.impl;
 
 import com.app.dao.user.UserDao;
 import com.app.dto.UserDto;
-
+import com.app.validator.UserValidator;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -56,12 +57,18 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int update_user_info(UserDto userDto) {
+    public int update_user_status(UserDto userDto) {
+        int result = 0;
+        result = sqlSessionTemplate.update("user_mapper.update_user_status", userDto);
+        return result;
+    }
 
-        try {
+    @Override
+    public int update_user_info(UserDto userDto, BindingResult bindingResult) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        UserValidator.modifyUserValidator(userDto, bindingResult);
+        if(bindingResult.hasErrors()) {
+            return -1;
         }
 
         int result = sqlSessionTemplate.update("user_mapper.update_user_info", userDto);

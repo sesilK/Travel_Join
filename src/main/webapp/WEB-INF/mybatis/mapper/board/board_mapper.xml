@@ -9,42 +9,35 @@
 	<!-- 게시글 상세페이지 호출과 조회수 업데이트 -->
 	<!-- 글상세 불러오기 -->
 	<select id="select_findPostById" parameterType="int" resultType="JoinDto">
-		select a.plan_id, a.user_id, a.title, a.content, a.destination, a.personnel,
+		select a.plan_id, a.user_id, a.title, a.content, a.destination, a.personnel, a.views, a.likes,
 			   TO_CHAR(a.start_day, 'YY-MM-DD') as start_day,
 			   TO_CHAR(a.end_day, 'YY-MM-DD') as end_day,
 			   TO_CHAR(a.reg_date, 'YY-MM-DD') as reg_date,
 			   TO_CHAR(a.finish_date, 'YY-MM-DD') as finish_date,
 			   a.plan_state,	REGEXP_SUBSTR(a.content, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image,
-			   b.nick, b.birth, b.gender <!--, b.image_id -->
+			   b.nick, b.birth, b.gender, b.file_name
 		from JOIN_BOARD a, (select nick, TRUNC((SYSDATE - BIRTH) / 365) as birth,
 								   DECODE(gender, 'M', '남자', 'F', '여자') as gender,
-								   <!-- image_id, --> user_id
+								   file_name, user_id
 							from users
 							where status = 0) b
 		where plan_state != 2
         and a.user_id = b.user_id
 		and a.plan_id = #{value}
  	</select>
- 	<!-- 조회수 업데이트  -->
- 	<update id="">
- 		UPDATE join_board
- 			SET VIEWS = NVL(VIEWS,0) + 1
- 		WHERE PLAN_ID = #{planId} 
- 	</update>
- 	<!-- 게시글 상세페이지 호출과 조회수 업데이트 -->
  
  	<!-- 여행팀 신청하기 -->
 		<!-- 모집인원 테이블에 받아온 게시글 번호(plan_id)와 회원아이디(user_id) 입력-->
-	<insert	id="insert_joinParty" parameterType="BoardDto"> 
-		INSERT INTO join_board_party (plan_id, user_id)
+	<insert	id="insert_joinParty" parameterType="JoinDto"> 
+		INSERT INTO JOIN_BOARD_MEMBER (plan_id, user_id)
 		VALUES (planId, userId)  
 	</insert>	
  
  
  	<!-- 여행팀 멤버 조회 -->
-	<select	id="select_myTeamDetail" resultType="BoardDto">
+	<select	id="select_myTeamDetail" resultType="JoinDto">
 		  SELECT p.plan_id, p.user_id
-		  FROM join_board_party p
+		  FROM JOIN_BOARD_MEMBER p
 		  WHERE p.plan_id = #{planId}
 		  GROUP BY p.plan_id, p.user_id
 		  ORDER BY plan_id, user_id
@@ -111,6 +104,11 @@
 		WHERE jbm.USER_ID = #{userId} -->
 	</select>
  
+	<select id="select_images_by_planId" parameterType="Integer" resultType="JoinDto">
+		select file_name
+		from join_board_image
+		where plan_id = #{planId}
+	</select>
  
  
  
@@ -120,10 +118,39 @@
  
  
  	<!--  게시판 상세보기시 조회수 증가 -->
-	<!--	<update id="update_joinBoardViewIncrease" parameterType="BoardDto">  
+	<update id="update_joinBoardViewIncrease" parameterType="JoinDto">  
 			UPDATE join_board
-			SET views = views +1 
-			WHERE plan_id= #{planId} 
-	</update> -->	
+			SET views = views + 1 
+			WHERE plan_id = #{planId}
+	</update>
+	
+	<!-- 추천 여부 확인 -->
+	<select id="select_join_mark" resultType="MarkDto">
+	    SELECT *
+	    FROM join_mark
+	    WHERE plan_id = #{planId}
+	    AND user_id = #{userId}
+	    AND sort = #{sort}
+	</select>
+	
+	<!-- 추천하기 -->
+	<insert id="insert_join_mark" parameterType="MarkDto">
+	    INSERT INTO join_mark
+	    VALUES ( #{planId}, #{userId}, #{sort} )
+	</insert>
+	
+	<!-- 추천 횟수 증가 -->
+	<update id="update_join_mark_count">
+		UPDATE join_board
+		SET likes = (SELECT count(*) FROM join_mark WHERE plan_id = #{planId} AND sort = 'L')
+		WHERE plan_id = #{planId}
+	</update>
+	
+	<!-- 추천 횟수 조회 -->
+	<select id="select_join_mark_count" resultType="JoinDto">
+		SELECT count(*) likes FROM join_mark
+		WHERE plan_id = #{planId}
+		AND sort = #{sort}
+	</select>
 	
 </mapper>	
