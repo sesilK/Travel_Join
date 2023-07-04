@@ -31,28 +31,27 @@ $(function () {
         });
     });
 
-    // 회원가입 submit 이벤트 전처리
-    $("#form-signup").submit(function (e) {
-        const idReg = /^[a-z][a-z0-9]{5,11}$/; // 6~12자리 소문자+숫자
-        const pwReg = /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,20}$/; // 8~20자리 영,특
-        const emailReg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일 abc@abc.abc 형태
-        const nameReg = /[가-힣]{2,6}$/; // 이름 한글 2~6길이
-        const nickReg = /[a-z|A-z|가-힣|0-9]{2,10}$/; // 닉네임 영,한,숫자 2~10자리
-        const telReg = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/; // 0111234567, 01012345678 형태
-        let isEmpty = false;
-        let resultMsg = "";
+    // 회원가입 버튼 클릭
+    $(".signup").click(function (e) {
+        // const idReg = /^[a-z][a-z0-9]{5,11}$/; // 6~12자리 소문자+숫자
+        // const pwReg = /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,20}$/; // 8~20자리 영,특
+        // const emailReg = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일 abc@abc.abc 형태
+        // const nameReg = /[가-힣]{2,6}$/; // 이름 한글 2~6길이
+        // const nickReg = /[a-z|A-z|가-힣|0-9]{2,10}$/; // 닉네임 영,한,숫자 2~10자리
+        // const telReg = /^01([0|1|6|7|8|9]?)?([0-9]{3,4})?([0-9]{4})$/; // 0111234567, 01012345678 형태
+        // let isEmpty = false;
+        // let resultMsg = "";
 
+        const inputs = $("#form-signup input");
 
-        $("#form-signup input").each(function (index, item) {
+        for(let item of inputs) {
             const thisValueLength = $.trim(item.value).length;
 
             if (thisValueLength === 0) {
-                isEmpty = true;
-                alert("빈 칸이 있습니다.");
-                e.preventDefault();
+                alert("빈 칸이 있습니다");
                 return false;
             }
-        });
+        }
 
         const idValue = $("#input_id").val();
         const pwValue = $("#input_pw").val();
@@ -61,25 +60,50 @@ $(function () {
         const nickValue = $("#input_nick").val();
         const telValue = $("#input_tel").val();
 
-        if (!idReg.test(idValue)) {
-            resultMsg = "아이디: 6~12자의 영문 소문자, 숫자만 사용 가능합니다";
-        } else if (!pwReg.test(pwValue)) {
-            resultMsg = "비밀번호: 8~20자의 특수문자를 포함한 영문 대/소문자, 숫자를 사용해 주세요.";
-        } else if (!emailReg.test(emailValue)) {
-            resultMsg = "이메일: 이메일 형식과 맞지 않습니다";
-        } else if (!nameReg.test(nameValue)) {
-            resultMsg = "이름: 이름 형식과 맞지 않습니다";
-        } else if (!nickReg.test(nickValue)) {
-            resultMsg = "닉네임:  2~10자의 영문, 한글, 숫자만 사용 가능합니다";
-        } else if (!telReg.test(telValue)) {
-            resultMsg = "휴대폰번호: 번호 형식과 맞지 않습니다";
-        }
+        let form = $("form")[1];
+        let formData = new FormData(form);
 
-        if (resultMsg != "") {
-            alert(resultMsg);
-            e.preventDefault();
-            return false;
-        }
+        $.ajax({
+            cache : false,
+            url : "/register", // 요기에
+            processData: false,
+            contentType: false,
+            type : 'POST',
+            data : formData,
+            success : function(data) {
+                console.log(data);
+                if(data == 'true') {
+                    alert("회원가입 완료");
+                    location.href = "/login";
+                } else {
+                    alert(data);
+                }
+            }, // success
+            error : function(data) {
+                alert("서버와 연결에 실패 했습니다");
+            }
+        });
+
+
+        // if (!idReg.test(idValue)) {
+        //     resultMsg = "아이디: 6~12자의 영문 소문자, 숫자만 사용 가능합니다";
+        // } else if (!pwReg.test(pwValue)) {
+        //     resultMsg = "비밀번호: 8~20자의 특수문자를 포함한 영문 대/소문자, 숫자를 사용해 주세요.";
+        // } else if (!emailReg.test(emailValue)) {
+        //     resultMsg = "이메일: 이메일 형식과 맞지 않습니다";
+        // } else if (!nameReg.test(nameValue)) {
+        //     resultMsg = "이름: 이름 형식과 맞지 않습니다";
+        // } else if (!nickReg.test(nickValue)) {
+        //     resultMsg = "닉네임:  2~10자의 영문, 한글, 숫자만 사용 가능합니다";
+        // } else if (!telReg.test(telValue)) {
+        //     resultMsg = "휴대폰번호: 번호 형식과 맞지 않습니다";
+        // }
+        //
+        // if (resultMsg != "") {
+        //     alert(resultMsg);
+        //     e.preventDefault();
+        //     return false;
+        // }
     });
 
     // 아이디 입력창 포커스아웃 이벤트
@@ -106,7 +130,7 @@ $(function () {
                         }
                     },
                     error: function () {
-                        console.log("아이디 중복체크 요청 실패");
+                        console.log("서버와 연결에 실패 했습니다");
                     }
                 })
             }

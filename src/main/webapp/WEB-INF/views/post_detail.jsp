@@ -49,7 +49,6 @@
                             <li>구 분 : <span>해외</span></li>
                         </c:when>
                     </c:choose>
-                    <li>구 분 : <span>${item.planType}</span></li>
                     <li>여행지 : <span>${item.destination}</span></li>
                     <li>여행시작 : <span>이때부터 ${item.startDay}</span></li>
                     <li>여행종료 : <span>이때까지 ${item.endDay}</span></li>

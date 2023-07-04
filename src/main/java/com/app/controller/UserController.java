@@ -35,14 +35,14 @@ public class UserController {
      * 회원가입 처리
      */
     @PostMapping("/register")
-    public String register_proc(Model model, @ModelAttribute UserDto userDto, BindingResult bindingResult) {
+    @ResponseBody
+    public String register_proc(UserDto userDto, BindingResult bindingResult) {
         // 회원가입 성공하면 로그인 페이지로 이동
         if (userService.registerUser(userDto, bindingResult)) {
-            model.addAttribute("success", "회원가입 완료!");
-            return "login";
+            return "true";
+        } else {
+            return bindingResult.getFieldError().getDefaultMessage();
         }
-
-        return "register";
     }
 
     /**

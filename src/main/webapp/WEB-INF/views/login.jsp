@@ -88,7 +88,7 @@
 
 
 
-                <button class="signin" type="submit">가입</button>
+                <button class="signup" type="button">가입</button>
                 
             </form>
         </div>
@@ -100,12 +100,6 @@
 <script src="/js/login.js"></script>
 <script>
     $(function () {
-        <c:if test="${not empty success}">
-        alert("${success}");
-        </c:if>
-
         $(".user-login").addClass("is-active");
     });
-
-
 </script>

@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
         if (bindingResult.hasErrors()) {
             result = false;
         } else { // 유효성검사 성공 + insert 결과 0보다 크면 true
-            if (userDao.insertUser(userDto) > 0) {
+            if (userDao.insertUser(userDto) > 0) { // DB저장 성공하면 true
                 result = true;
             }
         }
