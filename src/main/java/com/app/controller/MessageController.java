@@ -78,7 +78,7 @@ public class MessageController {
     @MessageMapping("/chat_paging")
     public void chatPaging(ChatDto message) {
         ChatRoomDto chatRoomDto = new ChatRoomDto();
-        chatRoomDto.setChatCount(5); // 페이징 갯수
+        chatRoomDto.setChatCount(20); // 페이징 갯수
         chatRoomDto.setPlanId(message.getPlanId()); // 불러올 채팅방 id
         chatRoomDto.setChatId(message.getChatId()); // 불러올 기준 chat_id
         List<ChatDto> list = chatService.select_chat_paging(chatRoomDto);

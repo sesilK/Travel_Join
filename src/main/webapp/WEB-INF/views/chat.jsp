@@ -1,34 +1,17 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-<head>
-    <title>Title</title>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@include file="header.jsp" %>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
+<link href="/css/chat.css" rel="stylesheet" type="text/css">
 
-    <script src="https://code.jquery.com/jquery-3.7.0.js"
-            integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"/>
-    <link href="/css/chat.css" rel="stylesheet" type="text/css">
-</head>
-<body data-userid="${sessionScope.userId}">
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 
 
-<div id="chatbox" class="animate" data-roomid="${roomId}">
+<div id="chatbox" class="animate" data-roomid="${roomId}" data-userid="${sessionScope.userId}">
 
     <div id="chatview" class="p1">
-        <div id="profile">
-
-            <div id="close">
-                <div class="cy"></div>
-                <div class="cx"></div>
-            </div>
-
-            <p>채팅방 제목</p>
-
-        </div>
 
         <div id="chat-messages">
 
@@ -71,7 +54,7 @@
 
         <div id="sendmessage">
             <input type="text" value="메세지를 입력하세요"/>
-            <button id="send"></button>
+            <button id="send">전송</button>
         </div>
 
     </div>

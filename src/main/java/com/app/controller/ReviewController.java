@@ -1,5 +1,20 @@
 package com.app.controller;
 
+import com.app.dto.*;
+import com.app.service.review.ReviewService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,31 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.app.dto.CommentDto;
-import com.app.dto.JoinDto;
-import com.app.dto.MarkDto;
-import com.app.dto.ReviewDto;
-import com.app.dto.ReviewImgDto;
-import com.app.service.review.ReviewService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 
 @Controller
 public class ReviewController {
@@ -55,7 +45,7 @@ public class ReviewController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 
-		String searchType = reviewDto.getArea();
+		String searchType = reviewDto.getDestiantion();
 	    String searchCondition = reviewDto.getPlanInfo();
 	    String keyword = reviewDto.getContent();
 	    if(reviewDto.getContent() == null || reviewDto.getContent().equals("")) {

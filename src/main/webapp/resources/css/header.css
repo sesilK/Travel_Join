@@ -1000,11 +1000,11 @@ video {
     background-color: #5847d0;
 }
 
-.message {
-    display: flex;
-    align-items: center;
-    margin-top: 18px;
-}
+/*.message {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    margin-top: 18px;*/
+/*}*/
 
 .message:last-child {
     margin-bottom: 18px;

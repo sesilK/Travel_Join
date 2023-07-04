@@ -4,7 +4,7 @@ $(function () {
     var stomp = Stomp.over(sockJs);
 
     const planId = $('#chatbox').data("roomid");
-    const myId = $("body").data("userid"); //세션값 가져옴
+    const myId = $("#chatbox").data("userid"); //세션값 가져옴
 
     var isScrolled = false;
 
@@ -66,6 +66,7 @@ $(function () {
                     str += "</div>";
                 }
                 $('#chat-messages').append(str); // 새로운 채팅 업데이트
+                $("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
 
 
                 stomp.send('/pub/getUnread', {}, JSON.stringify({
@@ -124,7 +125,7 @@ $(function () {
                             }
 
                             $(".scroll-btn").after(str);
-                            headChat.scrollIntoView();
+                            $("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
                         }
                     }
 
@@ -163,7 +164,11 @@ $(function () {
             type: "text"
         }));
 
+        // $("#chat-messages").scrollTop 현재 스크롤 위치
+
         $('#sendmessage input').val('');
+        // 스크롤 최하단 내리기
+        document.querySelectorAll(".message")[document.querySelectorAll(".message").length-1].scrollIntoView();
     });
 
     // 페이지 나가면 out 신호 보내기
@@ -193,14 +198,21 @@ $(function () {
         }
     });
 
+    // 스크롤바 백분율 소수점 둘째자리까지 구하는 함수
+    function getScrollPositionPercentage(element) {
+        var scrollableHeight = element.scrollHeight - element.clientHeight;
+        var scrollPosition = element.scrollTop;
+        var scrollPercentage = (scrollPosition / scrollableHeight) * 100;
+        return scrollPercentage.toFixed(2); // 소수점 둘째 자리까지 반올림
+    }
+
+
     // 스크롤 이벤트
     $("#chat-messages").scroll(function () {
 
-        const scrollHeight = $("#chat-messages").prop("scrollHeight") - 270;
-        const scrollTop = $("#chat-messages").scrollTop();
-        const scrollCal = scrollHeight - scrollTop;
+        const scrollPer = getScrollPositionPercentage(document.querySelector('#chat-messages'));
 
-        if (scrollTop == 0) {
+        if (scrollPer < 3.0) {
 
             // 제일 상단에 있는 chatId 보다 1 작은것
             const chatId = $(".unread")[0].dataset.chatid - 1;
@@ -215,7 +227,7 @@ $(function () {
         }
 
         // 스크롤높이가 200보다 작으면 (최하단 근처)
-        if (scrollCal < 300) {
+        if (scrollPer > 97.0) {
             isScrolled = false;
             $("#scroll-btn").fadeOut(500);
             $(".scroll-btn").css({display: "none"});
@@ -230,12 +242,12 @@ $(function () {
     $(".scroll-btn").click(function () {
         if (isScrolled) {
             $("#chat-messages").animate({
-                scrollTop: $("#chat-messages").prop("scrollHeight") - 270
+                scrollTop: $("#chat-messages").prop("scrollHeight")
             }, 100);
         }
     });
 
     // 입장시 스크롤 최하단 이동
-    $("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight") - 270);
+    $("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
 
 });

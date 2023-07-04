@@ -8,7 +8,7 @@ public class ChatRoomDto {
     private int chatId;
     private String userId;
     private String title;
-    private String imageId;
+    private String fileName;
     private String sender;
     private String content;
     private String time;

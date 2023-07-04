@@ -2,7 +2,7 @@ $(function () {
 
     var sockJs = new SockJS('/ws');
     var stomp = Stomp.over(sockJs);
-    const myId = $("body").data("userid"); //세션값 가져옴
+    const myId = $("#chatbox").data("userid"); //세션값 가져옴
 
     stomp.connect({}, function () {
 
@@ -11,6 +11,7 @@ $(function () {
             const roomId = ($(this).data("roomid"));
             const contentText = $(this).find(".last-chat");
             const thisList = $(this);
+
 
             stomp.subscribe("/sub/channel/" + roomId, function (chat) {
 
@@ -47,9 +48,10 @@ $(function () {
                         const _time = item.time;
                         const _chatCount = (item.chatCount == 0) ? "" : item.chatCount;
 
-                        $('[data-roomid="' + _planId + '"] .chat-count').text(_sender + ": " + _content);
-                        $('[data-roomid="' + _planId + '"] .chat-count').text(_time);
-                        $('[data-roomid="' + _planId + '"] .chat-count').text(_chatCount);
+
+                        $(".box-top .box-right span").text(_time); // 보낸시간
+                        $(".box-bot .box-left span").text(_content); // 채팅내용
+                        $(".box-bot .box-right span").text(_chatCount); // 채팅갯수
                     }
 
                 }

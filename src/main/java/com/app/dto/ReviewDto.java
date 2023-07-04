@@ -1,10 +1,10 @@
 package com.app.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor @NoArgsConstructor
 @Data
@@ -28,7 +28,7 @@ public class ReviewDto {
 	// DB에는 없는 항목
 	String planInfo;	//여행정보
 	int planType;		//여행분류(국내0/해외1)
-	String area;		//여행지
+	String destiantion;		//여행지
 	String nick;		//작성자닉네임
 	List<String> imageFileNameList; //파일명 리스트
 	

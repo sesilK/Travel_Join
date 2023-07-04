@@ -71,6 +71,7 @@ function displayData(currentPage, dataPerPage, dataList) {
 
 	for (let i = (currentPage - 1) * dataPerPage;
 		 i < Math.min((currentPage - 1) * dataPerPage + dataPerPage, dataList.length); i++ ) {
+		console.log(dataList[i]);
 		chartHtml +=
 			'<tr>' +
 			'<td class="stars"><span class="rating_box">' +
@@ -78,7 +79,7 @@ function displayData(currentPage, dataPerPage, dataList) {
 			'<span class="rating_star" data-stars="'+ dataList[i].stars +'">★★★★★</span>' +
 			'</span></span></td>' + 
             '<td class="title" data-reviewid="'+ dataList[i].reviewId +'">' + 
-			dataList[i].area + " │ " + dataList[i].title;
+			dataList[i].destination + " │ " + dataList[i].title;
 			if(dataList[i].commentCount > 0){
 				chartHtml += '['+dataList[i].commentCount+']';
 			}

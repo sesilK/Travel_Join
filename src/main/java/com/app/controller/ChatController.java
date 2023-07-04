@@ -53,7 +53,7 @@ public class ChatController {
         chatRoomDto.setChatId(Integer.parseInt(chatId));
         chatRoomDto.setPlanId(Integer.parseInt(roomId));
         chatRoomDto.setUserId(session.getAttribute("userId").toString());
-        chatRoomDto.setChatCount(5);
+        chatRoomDto.setChatCount(10);
 
         // 페이징된 채팅내역들 담겨있음
         List<ChatDto> list = chatService.select_chat_paging(chatRoomDto);
