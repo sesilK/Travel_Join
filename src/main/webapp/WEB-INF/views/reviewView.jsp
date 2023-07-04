@@ -22,7 +22,8 @@
 			<span class="rating_box">
 				<span class="rating">★★★★★
 					<span class="rating_star" id="stars" data-stars="${item.stars}">★★★★★</span>
-				</span>&nbsp; | &nbsp; ${item.planInfo}
+				</span>&nbsp; | &nbsp;
+				<span id="planInfo" data-plan-id="${item.planId}">${item.planInfo}</span>
 			</span>
 		</span>
 	</div>

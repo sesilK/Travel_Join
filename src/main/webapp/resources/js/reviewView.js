@@ -6,6 +6,11 @@ let commentMaxByte = 300; //댓글 입력제한 300 Byte
 
 $(document).ready(function() {
 
+	//planInfo 클릭하면 해당 모집글로 이동
+	$("#planInfo").click(function() {
+		location.href = "/detail/" + $(this).data("plan-id");
+	});
+
 	// rating_star 클래스에 추가할 스타일 속성
 	let styles = {
 		width: "" + stars * 2 + "0%" // 원하는 너비로 설정
@@ -232,11 +237,11 @@ $(document).ready(function() {
 		let modifyCommentForm = `<span><input name="modifiedComment" id="modifiedComment" value="` + content + `"></span>`;
 		let confirmBtn = `<td><button class="emojiBtn" id="confirmBtn">✔</button></td>`;
 		let cancelBtn = `<td><button class="emojiBtn" id="cancelBtn">✖</button></td>`;
-		
+
 		contentDateEl.replaceWith(modifyCommentForm);
 		buttonEl1.replaceWith(confirmBtn);
 		buttonEl2.replaceWith(cancelBtn);
-		
+
 
 		//수정 글자수 제한
 		$('input[name="modifiedComment"]').on('input', function() {
@@ -264,13 +269,13 @@ $(document).ready(function() {
 
 		// 원래의 댓글 내용으로 변경
 		let contentDateEl = $('<span></span>').append($('<span></span>').text(content));
-		
+
 		if (updateDate == '' || updateDate == null) {
 			contentDateEl.append(' <span class="unimportant">(' + createDate + ')</span>');
 		} else {
 			contentDateEl.append(' <span class="unimportant">(' + updateDate + ' 수정)</span>');
 		}
-		
+
 		if (commentLv < 3) {
 			contentDateEl.append('<button class="replyBtn emojiBtn unimportant" type="button">답글</button>');
 		}
@@ -303,13 +308,13 @@ $(document).ready(function() {
 						content: content
 					}),
 					success: function(data) {
-					if (data === '') {
-						alert('로그인 아이디가 없습니다.');
-						window.location.href = "/login";
-					} else {
-						renderComments(data);
-					}
-				},
+						if (data === '') {
+							alert('로그인 아이디가 없습니다.');
+							window.location.href = "/login";
+						} else {
+							renderComments(data);
+						}
+					},
 					error: function() {
 						alert('댓글 수정 실행 오류');
 					}
@@ -339,14 +344,14 @@ $(document).ready(function() {
 					userId: userId
 				}),
 				success: function(data) {
-			        if (data.true) {
+					if (data.true) {
 						renderComments(data.true); //data['commentList'] 아님
-			        } else if (data.idNull) {
+					} else if (data.idNull) {
 						alert('삭제 권한이 없습니다.(로그인 아이디 없음)');
 						window.location.href = "/login";
-			        } else if (data.false) {
+					} else if (data.false) {
 						alert('삭제 권한이 없습니다.');
-			        }
+					}
 				},
 				error: function() {
 					alert('댓글 삭제 실행 오류');
@@ -365,15 +370,15 @@ $(document).ready(function() {
 
 // 특정 클래스에 스타일 속성을 추가하는 함수
 function addStyleToClass(className, styles) {
-    let elements = document.getElementsByClassName(className);
-    for (let i = 0; i < elements.length; i++) {
-        let element = elements[i];
-        for (let property in styles) {
-            if (styles.hasOwnProperty(property)) {
-                element.style[property] = styles[property];
-            }
-        }
-    }
+	let elements = document.getElementsByClassName(className);
+	for (let i = 0; i < elements.length; i++) {
+		let element = elements[i];
+		for (let property in styles) {
+			if (styles.hasOwnProperty(property)) {
+				element.style[property] = styles[property];
+			}
+		}
+	}
 }
 
 //댓글 글자수 제한 함수
@@ -427,7 +432,7 @@ function renderComments(commentList) {
 			}
 			html += '<span class="commentNick">';
 			if (comment.userId === userId) {
-				html += '<b>'+comment.nick+'</b>';
+				html += '<b>' + comment.nick + '</b>';
 			} else {
 				html += comment.nick;
 			}
@@ -462,7 +467,7 @@ function renderComments(commentList) {
 
 		html += '</tr>';
 	}
-	
+
 	// 생성한 HTML을 특정 요소에 추가
 	$('#commentList').html(html);
 	$('input[name="comment"]').val('');
@@ -470,8 +475,7 @@ function renderComments(commentList) {
 	// 댓글 수 업데이트
 	let commentCountEl = $('.commentCount'); // 댓글 수 요소
 	commentCountEl.text(commentCount); // 댓글 수 업데이트
-	
-	
+
 }
 
 $(function() {
