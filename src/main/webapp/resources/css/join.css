@@ -17,6 +17,18 @@ body {
     overflow-y: scroll;
 }
 
+.plan-xline {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    overflow-x: scroll;
+}
+.plan-xline img{
+	margin-left: 50px;
+	margin-top: 25px
+}
+
+
 .card {
     width: 300px;
     height: 280px;
