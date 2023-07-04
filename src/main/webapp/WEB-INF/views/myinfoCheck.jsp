@@ -18,7 +18,7 @@
                 <span>password</span>
                 <br>
 
-                <button class="signin" type="submit">비밀번호 확인</button>
+                <button class="signin" type="button">비밀번호 확인</button>
             </form>
         </div>
 
@@ -30,4 +30,5 @@
         $(".modinfo").addClass("is-active");
     });
 </script>
+<script src="/js/myinfoCheck.js"></script>
 <%@ include file="footer.jsp" %>

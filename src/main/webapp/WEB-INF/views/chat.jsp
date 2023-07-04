@@ -23,10 +23,9 @@
 
             <c:forEach items="${chats}" var="chat">
 
-
                 <c:if test="${chat.userId eq sessionScope.userId}">
                     <div class="message right">
-                        <img src="/profile/default_profile.png"/>
+                        <img src="/profile/${sessionScope.profileImage}"/>
                         <div class="bubble">
                                 ${chat.content}
                             <span class="timestamp">${chat.time}</span>

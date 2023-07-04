@@ -38,7 +38,7 @@ public class ChatController {
 
         // 채팅방에 속한 멤버가 맞는지 체크
         int isMember = chatService.check_chatroom_member(chatDto);
-        if(isMember <= 0) {
+        if(isMember <= 0) { // 아니면 리스트 페이지로 돌려보내기
             return "redirect:/chatlist";
         }
 

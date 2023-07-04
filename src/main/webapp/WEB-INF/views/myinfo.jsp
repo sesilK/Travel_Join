@@ -25,7 +25,7 @@
 
     <div class="infoEdit-box">
         <div class="infoEdit">
-            <span>아이디</span><br> <input type="text" class="text input-f" value="${user.userId}" readonly="readonly"><br>
+            <span>아이디</span><br> <input type="text" class="text input-f" value="${user.userId}" readonly="readonly" style="background: #fff;"><br>
             <div><span>비밀번호</span><br> <input type="password" class="text input-f" name="password"
                                               value="${user.password}"> <i class="fa fa-eye fa-lg"></i></div>
             <br>

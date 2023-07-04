@@ -12,23 +12,36 @@
 
             <div class="img-display">
                 <div class="img-showcase">
-                    <c:if test="${images.size() > 0}">
-                        <c:forEach var="i" begin="0" end="${images.size()-1}">
-                            <img src="/images/join/${images.get(i).fileName}">
-                        </c:forEach>
-                    </c:if>
+                    <c:choose>
+                        <c:when test="${images.size() > 0}">
+                            <c:forEach var="i" begin="0" end="${images.size()-1}">
+                                <img src="/images/join/${images.get(i).fileName}">
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <img src="/images/join/default.png">
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
             <div class="img-select">
-                <c:if test="${images.size() > 0}">
-                    <c:forEach var="i" begin="0" end="${images.size()-1}">
+                <c:choose>
+                    <c:when test="${images.size() > 0}">
+                        <c:forEach var="i" begin="0" end="${images.size()-1}">
+                            <div class="img-item">
+                                <a href="#" data-id="${i+1}"> <img src="/images/join/${images.get(i).fileName}">
+                                </a>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
                         <div class="img-item">
-                            <a href="#" data-id="${i+1}"> <img src="/images/join/${images.get(i).fileName}">
+                            <a href="#" data-id="1"> <img src="/images/join/default.png">
                             </a>
                         </div>
-                    </c:forEach>
-                </c:if>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
         </div>

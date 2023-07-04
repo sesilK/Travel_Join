@@ -96,14 +96,14 @@ public class UserController {
 
     // 비밀번호 체크 post
     @PostMapping("/myinfo/before")
-    public String myinfoBefore_proc(@ModelAttribute UserDto userDto, HttpSession session) {
+    @ResponseBody
+    public String myinfoBefore_proc(UserDto userDto, HttpSession session) {
 
         String result = userService.login(userDto, session);
         if (result.equals("성공")) {
             session.setAttribute("passCheck", true);
-            return "redirect:/myinfo";
         }
-        return "redirect:/myinfo/before";
+        return result;
     }
 
     // 회원정보수정 페이지

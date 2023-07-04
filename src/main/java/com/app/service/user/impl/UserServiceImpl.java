@@ -62,6 +62,9 @@ public class UserServiceImpl implements UserService {
             String profileImage = userDao.selectUserById(userDto.getUserId()).getFileName();
             session.setAttribute("profileImage", profileImage);
 
+            // 닉네임 정보 세션에 담기
+            session.setAttribute("nick", findUser.getNick());
+
 
             String input_pw = userDto.getPassword(); // form 에서 입력한 pw
             String db_pw = findUser.getPassword();    // db에서 찾은 pw

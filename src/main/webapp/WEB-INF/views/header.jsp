@@ -95,7 +95,7 @@
     <div class="wrapper">
         <div class="header">
             <div class="search-bar">
-                <input type="text" placeholder="Search">
+                <input type="text" placeholder="Search" style="display: none;">
             </div>
 
             <div class="user-settings">
@@ -104,7 +104,7 @@
                         <img class="user-img"
                              src="/images/profile/${sessionScope.profileImage}"
                              alt="">
-                        <div class="user-name">${sessionScope.userId}</div>
+                        <div class="user-name">${sessionScope.nick}&nbsp;(${sessionScope.userId})</div>
 
 
                     </c:when>

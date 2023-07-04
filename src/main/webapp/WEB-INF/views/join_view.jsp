@@ -27,7 +27,15 @@
             </div>
 
             <div class="card-body">
-                    ${item.firstImage}
+                <c:choose>
+                    <c:when test="${not empty item.firstImage}">
+                        ${item.firstImage}
+                    </c:when>
+                    <c:otherwise>
+                        <img src="/images/join/default.png" style="width: 677.778px;">
+                    </c:otherwise>
+                </c:choose>
+
                 <div class="content">
                         ${item.content}
                 </div>
