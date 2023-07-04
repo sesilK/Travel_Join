@@ -1,6 +1,5 @@
 package com.app.dao.board;
 
-import com.app.dto.BoardDto;
 import com.app.dto.JoinDto;
 import com.app.dto.PartyDto;
 import com.app.dto.MarkDto;

@@ -7,18 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dao.board.BoardDao;
-import com.app.dto.JoinDto;
 import com.app.dto.MarkDto;
 import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
-public class BoardServiceImpl implements BoardService{
-
+public class BoardServiceImpl implements BoardService {
 
 	@Autowired
 	BoardDao boardDao;
@@ -43,11 +37,10 @@ public class BoardServiceImpl implements BoardService{
 		return list;
 	}
 
-
 	@Override
 	public void joinParty(PartyDto partyDto) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -60,9 +53,11 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<JoinDto> myPartying(String userId) {
 		// TODO Auto-generated method stub
-		
+
 		List<JoinDto> myPartying = boardDao.myPartying(userId);
 		return myPartying;
+	}
+
 	public int joinBoardViewIncrease(int planId) {
 
 		int result = boardDao.joinBoardViewIncrease(planId);
@@ -72,21 +67,18 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public MarkDto selectBoardMark(int planId, String userId, String sort) {
-		
+
 		MarkDto markDto = boardDao.selectBoardMark(planId, userId, sort);
-		
+
 		return markDto;
 	}
 
 	@Override
 	public int insertBoardMark(int planId, String userId, String sort) {
-		
+
 		int result = boardDao.insertBoardMark(planId, userId, sort);
-		
+
 		return result;
 	}
-
-	
-	
 
 }

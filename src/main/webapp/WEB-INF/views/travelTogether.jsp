@@ -7,8 +7,12 @@
             <div class="card-header">
                 <div class="left">
                     <div class="profile-image">
-                        <img src="https://tripsoda.s3.ap-northeast-2.amazonaws.com/test/image/1670229253636-1"
+                        <img src="/images/profile/${item.fileName}"
                              alt="avatar">
+                    </div>
+                    <div class="profile-info">
+                    <span>${item.nick}</span>
+                    <span>${item.gender} • ${item.birth}</span>
                     </div>
                 </div>
                 <div class="right">

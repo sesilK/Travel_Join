@@ -6,8 +6,6 @@ import com.app.dto.PartyDto;
 
 import java.util.List;
 
-import com.app.dto.BoardDto;
-
 public interface BoardService {
 		
 	public JoinDto findPostById(int planId); //글상세 불러오기

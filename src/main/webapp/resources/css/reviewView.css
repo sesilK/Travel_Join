@@ -84,7 +84,11 @@ input#comment {
     border-bottom: 1px solid #00000032; /* 1픽셀 너비의 회색 테두리 */
 }
 
-
 .commentSpan{
 	width: 17%;
+}
+
+#planInfo:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }

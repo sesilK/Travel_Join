@@ -8,7 +8,11 @@
                 <div class="left">
                     <div class="profile-image">
                         <img src="/images/profile/${item.fileName}"
-                             alt="avatar">
+                            alt="avatar">
+                    </div>
+                    <div class="profile-info">
+                        <span>${item.nick}</span>
+                        <span>${item.birth}살 • ${item.gender}</span>
                     </div>
                 </div>
                 <div class="right">
@@ -30,6 +34,7 @@
 
             <div class="card-footer">
                 <div class="title">${item.title}</div>
+                
             </div>
         </div>
     </c:forEach>

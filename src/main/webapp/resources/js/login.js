@@ -119,6 +119,7 @@ $(function () {
     });
 
     $(".signin").click(function () {
+		alert();
 
         const form = $("form")[0];
         const formData = new FormData(form);
