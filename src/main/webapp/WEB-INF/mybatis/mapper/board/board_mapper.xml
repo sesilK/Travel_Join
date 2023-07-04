@@ -43,6 +43,67 @@
 		  GROUP BY p.plan_id, p.user_id
 		  ORDER BY plan_id, user_id
 	</select> 
+	
+	<!-- 내 모집내역 -->
+	<select id="myPartying" resultType="JoinDto" >
+		
+		select a.PLAN_ID, a.USER_ID, a.TITLE, a.CONTENT, a.DESTINATION, a.PERSONNEL,
+			   TO_CHAR(a.start_day, 'YY-MM-DD') as START_DAY,
+			   TO_CHAR(a.end_day, 'YY-MM-DD') as END_DAY,
+			   TO_CHAR(a.reg_date, 'YY-MM-DD') as REG_DATE,
+			   TO_CHAR(a.finish_date, 'YY-MM-DD') as FINISH_DATE,
+			   a.PLAN_STATE,	REGEXP_SUBSTR(a.CONTENT, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image,
+			   b.nick, b.birth, b.gender, b.file_name
+		from JOIN_BOARD a, (select nick, TRUNC((SYSDATE - BIRTH) / 365) as birth,
+								   DECODE(gender, 'M', '남자', 'F', '여자') as gender,
+								   file_name, user_id
+							from users
+							where user_id = #{userId}) b
+        where a.user_id = #{userId}
+
+	</select>
+	
+	<!-- 참여중인 여행 -->
+	<select id="travelTogether" resultType="JoinDto">
+	
+	<!-- select a.PLAN_ID, a.USER_ID, a.TITLE, a.CONTENT, a.DESTINATION, a.PERSONNEL,
+			   TO_CHAR(a.start_day, 'YY-MM-DD') as START_DAY,
+			   TO_CHAR(a.end_day, 'YY-MM-DD') as END_DAY,
+			   TO_CHAR(a.reg_date, 'YY-MM-DD') as REG_DATE,
+			   TO_CHAR(a.finish_date, 'YY-MM-DD') as FINISH_DATE,
+			   a.PLAN_STATE,	REGEXP_SUBSTR(a.CONTENT, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image,
+			   b.nick, b.birth, b.gender , b.image_id
+		from JOIN_BOARD a, (select nick, TRUNC((SYSDATE - BIRTH) / 365) as birth,
+								   DECODE(gender, 'M', '남자', 'F', '여자') as gender,
+								   image_id, user_id
+							from users
+							where user_id = #{userId}) b
+        where a.user_id = #{userId} -->
+        
+    
+    SELECT a.PLAN_ID, a.USER_ID, a.TITLE, a.CONTENT, a.DESTINATION, a.PERSONNEL,
+			   TO_CHAR(a.start_day, 'YY-MM-DD') as START_DAY,
+			   TO_CHAR(a.end_day, 'YY-MM-DD') as END_DAY,
+			   TO_CHAR(a.reg_date, 'YY-MM-DD') as REG_DATE,
+			   TO_CHAR(a.finish_date, 'YY-MM-DD') as FINISH_DATE,
+			   a.PLAN_STATE,	REGEXP_SUBSTR(a.CONTENT, '&lt;img[^&gt;]+&gt;', 1, 1) as first_image,
+			   b.nick, b.birth, b.gender, b.file_name
+    	FROM JOIN_BOARD_MEMBER c
+    	
+    	JOIN JOIN_BOARD a ON a.PLAN_ID = c.PLAN_ID
+    	JOIN (SELECT nick, TRUNC((SYSDATE - BIRTH) / 365) as birth,
+    				 DECODE(gender, 'M', '남자', 'F', '여자') as gender, user_id, file_name
+			  from USERS ) b ON b.user_id = a.USER_ID
+   
+    	WHERE c.USER_ID = #{userId}
+    
+    
+        
+<!-- 	SELECT jb.*
+		FROM JOIN_BOARD_MEMBER jbm
+		JOIN JOIN_BOARD jb ON jb.PLAN_ID = jbm.PLAN_ID
+		WHERE jbm.USER_ID = #{userId} -->
+	</select>
  
 	<select id="select_images_by_planId" parameterType="Integer" resultType="JoinDto">
 		select file_name

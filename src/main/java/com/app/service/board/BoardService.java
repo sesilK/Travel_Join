@@ -14,6 +14,10 @@ public interface BoardService {
 
 	List<JoinDto> myTeamDetail(String userId); //plan 에 참가한 user들 조회
 
+	List<JoinDto> travelTogether(String userId);
+	
+	List<JoinDto> myPartying(String userId);
+
 	List<JoinDto> select_images_by_planId(int planId);
 
 	public int joinBoardViewIncrease(int planId); //조회수 증가

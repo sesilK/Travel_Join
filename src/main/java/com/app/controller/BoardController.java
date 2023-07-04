@@ -128,6 +128,29 @@ public class BoardController {
 
     }
     
+	@GetMapping("/travelTogether") /* 참가중인 여행 */
+    public String travelTogether(Model model, HttpSession httpSession) {
+    	
+    	String userId = (String) httpSession.getAttribute("userId");
+    	
+    	
+    	List<JoinDto> travelTogether
+    						= boardService.travelTogether(userId);
+    	model.addAttribute("items",travelTogether);
+    	return "travelTogether";
+    }
+    	
+	@GetMapping("/myPartying") /* 내 모집내역 */
+    public String myPartying(Model model, HttpSession httpSession) {
+    	
+    	String userId = (String) httpSession.getAttribute("userId");
+    	
+    	
+    	List<JoinDto> myPartying
+    						= boardService.myPartying(userId);
+    	model.addAttribute("items",myPartying);
+    	return "myPartying";
+    }
 	@PostMapping("/joinLike") //추천 버튼 클릭
 	@ResponseBody
 	public int joinLike(@RequestBody String requestBody, HttpSession session) throws JsonMappingException, JsonProcessingException {

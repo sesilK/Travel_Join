@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="header.jsp" %>
-<link href="/css/join_view.css" rel="stylesheet" type="text/css"/>
 <div class="plan-list">
 
     <c:forEach var="item" items="${items}">
@@ -9,11 +8,11 @@
                 <div class="left">
                     <div class="profile-image">
                         <img src="/images/profile/${item.fileName}"
-                            alt="avatar">
+                             alt="avatar">
                     </div>
                     <div class="profile-info">
-                        <span>${item.nick}</span>
-                        <span>${item.birth}살 • ${item.gender}</span>
+                    <span>${item.nick}</span>
+                    <span>${item.gender} • ${item.birth}살</span>
                     </div>
                 </div>
                 <div class="right">
@@ -35,14 +34,9 @@
 
             <div class="card-footer">
                 <div class="title">${item.title}</div>
-                
             </div>
         </div>
     </c:forEach>
-
-    <div class="btbox">
-        <a href="/join_making"><button class="makingUpdate" type="button">작성하기</button></a>
-    </div>
 </div>
 <script>
     $(function () {
@@ -51,4 +45,5 @@
         });
     })
 </script>
+
 <%@ include file="footer.jsp" %>

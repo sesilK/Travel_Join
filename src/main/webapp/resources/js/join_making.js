@@ -160,4 +160,3 @@
         $('input[name="startDay"]').attr('min', currentDate);
         $('input[name="endDay"]').attr('min', currentDate);
     });
-

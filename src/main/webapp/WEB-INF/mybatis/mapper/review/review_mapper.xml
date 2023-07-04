@@ -81,7 +81,7 @@
 					AND jb.destination LIKE '%'||#{keyword}||'%'
 				</if>
 				<if test="searchCondition == 'sessionId'">
-					AND us.user_id LIKE '%'||#{keyword}||'%'
+					AND us.user_id LIKE #{keyword}
 				</if>
 				ORDER BY review_id DESC
 				) rb

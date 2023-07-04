@@ -50,6 +50,25 @@ public class BoardDaoImpl implements BoardDao{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<JoinDto> travelTogether(String userId) {
+		// TODO Auto-generated method stub
+		
+		List<JoinDto> travelTogether =
+				sqlsessionTemplate.selectList("board_mapper.travelTogether", userId);
+				
+		return travelTogether;
+	}
+
+	@Override
+	public List<JoinDto> myPartying(String userId) {
+		// TODO Auto-generated method stub
+		List<JoinDto> myPartying =
+				sqlsessionTemplate.selectList("board_mapper.myPartying", userId);
+				
+		return myPartying;
+	}
 	
 	public int joinBoardViewIncrease(int planId) {
 

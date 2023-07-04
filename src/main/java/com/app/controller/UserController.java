@@ -124,7 +124,6 @@ public class UserController {
         }
     }
 
-
     // 회원정보 수정요청
     @PostMapping("/myinfo")
     @ResponseBody
