@@ -71,7 +71,7 @@ $(function () {
             type : 'POST',
             data : formData,
             success : function(data) {
-                console.log(data);
+                // console.log(data);
                 if(data == 'true') {
                     alert("회원가입 완료");
                     location.href = "/login";
@@ -122,7 +122,7 @@ $(function () {
                     url: '/api/register?userId=' + userId,
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         if (data == false) {
                             alert("사용 불가능한 아이디입니다.");
                             $("#input_id").val("");
@@ -130,7 +130,7 @@ $(function () {
                         }
                     },
                     error: function () {
-                        console.log("서버와 연결에 실패 했습니다");
+                        // console.log("서버와 연결에 실패 했습니다");
                     }
                 })
             }
@@ -147,8 +147,8 @@ $(function () {
     function login_proc() {
         const form = $("form")[0];
         const formData = new FormData(form);
-        console.log(form);
-        console.log(formData);
+        // console.log(form);
+        // console.log(formData);
 
         $.ajax({
             cache : false,
@@ -158,7 +158,7 @@ $(function () {
             type : 'POST',
             data : formData,
             success : function(data) {
-                console.log(data);
+                // console.log(data);
                 if(data == "성공") {
                     location.href = "/";
                 } else {

@@ -83,7 +83,7 @@ $(document).ready(function() {
 		let content = e.currentTarget.innerHTML;
 		let byteLength = calculateByteLength(content); //바이트 길이
 
-		console.log(byteLength);
+		// console.log(byteLength);
 
 		if (byteLength >= contentMaxByte) { // 입력된 텍스트의 바이트가 maxByte를 초과할 경우
 			let keyCode = e.keyCode || e.which;
@@ -134,7 +134,7 @@ $(document).ready(function() {
 
 		if (byteLength > titleMaxByte) {
 			let trimmedValue = title.substring(0, charLength - 1); // 입력값을 현재 글자까지만 잘라냄
-			console.log(trimmedValue);
+			// console.log(trimmedValue);
 			$(this).val(trimmedValue); // 입력값을 잘라낸 값으로 설정하여 길이를 제한함
 		}
 	});

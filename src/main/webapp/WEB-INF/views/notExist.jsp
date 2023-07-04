@@ -32,7 +32,7 @@ div.centerBox {
 		if (seconds <= 0) {	//남은시간 0초 되면 이동
 			window.history.back();	//이전페이지로 이동
         } else {	//남은시간 0초 되기 전에는 
-        	console.log(seconds);
+        	// console.log(seconds);
             updateCountdown(seconds); //남은시간 변경하는 함수 호출
             setTimeout(() => redirectToReviewList(seconds - 1), 1000); // 1초마다 다시 호출
         }

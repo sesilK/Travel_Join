@@ -1,8 +1,10 @@
 $(function () {
 
-    var sockJs = new SockJS('/ws');
-    var stomp = Stomp.over(sockJs);
+    let sockJs = new SockJS('/ws');
+    let stomp = Stomp.over(sockJs);
+    stomp.debug = null;
     const myId = $("#chatbox").data("userid"); //세션값 가져옴
+    let subscriptions = [];
 
     stomp.connect({}, function () {
 
@@ -12,17 +14,17 @@ $(function () {
             const contentText = $(this).find(".last-chat");
             const thisList = $(this);
 
-            stomp.subscribe("/sub/channel/" + roomId, function (chat) {
+            let subscription = stomp.subscribe("/sub/channel/" + roomId, function (chat) {
 
-                var message = JSON.parse(chat.body);
-                var sender = message.userId;
-                var content = message.content;
-                var timeStamp = message.time;
-                var chatId = message.chatId;
-                var unRead = message.unRead;
-                var title = message.title;
-                var chatListInfo = message.data;
-                var type = message.type;
+                let message = JSON.parse(chat.body);
+                let sender = message.userId;
+                let content = message.content;
+                let timeStamp = message.time;
+                let chatId = message.chatId;
+                let unRead = message.unRead;
+                let title = message.title;
+                let chatListInfo = message.data;
+                let type = message.type;
 
                 if (type === 'text') {
                     contentText.text(sender + ": " + content);
@@ -61,7 +63,7 @@ $(function () {
 
                 }
 
-
+                subscriptions.push(subscription);
             });
         });
 
@@ -78,7 +80,13 @@ $(function () {
 
     // 페이지 나가면 out 신호 보내기
     $(window).on("beforeunload", function () {
+        // 모든 구독 해제
+        for (let i = 0; i < subscriptions.length; i++) {
+            stomp.unsubscribe(subscriptions[i]);
+        }
 
+        subscriptions = []; // 배열 초기화
+        stomp.disconnect();
     });
 });
 

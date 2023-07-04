@@ -36,7 +36,7 @@ $(function () {
             }), //파라미터로 같이 담아서 보낼 것들
 
             success: (data) => {
-                console.log(data);
+                // console.log(data);
                 if (data == 'true') {
                     alert('신청 완료');
                 }

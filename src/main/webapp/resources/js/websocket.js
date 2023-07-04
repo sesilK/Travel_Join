@@ -5,13 +5,13 @@ function connect() {
     
     var host = document.location.host;
     var pathname = document.location.pathname;
-    console.log("ws://" +host  + pathname + "/" + username);
+    // console.log("ws://" +host  + pathname + "/" + username);
     
     ws = new WebSocket("ws://" +host  + pathname + "/" + username);
 
     ws.onmessage = function(event) {
     var log = document.getElementById("log");
-        console.log(event.data);
+        // console.log(event.data);
         var message = JSON.parse(event.data);
         log.innerHTML += message.from + " : " + message.content + "\n";
     };

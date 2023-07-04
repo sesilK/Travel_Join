@@ -23,7 +23,7 @@ $(function () {
                 contentType: false,
                 processData: false,
                 success: (data) => {
-                    console.log(data);
+                    // console.log(data);
                     if (data == 'true') {
                         alert("프로필사진 변경 완료");
                         location.href = '/myinfo';
@@ -78,7 +78,7 @@ $(function () {
                 tel: tel
             }), // 파라미터로 같이 담아서 보낼 것들
             success: function (data) {
-                console.log(data);
+                // console.log(data);
                 if (data === 'true') {
                     alert('수정완료');
                     location.href = "/myinfo";
@@ -105,7 +105,7 @@ $(function () {
                 contentType: "application/json; charset=utf-8", // json 포맷 utf-8 내용으로 통신하겠다
                 url: "/drop", // 어디 경로로 요청할 건지
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     if (data === 'true') {
                         alert('회원탈퇴 완료');
                         location.href = "/home";

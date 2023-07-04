@@ -1,14 +1,14 @@
 $(function () {
 
-    var sockJs = new SockJS('/ws');
-    var stomp = Stomp.over(sockJs);
+    let sockJs = new SockJS('/ws');
+    let stomp = Stomp.over(sockJs);
+    stomp.debug = null;
+    let subscriptions = [];
 
     const planId = $('#chatbox').data("roomid");
     const myId = $("#chatbox").data("userid"); //세션값 가져옴
 
-    var isScrolled = false;
-
-    var deferred = $.Deferred();
+    let isScrolled = false;
 
 
     stomp.connect({}, function () {
@@ -19,17 +19,17 @@ $(function () {
         }));
 
 
-        stomp.subscribe("/sub/channel/" + planId, function (chat) {
-            var message = JSON.parse(chat.body);
-            console.log(message);
-            var userId = message.userId;
-            var content = message.content;
-            var time = message.time;
-            var chatId = message.chatId;
-            var unRead = message.unRead;
-            var type = message.type;
-            var itemList = message.data;
-            var str = '';
+        let subscription = stomp.subscribe("/sub/channel/" + planId, function (chat) {
+            let message = JSON.parse(chat.body);
+            // console.log(message);
+            let userId = message.userId;
+            let content = message.content;
+            let time = message.time;
+            let chatId = message.chatId;
+            let unRead = message.unRead;
+            let type = message.type;
+            let itemList = message.data;
+            let str = '';
 
 
             // 받은 메세지가 text 타입이면
@@ -69,6 +69,8 @@ $(function () {
                 $("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
 
 
+
+
                 stomp.send('/pub/getUnread', {}, JSON.stringify({
                     planId: planId,
                     unRead: $("span.unread").length // 내 채팅창 채팅갯수
@@ -99,8 +101,8 @@ $(function () {
                         let _time = item.time;
                         let _unRead = item.unRead;
 
-                        if(_content != null && _content != NaN && _content != "") {
-                            console.log(_content + " ------------------------------------------");
+                        if (_content != null && _content != NaN && _content != "") {
+                            // console.log(_content + " ------------------------------------------");
                             if (myId === _userId) {
                                 str = "<div class='message right'>";
                                 str += "<img src='/profile/default_profile.png'/>";
@@ -146,12 +148,13 @@ $(function () {
                 }, 100);
             }
 
+            subscriptions.push(subscription);
         });
     });
 
     // 채팅 전송버튼
     $('#send').click(function () {
-        var content = $('#sendmessage input').val();
+        let content = $('#sendmessage input').val();
         if (content == '' || content == '메세지를 입력하세요') {
             return;
         }
@@ -168,7 +171,7 @@ $(function () {
 
         $('#sendmessage input').val('');
         // 스크롤 최하단 내리기
-        document.querySelectorAll(".message")[document.querySelectorAll(".message").length-1].scrollIntoView();
+        document.querySelectorAll(".message")[document.querySelectorAll(".message").length - 1].scrollIntoView();
     });
 
     // 페이지 나가면 out 신호 보내기
@@ -200,9 +203,9 @@ $(function () {
 
     // 스크롤바 백분율 소수점 둘째자리까지 구하는 함수
     function getScrollPositionPercentage(element) {
-        var scrollableHeight = element.scrollHeight - element.clientHeight;
-        var scrollPosition = element.scrollTop;
-        var scrollPercentage = (scrollPosition / scrollableHeight) * 100;
+        let scrollableHeight = element.scrollHeight - element.clientHeight;
+        let scrollPosition = element.scrollTop;
+        let scrollPercentage = (scrollPosition / scrollableHeight) * 100;
         return scrollPercentage.toFixed(2); // 소수점 둘째 자리까지 반올림
     }
 
@@ -210,10 +213,9 @@ $(function () {
     // 스크롤 이벤트
     $("#chat-messages").scroll(function () {
 
-        const scrollPer = getScrollPositionPercentage(document.querySelector('#chat-messages'));
+        const scrollPer = getScrollPositionPercentage(this);
 
         if (scrollPer < 3.0) {
-
             // 제일 상단에 있는 chatId 보다 1 작은것
             const chatId = $(".unread")[0].dataset.chatid - 1;
 
@@ -223,20 +225,20 @@ $(function () {
                 chatId: chatId,
                 userId: myId
             }));
-
         }
 
-        // 스크롤높이가 200보다 작으면 (최하단 근처)
+        // 스크롤높이가 바닥 근처에 있을때 (100.0 = 정확한 스크롤의 바닥지점)
         if (scrollPer > 97.0) {
             isScrolled = false;
             $("#scroll-btn").fadeOut(500);
             $(".scroll-btn").css({display: "none"});
-        } else {    // 스크롤중일때
+        } else {    // 97.0 < 일때 스크롤중으로 판단
             isScrolled = true;
             $(".scroll-btn").fadeIn(500);
             $(".scroll-btn").css({display: "flex"});
         }
     });
+
 
     // 스크롤버튼 클릭
     $(".scroll-btn").click(function () {
@@ -247,7 +249,18 @@ $(function () {
         }
     });
 
+
+    // 페이지 나가면 out 신호 보내기
+    $(window).on("beforeunload", function () {
+        // 모든 구독 해제
+        for (let i = 0; i < subscriptions.length; i++) {
+            stomp.unsubscribe(subscriptions[i]);
+        }
+
+        subscriptions = []; // 배열 초기화
+        stomp.disconnect();
+    });
+
     // 입장시 스크롤 최하단 이동
     $("#chat-messages").scrollTop($("#chat-messages").prop("scrollHeight"));
-
 });

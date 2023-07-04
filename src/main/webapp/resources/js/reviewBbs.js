@@ -63,7 +63,7 @@ function starsWidth(){
 
 //현재 페이지(currentPage)와 페이지당 글 개수(dataPerPage) 반영
 function displayData(dataList) {
-	console.log(dataList);
+	// console.log(dataList);
 
 	let chartHtml = "";
 
@@ -93,7 +93,7 @@ function displayData(dataList) {
 
 //페이징 표시 함수  (총 데이터 수, 한 페이지에 나타낼 글 수/페이지 수, 현재 페이지, 데이터리스트)
 function paging(totalData, dataPerPage, pageCount, currentPage) {
-	console.log("currentPage : " + currentPage);
+	// console.log("currentPage : " + currentPage);
 
 	totalPage = Math.ceil(totalData / dataPerPage); //총 페이지 수
 
