@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="header.jsp" %>
+<link href="/css/join_view.css" rel="stylesheet" type="text/css"/>
 <div class="plan-list">
 
     <c:forEach var="item" items="${items}">
@@ -37,6 +38,10 @@
             </div>
         </div>
     </c:forEach>
+
+    <div class="btbox">
+        <a href="/join_making"><button class="makingUpdate" type="button">작성하기</button></a>
+    </div>
 </div>
 <script>
     $(function () {

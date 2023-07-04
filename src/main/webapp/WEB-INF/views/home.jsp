@@ -40,7 +40,7 @@
         </div>
     </div>
 </div>
-<div class="small-header anim" style="--delay: .3s">최신글</div>
+<div class="small-header anim" style="--delay: .3s">조회 많은글</div>
 <div class="plan-list">
 
     <div class="card">
