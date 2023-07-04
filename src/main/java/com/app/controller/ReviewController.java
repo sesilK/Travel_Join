@@ -88,6 +88,7 @@ public class ReviewController {
 		if (keyword == null /* || keyword.equals("") */) {
 	    	keyword ="";
 	    }
+		
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("searchType", searchType);
 		map.put("searchCondition", searchCondition);
@@ -203,26 +204,14 @@ public class ReviewController {
 		ReviewDto item = reviewService.findReview(reviewId); //해당글 불러오기
 		
 		if(!(item.getDeleteAt().equals("Y")) && item.getReportCount() <= 5 ) { //삭제나 신고누적 해당 X
-			//List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
-			//model.addAttribute("commentList", commentList);
+			List<CommentDto> commentList = reviewService.findCommentList(reviewId); //댓글목록 불러오기
+			model.addAttribute("commentList", commentList);
 			model.addAttribute("item", item);			
 			
 			return "reviewView";
 		} else {
 			return "redirect:/notExist";
 		}	
-	}
-	
-	@PostMapping("/commentList") //글상세 페이지 요청
-	@ResponseBody
-	public List<CommentDto> commentList(@RequestBody String requestBody) throws JsonProcessingException {
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
-		
-		List<CommentDto> commentList = reviewService.findCommentList(reviewDto.getReviewId()); //댓글목록 불러오기
-		
-		return commentList;
 	}
 	
 	@GetMapping("/reviewModify") //글수정 페이지 요청

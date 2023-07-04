@@ -8,7 +8,7 @@ $(document).ready(function() {
 
 	// rating_star 클래스에 추가할 스타일 속성
 	let styles = {
-		width: ""+stars*2+"0%" // 원하는 너비로 설정
+		width: "" + stars * 2 + "0%" // 원하는 너비로 설정
 	};
 	addStyleToClass("rating_star", styles);
 
@@ -27,10 +27,10 @@ $(document).ready(function() {
 			success: (data) => {
 				if (data == -1) {
 					alert('이미 신고한 글입니다.');
-				} else if (data == -2){
+				} else if (data == -2) {
 					alert('로그인 아이디가 없습니다.');
 					window.location.href = "/login";
-				} else if (data > 0){
+				} else if (data > 0) {
 					alert('신고하였습니다.');
 				}
 			},	//요청에 대해 성공한 경우 수행할 내용
@@ -56,10 +56,10 @@ $(document).ready(function() {
 			success: (data) => {
 				if (data == -1) {
 					alert('이미 추천한 글입니다.');
-				} else if (data == -2){
+				} else if (data == -2) {
 					alert('로그인 아이디가 없습니다.');
 					window.location.href = "/login";
-				} else if (data > 0){
+				} else if (data > 0) {
 					let likeCount = $('#likeCount'); //추천수 요소
 					likeCount.text(data); // 추천 수 업데이트
 					alert('추천하였습니다.');
@@ -148,7 +148,7 @@ $(document).ready(function() {
 		$('#commentList button').hide();
 
 		let commentRow = $(this).closest('tr');
-		let parentLv = parseInt(commentRow.attr('data-comment-lv'), 10); //부모댓글레벨(10진수 표현)
+		/*let parentLv = parseInt(commentRow.attr('data-comment-lv'), 10); //부모댓글레벨(10진수 표현)*/
 
 		// 답글 입력 input 추가
 		let replyInput = '<tr id="replyRow">' +
