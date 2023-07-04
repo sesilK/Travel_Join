@@ -13,17 +13,17 @@
 .makingUpdate {
     background-color: #9DC3C1;
     color: #FFF;
-    width: 300px;
+    width: 14%;
     padding: 10px 20px;
     height: 39px;
     border-radius: 20px;
     transition: all 0.5s ease-in-out;
     border: none;
     text-transform: uppercase;
-    POSITION: ABSOLUTE;
+    POSITION: fixed;
     Z-INDEX: 8;
-    RIGHT: 314PX;
-    BOTTOM: 24PX;
+    right: 14%;
+    bottom: 5%;
 }
 
 .makingUpdate:hover {
