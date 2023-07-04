@@ -29,6 +29,7 @@ body {
 .d-card-wrapper {
     max-width: 1100px;
     margin: 0 auto;
+    overflow-y: scroll;
 }
 
 img {
@@ -47,7 +48,7 @@ img {
 }
 
 .img-showcase img {
-    min-width: 100%;
+    width: 380px;
 }
 
 .img-select {

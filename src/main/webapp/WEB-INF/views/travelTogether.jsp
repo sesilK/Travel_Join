@@ -43,6 +43,8 @@
         $(".card").click(function () {
             location.href = "/detail/" + $(this).data("planid");
         });
+
+        $(".mytrip").addClass("is-active");
     })
 </script>
 

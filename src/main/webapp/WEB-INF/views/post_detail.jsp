@@ -14,7 +14,7 @@
                 <div class="img-showcase">
                     <c:if test="${images.size() > 0}">
                         <c:forEach var="i" begin="0" end="${images.size()-1}">
-                            <img src="${images.get(i).fileName}">
+                            <img src="/images/join/${images.get(i).fileName}">
                         </c:forEach>
                     </c:if>
                 </div>
@@ -24,7 +24,7 @@
                 <c:if test="${images.size() > 0}">
                     <c:forEach var="i" begin="0" end="${images.size()-1}">
                         <div class="img-item">
-                            <a href="#" data-id="${i+1}"> <img src="${images.get(i).fileName}">
+                            <a href="#" data-id="${i+1}"> <img src="/images/join/${images.get(i).fileName}">
                             </a>
                         </div>
                     </c:forEach>
@@ -34,11 +34,10 @@
         </div>
         <!-- card right -->
         <div class="post-content">
-            <h2 class="post-title">제목 ${item.title}</h2>
+            <p class="post-title">${item.title}</p>
 
             <div class="post-detail">
-                <h2>본문 :</h2>
-                <p>내용 ${item.content}</p>
+                <p>${item.content}</p>
 
                 <ul>
                     <c:choose>
@@ -50,9 +49,9 @@
                         </c:when>
                     </c:choose>
                     <li>여행지 : <span>${item.destination}</span></li>
-                    <li>여행시작 : <span>이때부터 ${item.startDay}</span></li>
-                    <li>여행종료 : <span>이때까지 ${item.endDay}</span></li>
-                    <li>모집 마감일: <span>${item.finishDate}</span></li>
+                    <li>여행시작 : <span>${item.startDay}일 부터</span></li>
+                    <li>여행종료 : <span>${item.endDay}일 까지</span></li>
+                    <li>모집 마감일: <span>${item.finishDate}일</span></li>
                     <li>모집 상태: <span>${item.planState}</span></li>
                     <li>조회수: <span>${item.views}</span></li>
                     <li>추천: <span id="likes">${item.likes}</span></li>

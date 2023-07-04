@@ -42,6 +42,11 @@
 
 
 <%@include file="footer.jsp" %>
+<script>
+    $(function () {
+        $(".chatting").addClass("is-active");
+    });
+</script>
 <script src="/js/chatlist.js"></script>
 
 

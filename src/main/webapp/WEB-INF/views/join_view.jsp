@@ -46,6 +46,10 @@
 </div>
 <script>
     $(function () {
+        $(function () {
+            $(".trending").addClass("is-active");
+        });
+
         $(".card").click(function () {
             location.href = "/detail/" + $(this).data("planid");
         });

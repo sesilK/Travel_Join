@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class UserValidator {
 
-    static String idReg = "^[a-z]{1}[a-z0-9]{6,12}+$"; // 6~12자리 소문자+숫자
+    static String idReg = "^[a-z]{1}[a-z0-9]{5,11}+$"; // 6~12자리 소문자+숫자
     static String pwReg = "^(?=.*[a-zA-Z])((?=.*\\d)|(?=.*\\W)).{8,20}+$"; // 8~20자리 영,특
     static String emailReg = "^[a-zA-Z0-9]+@[0-9a-zA-Z]+\\.[a-z]+$"; // 이메일 abc@abc.abc 형태
     static String nameReg = "^[ㄱ-ㅎ|가-힣]{2,6}$"; // 이름 한글 2~6길이

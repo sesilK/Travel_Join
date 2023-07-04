@@ -51,4 +51,9 @@
 
 </div>
 <%@ include file="footer.jsp" %>
+<script>
+    $(function () {
+        $(".modinfo").addClass("is-active");
+    });
+</script>
 <script src="/js/myInfo.js"></script>

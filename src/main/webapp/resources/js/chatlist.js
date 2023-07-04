@@ -12,7 +12,6 @@ $(function () {
             const contentText = $(this).find(".last-chat");
             const thisList = $(this);
 
-
             stomp.subscribe("/sub/channel/" + roomId, function (chat) {
 
                 var message = JSON.parse(chat.body);
@@ -35,7 +34,7 @@ $(function () {
                         type: 'info'
                     }));
 
-                } else if (type === 'info') {
+                } else if (type == 'info' && sender == myId) {
 
                     // 채팅방 정보들 업데이트
                     for (let item of chatListInfo) {
@@ -48,10 +47,16 @@ $(function () {
                         const _time = item.time;
                         const _chatCount = (item.chatCount == 0) ? "" : item.chatCount;
 
+                        $('.friend').each(function () {
+                            const target_ele = $('.friend[data-roomid="' + _planId + '"]');
+                            target_ele.find(".box-top .box-right span").text(_time);
+                            target_ele.find(".box-bot .box-left span").text(_content);
+                            target_ele.find(".box-bot .box-right span").text(_chatCount);
+                        });
 
-                        $(".box-top .box-right span").text(_time); // 보낸시간
-                        $(".box-bot .box-left span").text(_content); // 채팅내용
-                        $(".box-bot .box-right span").text(_chatCount); // 채팅갯수
+                        // $(".box-top .box-right span").text(_time); // 보낸시간
+                        // $(".box-bot .box-left span").text(_content); // 채팅내용
+                        // $(".box-bot .box-right span").text(_chatCount); // 채팅갯수
                     }
 
                 }

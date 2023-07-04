@@ -4,26 +4,30 @@
 <%@ include file="header.jsp" %>
 <div class="login-container">
 
-  <div class="login-box">
-    <div class="login">
-      <form action="/myinfo/before" method="post" id="form-signin">
+    <div class="login-box">
+        <div class="login">
+            <form action="/myinfo/before" method="post" id="form-signin">
 
 
-        <input type="text" class="text input-f" name="userId" value="${sessionScope.userId}">
-        <span>login id</span>
-        <br>
-        <br>
+                <input type="text" class="text input-f" name="userId" value="${sessionScope.userId}">
+                <span>login id</span>
+                <br>
+                <br>
 
-        <input type="password" class="text input-f" name="password">
-        <span>password</span>
-        <br>
+                <input type="password" class="text input-f" name="password">
+                <span>password</span>
+                <br>
 
-        <button class="signin" type="submit">비밀번호 확인</button>
-      </form>
+                <button class="signin" type="submit">비밀번호 확인</button>
+            </form>
+        </div>
+
     </div>
-
-  </div>
 </div>
 
-
+<script>
+    $(function () {
+        $(".modinfo").addClass("is-active");
+    });
+</script>
 <%@ include file="footer.jsp" %>
