@@ -42,8 +42,8 @@ $(document).ready(function() {
 	//썸머노트 불러오기
 	$('#summernote').summernote({
 		//width: 800, // set editor width
-		//height: 400, // set editor height
-		minHeight: 450, // set minimum height of editor
+		height: $(window).height()* 0.5, // set editor height
+		//minHeight: null, // set minimum height of editor
 		//maxHeight: null, // set maximum height of editor
 		focus: false, // focus  여부 설정 (false -> focus)
 		lang: 'ko-KR', // 기본 메뉴언어 US->KR로 변경
