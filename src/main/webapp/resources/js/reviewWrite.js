@@ -364,7 +364,7 @@ function temporarySave() {
 		}),	//파라미터로 같이 담아서 보낼 것들
 		success: (data) => {
 			if (data === 'true') {
-				alert('임시저장되었습니다.');
+				//alert('임시저장되었습니다.');
 			}
 			if (data === 'false') {
 				alert('임시저장 실패');

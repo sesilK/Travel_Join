@@ -35,7 +35,7 @@ $(document).ready(function() {
 				} else if (data == -2) {
 					alert('로그인 아이디가 없습니다.');
 					window.location.href = "/login";
-				} else if (data > 0) {
+				} else if (data >= 0) {
 					alert('신고하였습니다.');
 				}
 			},	//요청에 대해 성공한 경우 수행할 내용
@@ -85,7 +85,7 @@ $(document).ready(function() {
 	// 글 삭제 버튼 클릭 이벤트 처리
 	$('#deleteBtn').click(function() {
 
-		if (confirm('삭제하시겠습니까?')) {
+		if (confirm('삭제하시겠습니까?\n(삭제한 글은 복구할 수 없습니다.)')) {
 			$.ajax({
 				type: "POST",
 				contentType: "application/json; charset=utf-8",
@@ -96,7 +96,7 @@ $(document).ready(function() {
 				}),
 				success: function(data) {
 					if (data === 'true') {
-						alert('게시물이 삭제되었습니다.');
+						//alert('게시물이 삭제되었습니다.');
 						window.location.href = "/review";
 					} else if (data === 'idNull') {
 						alert('삭제 권한이 없습니다.(로그인 아이디 없음)');
@@ -297,29 +297,27 @@ $(document).ready(function() {
 		if (before == content) {
 			commentEl.focus();
 		} else if (content != '') {
-			if (confirm('댓글 수정하시겠습니까?')) {
-				$.ajax({
-					type: "POST",
-					contentType: "application/json; charset=utf-8",
-					url: "/updateComment",
-					data: JSON.stringify({
-						reviewId: reviewId,
-						commentId: commentId,
-						content: content
-					}),
-					success: function(data) {
-						if (data === '') {
-							alert('로그인 아이디가 없습니다.');
-							window.location.href = "/login";
-						} else {
-							renderComments(data);
-						}
-					},
-					error: function() {
-						alert('댓글 수정 실행 오류');
+			$.ajax({
+				type: "POST",
+				contentType: "application/json; charset=utf-8",
+				url: "/updateComment",
+				data: JSON.stringify({
+					reviewId: reviewId,
+					commentId: commentId,
+					content: content
+				}),
+				success: function(data) {
+					if (data === '') {
+						alert('로그인 아이디가 없습니다.');
+						window.location.href = "/login";
+					} else {
+						renderComments(data);
 					}
-				});
-			}
+				},
+				error: function() {
+					alert('댓글 수정 실행 오류');
+				}
+			});
 		} else {
 			alert('내용을 입력하세요');
 			commentEl.focus();
