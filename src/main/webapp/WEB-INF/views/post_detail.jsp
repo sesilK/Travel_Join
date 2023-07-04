@@ -12,19 +12,23 @@
 
             <div class="img-display">
                 <div class="img-showcase">
-                    <c:forEach var="i" begin="0" end="${images.size()-1}">
-                        <img src="${images.get(i).fileName}">
-                    </c:forEach>
+                    <c:if test="${images.size() > 0}">
+                        <c:forEach var="i" begin="0" end="${images.size()-1}">
+                            <img src="${images.get(i).fileName}">
+                        </c:forEach>
+                    </c:if>
                 </div>
             </div>
 
             <div class="img-select">
-                <c:forEach var="i" begin="0" end="${images.size()-1}">
-                    <div class="img-item">
-                        <a href="#" data-id="${i+1}"> <img src="${images.get(i).fileName}">
-                        </a>
-                    </div>
-                </c:forEach>
+                <c:if test="${images.size() > 0}">
+                    <c:forEach var="i" begin="0" end="${images.size()-1}">
+                        <div class="img-item">
+                            <a href="#" data-id="${i+1}"> <img src="${images.get(i).fileName}">
+                            </a>
+                        </div>
+                    </c:forEach>
+                </c:if>
             </div>
 
         </div>
@@ -37,6 +41,14 @@
                 <p>내용 ${item.content}</p>
 
                 <ul>
+                    <c:choose>
+                        <c:when test="${item.planType eq 0}">
+                            <li>구 분 : <span>국내</span></li>
+                        </c:when>
+                        <c:when test="${item.planType eq 1}">
+                            <li>구 분 : <span>해외</span></li>
+                        </c:when>
+                    </c:choose>
                     <li>구 분 : <span>${item.planType}</span></li>
                     <li>여행지 : <span>${item.destination}</span></li>
                     <li>여행시작 : <span>이때부터 ${item.startDay}</span></li>
@@ -87,7 +99,7 @@
         </c:when>
 
         <c:when test="${item.planState eq 0}">
-<%--            <button type="button" id="btn-join">참가하기</button>--%>
+            <%--            <button type="button" id="btn-join">참가하기</button>--%>
         </c:when>
     </c:choose>
 </div>

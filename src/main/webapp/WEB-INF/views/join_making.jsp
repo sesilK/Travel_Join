@@ -70,12 +70,14 @@
         // 글작성올리기전 검증(빈칸)후에 비동기로 db에 전송
         let titlt = $('input[name="title"]').val(); // 제목
         let destination = $('input[name="destination"]').val(); // 여행 구분
-        let planType = $('input[name="planType"]').val(); // 여행 목적지
+        let planType = $('input[name="planType"]:checked').val(); // 여행 목적지
         let startDay = $('input[name="startDay"]').val(); //여행시작
         let endDay = $('input[name="endDay"]').val(); 	  //여행끝
         let personnel = $('input[name="personnel"]').val(); //인원
         let finishDate = $('input[name="finishDate"]').val(); //여행모집 마감
         let content = $('textarea[name="content"]').innerHTML;
+
+        console.log(planType);
 
         if (titlt === "") {
             alert("제목을 입력해주세요")

@@ -44,18 +44,18 @@
 		
 		<interceptor>	<!-- 로그인 인터셉터 제외시킬 것들 -->
 			<mapping path="/**"/>
+			<exclude-mapping path="/"/>			<!-- 루트 -->
+			<exclude-mapping path="/home"/>			<!-- 메인페이지 -->
 			<exclude-mapping path="/login"/>		<!-- 로그인 -->
 			<exclude-mapping path="/register"/>		<!-- 회원가입 -->
 			<exclude-mapping path="/api/register"/>		<!-- 회원가입 -->
-			<exclude-mapping path="/home"/>			<!-- 메인페이지 -->
+			<exclude-mapping path="/join_view"/>			<!-- 메인페이지 -->
 			<exclude-mapping path="/review"/>		<!-- 리뷰게시판 -->
 			<exclude-mapping path="/**/*.css"/>		<!-- css -->
 			<exclude-mapping path="/**/*.js"/>		<!-- js -->
 			<exclude-mapping path="/**/image/**"/>	<!-- 이미지파일들 -->
 			<exclude-mapping path="/images/**"/>	<!-- 이미지파일들 -->
 			<exclude-mapping path="/notExist"/>		<!-- 존재하지않는 페이지 -->
-			<exclude-mapping path=""/>	<!--  -->
-			<exclude-mapping path=""/>	<!--  -->
 			<beans:ref bean="loginInterceptor"/>
 		</interceptor>
 		

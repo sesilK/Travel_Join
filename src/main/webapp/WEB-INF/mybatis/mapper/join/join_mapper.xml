@@ -13,9 +13,9 @@
 
         insert all
         into join_board (PLAN_ID, USER_ID, TITLE,CONTENT, PERSONNEL ,START_DAY , END_DAY, DESTINATION, PLAN_STATE,
-        FINISH_DATE)
+        FINISH_DATE, PLAN_TYPE)
         values (#{planId}, #{userId} , #{title}, #{content} ,#{personnel} ,TO_DATE(#{startDay}, 'YYYY-MM-DD'),
-        TO_DATE(#{endDay}, 'YYYY-MM-DD') ,#{destination},#{planType}, TO_DATE(#{finishDate}, 'YYYY-MM-DD'))
+        TO_DATE(#{endDay}, 'YYYY-MM-DD') ,#{destination},#{planType}, TO_DATE(#{finishDate}, 'YYYY-MM-DD'), #{planType})
         into join_board_member (plan_id, user_id)
         values (#{planId}, #{userId})
         into chat (chat_id, plan_id, user_id, content, time)
