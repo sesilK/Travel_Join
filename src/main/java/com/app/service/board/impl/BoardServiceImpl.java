@@ -7,14 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.dao.board.BoardDao;
-import com.app.dto.JoinDto;
+
 import com.app.dto.MarkDto;
 import com.app.dto.PartyDto;
 import com.app.service.board.BoardService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -63,6 +60,7 @@ public class BoardServiceImpl implements BoardService{
 		
 		List<JoinDto> myPartying = boardDao.myPartying(userId);
 		return myPartying;
+	}
 	public int joinBoardViewIncrease(int planId) {
 
 		int result = boardDao.joinBoardViewIncrease(planId);

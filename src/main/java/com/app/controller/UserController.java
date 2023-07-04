@@ -125,6 +125,7 @@ public class UserController {
         }
     }
 
+
     // 회원정보 수정요청
     @PostMapping("/myinfo")
     @ResponseBody
@@ -165,21 +166,14 @@ public class UserController {
         // DB저장 로직 후 성공시 true 주기
         int result = userService.update_user_profile(userDto);
 
-<<<<<<< HEAD
-        if(result > 0) {
-        	session.setAttribute("profileImage", savedFileName);
-=======
         if (result > 0) {
             session.removeAttribute("profileImage");
             session.setAttribute("profileImage", savedFileName);
->>>>>>> 055e214ee22e0fedf79d05fece329e00268096c7
             return "true";
         }
         return "false";
     }
 
-<<<<<<< HEAD
-=======
 
     // 회원탈퇴 요청
     @PostMapping("/drop")
@@ -200,5 +194,4 @@ public class UserController {
         return "false";
     }
 
->>>>>>> 055e214ee22e0fedf79d05fece329e00268096c7
 }
