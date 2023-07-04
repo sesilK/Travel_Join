@@ -118,4 +118,45 @@ $(function () {
         $("#input_tel").val($("#input_tel").val().replaceAll(/[^0-9]/g, ""));
     });
 
+
+    // 로그인 요청함수
+    function login_proc() {
+        const form = $("form")[0];
+        const formData = new FormData(form);
+        console.log(form);
+        console.log(formData);
+
+        $.ajax({
+            cache : false,
+            url : "/login", // 요기에
+            processData: false,
+            contentType: false,
+            type : 'POST',
+            data : formData,
+            success : function(data) {
+                console.log(data);
+                if(data == true) {
+                    location.href = "/";
+                } else {
+                    alert("정확한 회원정보를 입력해주세요");
+                }
+            }, // success
+            error : function() {
+
+            }
+        });
+    }
+
+    // 로그인 버튼 클릭
+    $(".signin").click(function () {
+        login_proc();
+    });
+
+    // 비밀번호 인풋창 엔터
+    $('input[type=password]').keypress(function (e) {
+        if (e.which == 13) {
+            login_proc();
+        }
+    });
+
 });

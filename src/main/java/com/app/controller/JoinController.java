@@ -2,7 +2,7 @@ package com.app.controller;
 
 import com.app.dto.JoinDto;
 import com.app.service.party.PartyService;
-import com.app.service.user.join.JoinService;
+import com.app.service.join.JoinService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;

@@ -9,7 +9,7 @@ $(function () {
     $("#img_file").change(function () {
         const isConfirm = confirm("프로필 사진을 변경 하시겠습니까?");
 
-        if(isConfirm) {
+        if (isConfirm) {
             // ajax 코드
             let formData = new FormData();
             const file = document.querySelector("#img_file").files[0];
@@ -24,7 +24,7 @@ $(function () {
                 processData: false,
                 success: (data) => {
                     console.log(data);
-                    if(data == 'true') {
+                    if (data == 'true') {
                         alert("프로필사진 변경 완료");
                         location.href = '/myinfo';
                     } else {
@@ -40,7 +40,6 @@ $(function () {
             document.querySelector("#img_file").files = document.querySelector("#empty_file").files
         }
     });
-
 
 
     $('.infoEdit i').on('click', function () {
@@ -82,14 +81,47 @@ $(function () {
                 console.log(data);
                 if (data === 'true') {
                     alert('수정완료');
+                    location.href = "/myinfo";
                 } else if (data === 'false') {
                     alert('수정실패');
+                } else {
+                    alert(data);
                 }
-                window.location.href = "/myinfo";
             }, // 요청에 대해 성공한 경우 수행할 내용
             error: function () {
                 alert('실행 오류');
             } // 요청이 실패, 오류난 경우 수행할 내용
         });
     });
+
+    // 탈퇴하기 버튼
+    $("#dropout").click(function () {
+
+        let userId = $('input[name="userId"]').val();
+
+        if (confirm('정말 탈퇴 하시겠습니까?')) {
+            $.ajax({
+                type: "POST", // 요청 method
+                contentType: "application/json; charset=utf-8", // json 포맷 utf-8 내용으로 통신하겠다
+                url: "/drop", // 어디 경로로 요청할 건지
+                success: function (data) {
+                    console.log(data);
+                    if (data === 'true') {
+                        alert('회원탈퇴 완료');
+                        location.href = "/home";
+                    } else if (data === 'false') {
+                        alert('이미 탈퇴한 회원입니다');
+                        location.href = "/home";
+                    }
+                }, // 요청에 대해 성공한 경우 수행할 내용
+                error: function () {
+                    alert('오류가 발생했습니다');
+                    location.href = "/myinfo";
+                } // 요청이 실패, 오류난 경우 수행할 내용
+
+            });
+        }
+    });
+
+
 });

@@ -1,5 +1,26 @@
 $(function () {
 
+    // 템플릿 슬라이드 관련 설정
+    const imgs = document.querySelectorAll('.img-item a');
+    const imgBtns = [...imgs];
+    let imgId = 1;
+
+    imgBtns.forEach((imgItem) => {
+        imgItem.addEventListener('click', (event) => {
+            event.preventDefault();
+            imgId = imgItem.dataset.id;
+            slideImage();
+        });
+    });
+
+    function slideImage() {
+        const displayWidth = document.querySelector('.img-showcase img:first-child').clientWidth;
+        document.querySelector('.img-showcase').style.transform = `translateX(${-(imgId - 1) * displayWidth}px)`;
+    }
+
+    window.addEventListener('resize', slideImage);
+
+
     // planId 전역변수 설정
     const planId = $("body").data("planid");
 
@@ -30,7 +51,32 @@ $(function () {
         });
     });
 
+	// 추천하기 버튼
+    $("#btn-like").click(function () {
 
+        $.ajax({
+            url: "/joinLike",	
+            type: "POST",	//요청 method
+            contentType: "application/json; charset=utf-8",	
+            data: JSON.stringify({	
+                planId: planId,
+                sort: 'L'
+            }), 
+            success: (data) => {
+				if (data == -1) {
+					alert('이미 추천한 글입니다.');
+				} else if (data > 0){
+					let likes = $('#likes'); //추천수 요소
+					likes.text("추천: "+data); // 추천 수 업데이트
+					alert('추천하였습니다.');
+				}
+            },	
+            error: () => {
+                alert('추천 실행 오류');
+            }	
+
+        });
+    });
     // 마감버튼 일듯?
     // document.getElementById("deadBtn").addEventListener("click", function () {
     //     $.ajax({

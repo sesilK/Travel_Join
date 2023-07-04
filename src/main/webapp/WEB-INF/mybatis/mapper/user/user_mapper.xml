@@ -35,11 +35,18 @@
     	where user_id = #{userId}
     </update>
 
+    <!--    프로필 사진 변경-->
     <update id="update_user_profile" parameterType="UserDto">
         update users
         set file_name = #{fileName}
         where user_id = #{userId}
     </update>
-	
+
+    <!--    회원탈퇴-->
+	<update id="update_user_status" parameterType="UserDto">
+        update users
+        set status = #{status}
+        where user_id = #{userId}
+    </update>
 
 </mapper>

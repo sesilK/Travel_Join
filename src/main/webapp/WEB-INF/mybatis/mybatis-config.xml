@@ -11,11 +11,15 @@
     </settings>
 
     <typeAliases>
-    	<typeAlias type="com.app.dto.BoardDto" alias="BoardDto"/>
+    	<typeAlias type="com.app.dto.ReviewDto" alias="ReviewDto"/>
+    	<typeAlias type="com.app.dto.ReviewImgDto" alias="ReviewImgDto"/>
+		<typeAlias type="com.app.dto.MarkDto" alias="MarkDto"/>
+		<typeAlias type="com.app.dto.CommentDto" alias="CommentDto"/>
     	<typeAlias type="com.app.dto.PartyDto" alias="PartyDto"/>
     	<typeAlias type="com.app.dto.UserDto" alias="UserDto"/>
 		<typeAlias type="com.app.dto.JoinDto" alias="JoinDto"/>
-        <typeAlias type="com.app.dto.NoticeDto" alias="NoticeDto"/>
+        <typeAlias type="com.app.dto.ChatDto" alias="ChatDto" />
+        <typeAlias type="com.app.dto.ChatRoomDto" alias="ChatRoomDto" />
     </typeAliases>
     
 </configuration>

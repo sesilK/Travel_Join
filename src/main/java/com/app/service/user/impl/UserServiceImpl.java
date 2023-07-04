@@ -46,20 +46,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean login(UserDto userDto, HttpSession session) {
 
-        // 입력받은 아이디를 기준으로 DB에서 회원정보 조회
-        UserDto findUser = userDao.selectUserById(userDto.getUserId());
-        // 프로필사진 정보 세션에 담기
-        String profileImage = userDao.selectUserById(userDto.getUserId()).getFileName();
-        session.setAttribute("profileImage", profileImage);
-
-
-        String input_pw = userDto.getPassword(); // form 에서 입력한 pw
-        String db_pw = findUser.getPassword();    // db에서 찾은 pw
-
-        if (findUser != null) { // 찾은 회원정보가 null 이 아니면
-            if (input_pw.equals(db_pw)) { // 입력한 pw와 회원정보의 pw가 일치하면
-                return true;
+        try {
+            // 입력받은 아이디를 기준으로 DB에서 회원정보 조회
+            UserDto findUser = userDao.selectUserById(userDto.getUserId());
+            if (findUser.getStatus() == -1) {
+                // 탈퇴한 회원이면 false
+                return false;
             }
+            // 프로필사진 정보 세션에 담기
+            String profileImage = userDao.selectUserById(userDto.getUserId()).getFileName();
+            session.setAttribute("profileImage", profileImage);
+
+
+            String input_pw = userDto.getPassword(); // form 에서 입력한 pw
+            String db_pw = findUser.getPassword();    // db에서 찾은 pw
+
+            if (findUser != null) { // 찾은 회원정보가 null 이 아니면
+                if (input_pw.equals(db_pw)) { // 입력한 pw와 회원정보의 pw가 일치하면
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            // 그대로 return false
         }
 
         return false;
@@ -83,26 +91,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public int update_user_profile(UserDto userDto) {
         int result = 0;
-        result =  userDao.update_user_profile(userDto);
+        result = userDao.update_user_profile(userDto);
+        return result;
+    }
+
+    @Override
+    public int update_user_status(UserDto userDto) {
+        int result = 0;
+        result = userDao.update_user_status(userDto);
         return result;
     }
 
     //회원정보수정
-	@Override
-	public int updateUser(UserDto userDto) {
-		// TODO Auto-generated method stub
-	
-		int result= userDao.update_user_info(userDto);
-		
-		return result;
-	}
+    @Override
+    public int updateUser(UserDto userDto, BindingResult bindingResult) {
+        // TODO Auto-generated method stub
 
-	//id로 회원정보 조회
-	@Override
-	public UserDto getUserInfo(String userId) {
-		
-		UserDto userInfo = userDao.selectUserById(userId);
+        int result = userDao.update_user_info(userDto, bindingResult);
 
-		return userInfo;
-	}
+        return result;
+    }
+
+    //id로 회원정보 조회
+    @Override
+    public UserDto getUserInfo(String userId) {
+
+        UserDto userInfo = userDao.selectUserById(userId);
+
+        return userInfo;
+    }
 }
