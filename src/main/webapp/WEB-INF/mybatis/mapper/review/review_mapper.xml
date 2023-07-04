@@ -80,7 +80,7 @@
 			<if test="searchCondition == 'user'">
 				AND us.nick LIKE '%'||#{keyword}||'%'
 			</if>
-			<if test="searchCondition == 'area'">
+			<if test="searchCondition == 'destination'">
 				AND jb.destination LIKE '%'||#{keyword}||'%'
 			</if>
 			AND rb.delete_at = 'N'
@@ -117,7 +117,7 @@
 		<if test="searchCondition == 'user'">
 			AND us.nick LIKE '%'||#{keyword}||'%'
 		</if>
-		<if test="searchCondition == 'area'">
+		<if test="searchCondition == 'destination'">
 			AND jb.destination LIKE '%'||#{keyword}||'%'
 		</if>
 		AND rb.delete_at = 'N'

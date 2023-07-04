@@ -37,7 +37,7 @@
 								</span>
 							</span>
 		            	</td>
-		            	<td class="title" data-reviewid="${item.reviewId}">${item.area} │ ${item.title}
+		            	<td class="title" data-reviewid="${item.reviewId}">${item.destination} │ ${item.title}
 		            	    <c:if test="${item.commentCount > 0}">[${item.commentCount}]</c:if></td>
 		            	<td>${item.nick}</td>
 		            	<td>${item.createDate}</td>
@@ -64,7 +64,7 @@
 				<option value="content" ${param.searchCondition eq 'content' ? 'selected' : ''}>내용</option> --%>
 				<option value="ticon" ${param.searchCondition eq 'ticon' ? 'selected' : ''}>제목+내용</option>
 				<option value="user" ${param.searchCondition eq 'user' ? 'selected' : ''}>글쓴이</option>
-				<option value="area" ${param.searchCondition eq 'area' ? 'selected' : ''}>여행지</option>
+				<option value="destination" ${param.searchCondition eq 'destination' ? 'selected' : ''}>여행지</option>
 		</select>
 		<input type="text" name="keyword" id="keyword" value="${keyword}"/>
 		<button id="searchBtn" class="emojiBtn">🔍</button>

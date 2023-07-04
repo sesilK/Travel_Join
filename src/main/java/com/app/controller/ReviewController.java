@@ -55,7 +55,7 @@ public class ReviewController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 
-		String searchType = reviewDto.getArea();
+		String searchType = reviewDto.getDestination();
 	    String searchCondition = reviewDto.getPlanInfo();
 	    String keyword = reviewDto.getContent();
 	    
@@ -79,7 +79,7 @@ public class ReviewController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ReviewDto reviewDto = objectMapper.readValue(requestBody, ReviewDto.class);
 
-		String searchType = reviewDto.getArea();
+		String searchType = reviewDto.getDestination();
 	    String searchCondition = reviewDto.getPlanInfo();
 	    String keyword = reviewDto.getContent();
 	    String page = reviewDto.getPage();

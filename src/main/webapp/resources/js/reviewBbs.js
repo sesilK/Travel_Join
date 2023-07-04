@@ -76,7 +76,7 @@ function displayData(dataList) {
 			'<span class="rating_star" data-stars="'+ dataList[i].stars +'">★★★★★</span>' +
 			'</span></span></td>' + 
             '<td class="title" data-reviewid="'+ dataList[i].reviewId +'">' + 
-			dataList[i].area + " │ " + dataList[i].title;
+			dataList[i].destination + " │ " + dataList[i].title;
 			if(dataList[i].commentCount > 0){
 				chartHtml += '['+dataList[i].commentCount+']';
 			}
@@ -175,7 +175,7 @@ function loadReviewList(page){
 		dataType: "json",
 		contentType: "application/json; charset=utf-8",
 		data: JSON.stringify({
-		    area: searchType,
+		    destination: searchType,
 		    planInfo: searchCondition,
 		    content: keyword
 		}),
@@ -188,7 +188,7 @@ function loadReviewList(page){
 				dataType: "json",
 				contentType: "application/json; charset=utf-8",
 				data: JSON.stringify({
-				    area: searchType,
+				    destination: searchType,
 				    planInfo: searchCondition,
 				    content: keyword,
 				    page: page,
