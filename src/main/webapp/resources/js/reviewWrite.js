@@ -69,8 +69,8 @@ $(document).ready(function() {
 				limitByte(e);
 			},
 			onPaste: function(e) {
-				e.preventDefault(); // 붙여넣기 막음
-				alert('붙여넣기 기능을 지원하지 않습니다.');
+				//e.preventDefault(); // 붙여넣기 막음
+				//alert('붙여넣기 기능을 지원하지 않습니다.');
 				/* let clipboardData = e.originalEvent.clipboardData || window.clipboardData;
 				if (!clipboardData) {
 					alert('브라우저에서 붙여넣기 기능을 지원하지 않습니다.');
@@ -113,7 +113,7 @@ $(document).ready(function() {
 		let content = e.currentTarget.innerHTML;
 		let byteLength = calculateByteLength(content); //바이트 길이
 
-		// console.log(byteLength);
+		console.log(byteLength);
 
 		if (byteLength >= contentMaxByte) { // 입력된 텍스트의 바이트가 maxByte를 초과할 경우
 			let keyCode = e.keyCode || e.which;

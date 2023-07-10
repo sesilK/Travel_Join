@@ -124,6 +124,9 @@
 		<if test="searchCondition == 'destination'">
 			AND jb.destination LIKE '%'||#{keyword}||'%'
 		</if>
+		<if test="searchCondition == 'sessionId'">
+			AND us.user_id LIKE #{keyword}
+		</if>
 		AND rb.delete_at = 'N'
 		AND rb.report_count &lt;= 5 <!-- 부등호(<)의 XML 엔티티 &lt; -->
 		<!-- ORDER BY rb.review_id DESC -->
